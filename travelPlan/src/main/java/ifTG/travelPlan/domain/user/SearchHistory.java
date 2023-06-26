@@ -15,8 +15,9 @@ public class SearchHistory {
     private Long id;
 
     @ManyToOne(fetch =FetchType.LAZY)
-    @JoinColumn(name ="userId", referencedColumnName = "id")
+    @JoinColumn(nullable = false, name ="userId", referencedColumnName = "id")
     private User user;
 
+    @Column(nullable = false)
     private String history;
 }

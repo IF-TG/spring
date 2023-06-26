@@ -26,8 +26,8 @@ public class TravelPlanDestinationRoute {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumns({
-            @JoinColumn(name = "id", insertable=false, updatable=false),
-            @JoinColumn(name = "type", insertable=false, updatable=false)
+            @JoinColumn(name = "destination_id", insertable=false, updatable=false),
+            @JoinColumn(name = "destination_type", insertable=false, updatable=false)
     })
     private DestinationRoute destinationRoute;
 
