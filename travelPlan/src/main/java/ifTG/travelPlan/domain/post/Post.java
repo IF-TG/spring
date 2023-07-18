@@ -1,15 +1,21 @@
 package ifTG.travelPlan.domain.post;
 
+import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.user.User;
+import ifTG.travelPlan.dto.post.enums.Companions;
+import ifTG.travelPlan.dto.post.enums.Regions;
+import ifTG.travelPlan.dto.post.enums.Seasons;
+import ifTG.travelPlan.dto.post.enums.Themes;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.*;
@@ -48,41 +54,88 @@ public class Post {
     @Column(nullable = false)
     private LocalDateTime createAt;
 
-    @Formula("(SELECT COUNT(1) FROM post_likes l WHERE l.post_id = post_id)")
+    @Formula("(SELECT COALESCE(COUNT(1),0) FROM post_likes l WHERE l.post_id = post_id)")
     private Integer likeNum;
 
-    @Formula("(SELECT COUNT(1) FROM comments c WHERE c.post_id = post_id)")
+    @Formula("(SELECT COALESCE(COUNT(1),0) FROM comments c WHERE c.post_id = post_id)")
     private Integer commentNum;
+
+    @Column(columnDefinition = "DOUBLE DEFAULT 0")
+    private Double score;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 
     //양방향 매핑
-    @BatchSize(size = 100)
-    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
-    private List<PostImg> postImgList;
 
-    //@BatchSize(size = 1000)
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
-    private List<Comment> commentList;
+    private final List<PostImg> postImgList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = ALL)
-    private List<PostLike> postLikes;
+    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    private final List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    private final List<PostLike> postLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    private List<PostTheme> postThemeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    private List<PostRegion> postRegionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    private List<PostCompanion> postCompanionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    private List<PostSeason> postSeasonList = new ArrayList<>();
+
 
     @Builder
-    public Post(Long id, String title, String content, LocalDateTime createAt, User user, LocalDateTime startDate, LocalDateTime endDate) {
+    public Post(String title, String content, User user, LocalDate startDate, LocalDate endDate) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+        this.user.getPostList().add(this); // 1차 캐시 문제
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public Post(Long id, String title, String content, User user, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.createAt = createAt;
         this.user = user;
-        this.user.getPostList().add(this);
+        this.user.getPostList().add(this); // 1차 캐시 문제
         this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    /**
+     * setter
+     */
+    public void setTravelSubCategories(List<PostTheme> themes, List<PostRegion> regions, List<PostCompanion> companions, List<PostSeason> seasons){
+        this.postThemeList.addAll(themes);
+        this.postRegionList.addAll(regions);
+        this.postCompanionList.addAll(companions);
+        this.postSeasonList.addAll(seasons);
+    }
+
+    public void clearSubCategory() {
+        this.postSeasonList.clear();
+        this.postRegionList.clear();
+        this.postCompanionList.clear();
+        this.postThemeList.clear();
+    }
+
+    public void updatePost(String title, String content, LocalDate startDate, LocalDate endDate){
+        this.title = title;
+        this.content = content;
+        this.startDate =startDate;
         this.endDate = endDate;
     }
 

@@ -1,6 +1,6 @@
-package ifTG.travelPlan.domain.post;
+package ifTG.travelPlan.domain.post.comment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

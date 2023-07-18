@@ -56,5 +56,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByPhoneNumber(String phoneNumber);
     User findByEmail(String email);
     User findByNickname(String nickname);
-
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.userBlockList ub LEFT JOIN FETCH u.postLikeList pl WHERE u.userId = :userId")
+    User findByUserIdWithUserBlockAndPostLike(String userId);
 }

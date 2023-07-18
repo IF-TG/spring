@@ -1,17 +1,16 @@
-package ifTG.travelPlan.domain.post;
+package ifTG.travelPlan.domain.post.comment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -49,5 +48,5 @@ public class Comment {
     private Post post;
 
     @OneToMany(mappedBy = "parentComment")
-    private List<NestedComment> nestedComment;
+    private final List<NestedComment> nestedComment = new ArrayList<>();
 }

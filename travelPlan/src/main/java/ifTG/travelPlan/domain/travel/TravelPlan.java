@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
@@ -32,7 +33,7 @@ public class TravelPlan {
 
     //양방향 매핑
     @OneToMany(mappedBy = "travelPlan")
-    private List<TravelPlanDestinationRoute> travelPlanDestinationRoute;
+    private final List<TravelPlanDestinationRoute> travelPlanDestinationRoute = new ArrayList<>();
 
     @Builder
     public TravelPlan(Long travelPlanId, String title, User user) {

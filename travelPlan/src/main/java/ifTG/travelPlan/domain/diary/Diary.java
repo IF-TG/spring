@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -34,6 +35,6 @@ public class Diary {
 
     //양방향 매핑
     @OneToMany(mappedBy = "diary", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<DiaryImg> diaryImgList;
+    private final List<DiaryImg> diaryImgList = new ArrayList<>();
 
 }

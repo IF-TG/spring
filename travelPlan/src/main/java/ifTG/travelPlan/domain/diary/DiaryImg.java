@@ -11,7 +11,7 @@ public class DiaryImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diary_img_id")
-    private int id;
+    private Long id;
 
     @Column(name = "img_url", nullable = false)
     private String imgURL;

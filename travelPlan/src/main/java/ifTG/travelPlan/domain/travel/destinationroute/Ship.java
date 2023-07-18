@@ -21,7 +21,7 @@ public class Ship extends DestinationRoute {
     @Column(nullable = false)
     private LocalDateTime startDt;
     @Column(nullable = false)
-    private LocalDateTime endDtt;
+    private LocalDateTime endDt;
     private Integer charge;
 
     public Ship(DestinationRouteId destinationRouteId) {

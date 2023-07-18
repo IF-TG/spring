@@ -1,7 +1,10 @@
 package ifTG.travelPlan.domain.user;
 
 import ifTG.travelPlan.domain.diary.Diary;
-import ifTG.travelPlan.domain.post.Comment;
+import ifTG.travelPlan.domain.post.PostLike;
+import ifTG.travelPlan.domain.post.PostRegion;
+import ifTG.travelPlan.domain.post.PostTheme;
+import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.travel.TravelPlan;
 import jakarta.persistence.*;
@@ -9,10 +12,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
@@ -48,33 +53,33 @@ public class User {
 
     //양방향 매핑
     @OneToMany(mappedBy = "user")
-    private List<Comment> commentList;
+    private final List<Comment> commentList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private List<Post> postList;
+    private final List<Post> postList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private List<TravelPlan> travelPlanList;
+    private final List<TravelPlan> travelPlanList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private List<Diary> diaryList;
+    private final List<Diary> diaryList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private List<ScrapFolder> scrapFolderList;
+    private final List<ScrapFolder> scrapFolderList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private List<SearchHistory> searchHistorieList;
+    private final List<SearchHistory> searchHistorieList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private final Set<UserBlock> userBlockList = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private final Set<PostLike> postLikeList = new HashSet<>();
     @Builder
-    public User(String userId, String pw, String name, Sex sex, LocalDate birthDate, String phoneNumber, String email, UserAddress userAddress) {
+    public User(String userId, String pw, String nickname, String name, Sex sex, LocalDate birthDate, String phoneNumber, String email, UserAddress userAddress) {
         this.userId = userId;
         this.pw = pw;
+        this.nickname = nickname;
         this.name = name;
         this.sex = sex;
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.userAddress = userAddress;
-        this.userAddress.addUser(this);
+        this.userAddress.addUser(this); //1차 캐시 문제 해결
     }
-
-
-    /**
-     * 1차 캐싱 npe 방지 매핑용
-     */
 
 }

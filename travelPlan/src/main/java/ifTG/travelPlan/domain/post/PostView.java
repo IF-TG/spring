@@ -2,22 +2,25 @@ package ifTG.travelPlan.domain.post;
 
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name= "comment_likes")
 @Getter
-public class CommentLike {
+@Table(name = "post_likes")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class PostView {
     @EmbeddedId
-    private CommentLikeId commentLikeId;
+    private PostLikeId postLikeId;
 
     @ManyToOne(optional = false, fetch = LAZY)
     @JoinColumn(name = "user_id", insertable=false, updatable=false)
     private User user;
 
     @ManyToOne(optional = false, fetch = LAZY)
-    @JoinColumn(name = "comment_id", insertable=false, updatable=false)
-    private Comment comment;
+    @JoinColumn(name = "post_id", insertable=false, updatable=false)
+    private Post post;
 }

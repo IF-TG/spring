@@ -25,4 +25,8 @@ public class PostLike {
     @JoinColumn(name = "post_id", insertable=false, updatable=false)
     private Post post;
 
+    public PostLike(User user, Post post) {
+        postLikeId = new PostLikeId(user.getId(), post.getId());
+
+    }
 }

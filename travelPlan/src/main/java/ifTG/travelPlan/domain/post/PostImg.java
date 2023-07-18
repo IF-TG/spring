@@ -2,7 +2,9 @@ package ifTG.travelPlan.domain.post;
 
 import ifTG.travelPlan.domain.post.Post;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -15,6 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Table(name = "post_imgs")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostImg {
     @Id
     @GeneratedValue(strategy = IDENTITY)

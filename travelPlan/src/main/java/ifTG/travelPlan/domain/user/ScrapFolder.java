@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
@@ -33,10 +34,10 @@ public class ScrapFolder {
      * 양방향 매핑
      */
     @OneToMany(mappedBy = "scrapFolder")
-    List<DestinationScrap> destinationScrapList;
+    private final List<DestinationScrap> destinationScrapList = new ArrayList<>();
 
     @OneToMany(mappedBy = "scrapFolder")
-    List<PostScrap> postScrapList;
+    private final List<PostScrap> postScrapList = new ArrayList<>();
 
 
 

@@ -1,4 +1,4 @@
-package ifTG.travelPlan.domain.post;
+package ifTG.travelPlan.domain.post.comment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
