@@ -1,16 +1,19 @@
 package ifTG.travelPlan.service.comment;
 
-import ifTG.travelPlan.controller.comment.CommentIdDto;
-import ifTG.travelPlan.controller.dto.RequestCommentByPostDto;
-import ifTG.travelPlan.controller.dto.RequestCreateCommentDto;
-import ifTG.travelPlan.dto.comment.CommentDto;
+import ifTG.travelPlan.controller.comment.NestedCommentIdDto;
+import ifTG.travelPlan.controller.dto.*;
+import ifTG.travelPlan.dto.comment.CommentDtoWithUserInfo;
+import ifTG.travelPlan.dto.comment.CommentUpdateDto;
+import ifTG.travelPlan.dto.comment.NestedCommentDto;
 
 import java.util.List;
 
 public interface CommentService {
-    List<CommentDto> getCommentListByPost(RequestCommentByPostDto requestCommentByPostDto);
-    List<CommentDto> getCommentListByPostAndSavePostView(RequestCommentByPostDto requestCommentByPostDto);
-    CommentDto saveComment(RequestCreateCommentDto createCommentDto);
-
+    List<CommentDtoWithUserInfo> getCommentListByPost(RequestCommentByPostDto requestCommentByPostDto);
+    List<CommentDtoWithUserInfo> getCommentListByPostAndSavePostView(RequestCommentByPostDto requestCommentByPostDto);
+    CommentDtoWithUserInfo saveComment(RequestCreateCommentDto createCommentDto);
     Boolean deleteComment(CommentIdDto commentIdDto);
+    CommentUpdateDto updateComment(RequestUpdateCommentDto requestUpdateCommentDto);
+    NestedCommentDto saveNestedComment(RequestCreateNestedCommentDto nestedCommentDto);
+    Boolean deleteNestedComment(NestedCommentIdDto nestedCommentIdDto);
 }

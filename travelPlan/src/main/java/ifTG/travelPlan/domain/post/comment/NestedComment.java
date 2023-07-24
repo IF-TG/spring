@@ -4,6 +4,7 @@ import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,4 +38,11 @@ public class NestedComment {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_comment_id", referencedColumnName = "comment_id")
     private Comment parentComment;
+
+    @Builder
+    public NestedComment(String comment, User user, Comment parentComment) {
+        this.comment = comment;
+        this.user = user;
+        this.parentComment = parentComment;
+    }
 }

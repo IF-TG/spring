@@ -1,4 +1,4 @@
-package ifTG.travelPlan.controller.comment;
+package ifTG.travelPlan.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,14 +1,15 @@
 package ifTG.travelPlan.service.comment;
 
-import ifTG.travelPlan.controller.comment.CommentIdDto;
-import ifTG.travelPlan.controller.dto.RequestCommentByPostDto;
-import ifTG.travelPlan.controller.dto.RequestCreateCommentDto;
+import ifTG.travelPlan.controller.comment.NestedCommentIdDto;
+import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.post.comment.NestedComment;
 import ifTG.travelPlan.domain.user.User;
-import ifTG.travelPlan.dto.comment.CommentDto;
+import ifTG.travelPlan.dto.comment.CommentDtoWithUserInfo;
+import ifTG.travelPlan.dto.comment.CommentUpdateDto;
 import ifTG.travelPlan.dto.comment.NestedCommentDto;
+import ifTG.travelPlan.repository.springdata.NestedCommentRepository;
 import ifTG.travelPlan.repository.springdata.post.CommentRepository;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
@@ -28,18 +29,19 @@ public class CommentServiceImpl implements CommentService{
     private final UserRepository userRepository;
     private final PostViewService postViewService;
     private final PostRepository postRepository;
+    private final NestedCommentRepository nestedCommentRepository;
 
     @Override
-    public List<CommentDto> getCommentListByPost(RequestCommentByPostDto requestCommentByPostDto) {
+    public List<CommentDtoWithUserInfo> getCommentListByPost(RequestCommentByPostDto requestCommentByPostDto) {
+        return getCommentList(requestCommentByPostDto);
+    }
+    @Override
+    public List<CommentDtoWithUserInfo> getCommentListByPostAndSavePostView(RequestCommentByPostDto requestCommentByPostDto) {
         postViewService.addPostViewByPostIdAndUserId(requestCommentByPostDto.getPostId(), requestCommentByPostDto.getUserId());
         return getCommentList(requestCommentByPostDto);
     }
     @Override
-    public List<CommentDto> getCommentListByPostAndSavePostView(RequestCommentByPostDto requestCommentByPostDto) {
-        return getCommentList(requestCommentByPostDto);
-    }
-    @Override
-    public CommentDto saveComment(RequestCreateCommentDto createCommentDto) {
+    public CommentDtoWithUserInfo saveComment(RequestCreateCommentDto createCommentDto) {
         User user = getUser(createCommentDto.getUserId());
         Post post = getPost(createCommentDto.getPostId());
         Comment comment = Comment.builder()
@@ -59,8 +61,42 @@ public class CommentServiceImpl implements CommentService{
         return true;
     }
 
-    private CommentDto getCommentDto(User user, Comment comment, boolean isLiked) {
-        return CommentDto.builder()
+    @Override
+    public CommentUpdateDto updateComment(RequestUpdateCommentDto requestUpdateCommentDto) {
+        Comment comment = commentRepository.findById(requestUpdateCommentDto.getCommentId()).orElseThrow(EntityNotFoundException::new);
+        if(comment.isDeleted()){
+            throw new RuntimeException("이미 삭제된 댓글입니다.");
+        }
+        comment.updateComment(requestUpdateCommentDto.getComment());
+        return new CommentUpdateDto(comment.getId(), comment.getComment());
+    }
+
+    @Override
+    public NestedCommentDto saveNestedComment(RequestCreateNestedCommentDto nestedCommentDto) {
+        User user = getUser(nestedCommentDto.getUserId());
+        Comment comment = getComment(nestedCommentDto.getCommentId());
+        NestedComment nestedComment = NestedComment.builder()
+                .parentComment(comment)
+                .comment(nestedCommentDto.getComment())
+                .user(user)
+                .build();
+        nestedCommentRepository.save(nestedComment);
+
+        return getNestedCommentDto(nestedComment, false);
+    }
+
+    @Override
+    public Boolean deleteNestedComment(NestedCommentIdDto nestedCommentIdDto) {
+        nestedCommentRepository.deleteById(nestedCommentIdDto.getNestedCommentId());
+        return true;
+    }
+
+    private Comment getComment(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    private CommentDtoWithUserInfo getCommentDto(User user, Comment comment, boolean isLiked) {
+        return CommentDtoWithUserInfo.builder()
                 .commentId(comment.getId())
                 .nickname(user.getNickname())
                 .profileImgUri(user.getProfileImgUrl())
@@ -81,7 +117,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
 
-    public List<CommentDto> getCommentList(RequestCommentByPostDto requestCommentByPostDto){
+    public List<CommentDtoWithUserInfo> getCommentList(RequestCommentByPostDto requestCommentByPostDto){
         Long postId = requestCommentByPostDto.getPostId();
         Pageable pageable = requestCommentByPostDto.getPageable();
         User user = getUserWithCommentLikesAndNestedCommentLikes(requestCommentByPostDto.getUserId());
@@ -95,7 +131,7 @@ public class CommentServiceImpl implements CommentService{
     private User getUserWithCommentLikesAndNestedCommentLikes(Long userId) {
         return userRepository.findWithCommentLikeAndNestedCommentLikeByUserId(userId);
     }
-    private List<CommentDto> getCommentDtoList(Page<Comment> commentList, List<Long> likedCommentIdList, List<Long> likedNestedCommentIdList) {
+    private List<CommentDtoWithUserInfo> getCommentDtoList(Page<Comment> commentList, List<Long> likedCommentIdList, List<Long> likedNestedCommentIdList) {
         return commentList.stream().map(comment ->
                 getCommentDtoWithNestedDto(
                         comment,
@@ -104,8 +140,8 @@ public class CommentServiceImpl implements CommentService{
                 )).toList();
     }
 
-    private CommentDto getCommentDtoWithNestedDto(Comment comment, List<Long> likedNestedCommentIdListByUser, boolean likedComment) {
-        return CommentDto.builder()
+    private CommentDtoWithUserInfo getCommentDtoWithNestedDto(Comment comment, List<Long> likedNestedCommentIdListByUser, boolean likedComment) {
+        return CommentDtoWithUserInfo.builder()
                 .commentId(comment.getId())
                 .nickname(comment.getUser().getNickname())
                 .isLiked(likedComment)

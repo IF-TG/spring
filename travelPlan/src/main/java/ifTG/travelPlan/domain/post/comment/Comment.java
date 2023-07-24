@@ -72,4 +72,8 @@ public class Comment {
         this.comment = "삭제된 댓글입니다.";
         this.isDeleted = true;
     }
+
+    public void updateComment(String comment){
+        this.comment = comment;
+    }
 }

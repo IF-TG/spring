@@ -3,14 +3,12 @@ package ifTG.travelPlan.dto.comment;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class CommentDto {
+public class CommentDtoWithUserInfo {
     private final Long commentId;
     private final String profileImgUri;
     private final String nickname;
@@ -22,7 +20,7 @@ public class CommentDto {
     private final boolean isDeleted;
 
     @Builder
-    public CommentDto(Long commentId, String profileImgUri, String nickname, boolean isLiked, LocalDateTime createAt, int likeNum, String comment, List<NestedCommentDto> nestedCommentDtoList, boolean isDeleted) {
+    public CommentDtoWithUserInfo(Long commentId, String profileImgUri, String nickname, boolean isLiked, LocalDateTime createAt, int likeNum, String comment, List<NestedCommentDto> nestedCommentDtoList, boolean isDeleted) {
         this.commentId = commentId;
         this.profileImgUri = profileImgUri;
         this.nickname = nickname;
