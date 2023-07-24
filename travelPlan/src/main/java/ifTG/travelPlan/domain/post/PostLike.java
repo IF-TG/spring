@@ -27,6 +27,5 @@ public class PostLike {
 
     public PostLike(User user, Post post) {
         postLikeId = new PostLikeId(user.getId(), post.getId());
-
     }
 }

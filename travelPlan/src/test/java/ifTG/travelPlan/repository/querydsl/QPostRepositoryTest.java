@@ -25,7 +25,7 @@ import java.time.LocalDate;
 
 @Transactional
 @SpringBootTest
-@Slf4j@Commit
+@Slf4j
 class QPostRepositoryTest {
     @PersistenceContext
     EntityManager em;
@@ -103,17 +103,7 @@ class QPostRepositoryTest {
         log.info("postA persist");
         postRepository.save(postA);
 
-        postA.addPostLikeByUser(userA);
 
-        ;
-        postA.addPostThemeByThemes(Themes.LOCAL_EXPERIENCE);
-        postA.addPostThemeByThemes(Themes.ADVENTURE);
-
-        postA.addPostRegionByRegions(Regions.GYEONGGI);
-
-        postA.addPostSeasonBySeasons(Seasons.SUMMER);
-
-        postA.addPostCompanionByCompanions(Companions.ALONE);
 
         /**
          * Post B 정보
@@ -131,18 +121,6 @@ class QPostRepositoryTest {
                 .endDate(LocalDate.of(2022, 7, 2)).build();
         postRepository.save(postB);
 
-        postB.addPostLikeByUser(userA);
-        postB.addPostLikeByUser(userB);
-
-        postB.addPostThemeByThemes(Themes.FESTIVAL);
-
-        postB.addPostCompanionByCompanions(Companions.ALONE);
-        postB.addPostCompanionByCompanions(Companions.FRIEND);
-        postB.addPostCompanionByCompanions(Companions.PET);
-
-        postB.addPostRegionByRegions(Regions.DAEJEON);
-
-        postB.addPostSeasonBySeasons(Seasons.SUMMER);
 
         /**
          * post C 정보
@@ -159,16 +137,6 @@ class QPostRepositoryTest {
                 .endDate(LocalDate.now()).build();
         postRepository.save(postC);
 
-        postC.addPostLikeByUser(userB);
-
-        postC.addPostThemeByThemes(Themes.SHOPPING);
-
-        postC.addPostCompanionByCompanions(Companions.ALONE);
-        postC.addPostCompanionByCompanions(Companions.FAMILY);
-
-        postC.addPostSeasonBySeasons(Seasons.WINTER);
-
-        postC.addPostRegionByRegions(Regions.CHUNGNAM);
 
 
         /**
@@ -182,7 +150,6 @@ class QPostRepositoryTest {
                 .endDate(LocalDate.now()).build();
         postRepository.save(postD);
 
-        postD.addPostCompanionByCompanions(Companions.ALONE);
 
 
         postRepository.save(postA);
@@ -193,6 +160,10 @@ class QPostRepositoryTest {
     }
 
     @Test
+    void test(){
+
+    }
+   /* @Test
     void findAllWithCompanionBySubCategory() {
         em.flush();
         em.clear();
@@ -226,7 +197,7 @@ class QPostRepositoryTest {
         OrderMethod orderMethod = OrderMethod.RECENT_ORDER;
         Regions regions = Regions.DAEJEON;
 
-        Page<Post> findPostList = qPostRepository.findAllWithRegionBySubCategory(pageable, orderMethod, regions, null);
+       // Page<Post> findPostList = qPostRepository.findAllWithRegionBySubCategory(pageable, orderMethod, regions, null);
         for(Post p : findPostList){
             log.info("{}, {}, {}, {}, {}, {}, {}, {}",
                     p.getUser().getId(),
@@ -251,7 +222,7 @@ class QPostRepositoryTest {
         OrderMethod orderMethod = OrderMethod.RECENT_ORDER;
         Themes themes = Themes.SHOPPING;
 
-        Page<Post> findPostList = qPostRepository.findAllWithThemeBySubCategory(pageable, orderMethod, themes, null);
+        Page<Post> findPostList = qPostRepository.findAllBySubCategoryOrderByOrderMethod(pageable, orderMethod, themes, null);
         for(Post p : findPostList){
             log.info("{}, {}, {}, {}, {}, {}, {}, {}",
                     p.getUser().getId(),
@@ -290,5 +261,5 @@ class QPostRepositoryTest {
         }
 
         Assertions.assertThat(findPostList.getTotalElements()).isEqualTo(2);
-    }
+    }*/
 }

@@ -4,9 +4,12 @@ import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,6 +50,26 @@ public class Comment {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    @Formula("(SELECT COUNT(1) FROM comment_likes c WHERE c.comment_id = id)")
+    private int likeNum;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean isDeleted;
+
     @OneToMany(mappedBy = "parentComment")
-    private final List<NestedComment> nestedComment = new ArrayList<>();
+    private final List<NestedComment> nestedCommentList = new ArrayList<>();
+    @OneToMany(mappedBy = "comment")
+    private final List<CommentLike> commentLikeList = new ArrayList<>();
+
+    @Builder
+    public Comment(String comment, User user, Post post) {
+        this.comment = comment;
+        this.user = user;
+        this.post = post;
+    }
+
+    public void deleteComment(){
+        this.comment = "삭제된 댓글입니다.";
+        this.isDeleted = true;
+    }
 }

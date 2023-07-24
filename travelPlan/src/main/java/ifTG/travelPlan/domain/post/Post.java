@@ -2,23 +2,22 @@ package ifTG.travelPlan.domain.post;
 
 import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.user.User;
-import ifTG.travelPlan.dto.post.enums.Companions;
-import ifTG.travelPlan.dto.post.enums.Regions;
-import ifTG.travelPlan.dto.post.enums.Seasons;
-import ifTG.travelPlan.dto.post.enums.Themes;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
@@ -38,6 +37,7 @@ import static lombok.AccessLevel.*;
 @Entity @Getter
 @Table(name = "posts")
 @NoArgsConstructor(access = PROTECTED)
+@Slf4j
 public class Post {
     @Id
     @Column(name = "post_id")
@@ -72,28 +72,23 @@ public class Post {
 
 
     //양방향 매핑
-
-    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.MERGE, orphanRemoval = true)
     private final List<PostImg> postImgList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private final List<PostLike> postLikeList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
-    private List<PostTheme> postThemeList = new ArrayList<>();
+    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private Set<PostCategory> postCategoryList = new HashSet<>();
 
-    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
-    private List<PostRegion> postRegionList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
-    private List<PostCompanion> postCompanionList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
-    private List<PostSeason> postSeasonList = new ArrayList<>();
-
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private final List<PostView> postViewList = new ArrayList<>();
 
     @Builder
     public Post(String title, String content, User user, LocalDate startDate, LocalDate endDate) {
@@ -118,19 +113,6 @@ public class Post {
     /**
      * setter
      */
-    public void setTravelSubCategories(List<PostTheme> themes, List<PostRegion> regions, List<PostCompanion> companions, List<PostSeason> seasons){
-        this.postThemeList.addAll(themes);
-        this.postRegionList.addAll(regions);
-        this.postCompanionList.addAll(companions);
-        this.postSeasonList.addAll(seasons);
-    }
-
-    public void clearSubCategory() {
-        this.postSeasonList.clear();
-        this.postRegionList.clear();
-        this.postCompanionList.clear();
-        this.postThemeList.clear();
-    }
 
     public void updatePost(String title, String content, LocalDate startDate, LocalDate endDate){
         this.title = title;
@@ -139,4 +121,7 @@ public class Post {
         this.endDate = endDate;
     }
 
+    public void addPostViewByUser(User user){
+        postViewList.add(new PostView(new PostViewId(user.getId(), this.getId())));
+    }
 }

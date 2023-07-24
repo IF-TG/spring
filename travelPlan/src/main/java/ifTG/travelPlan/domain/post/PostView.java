@@ -14,7 +14,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostView {
     @EmbeddedId
-    private PostLikeId postLikeId;
+    private PostViewId postViewId;
 
     @ManyToOne(optional = false, fetch = LAZY)
     @JoinColumn(name = "user_id", insertable=false, updatable=false)
@@ -23,4 +23,9 @@ public class PostView {
     @ManyToOne(optional = false, fetch = LAZY)
     @JoinColumn(name = "post_id", insertable=false, updatable=false)
     private Post post;
+
+
+    public PostView(PostViewId postViewId) {
+        this.postViewId = postViewId;
+    }
 }

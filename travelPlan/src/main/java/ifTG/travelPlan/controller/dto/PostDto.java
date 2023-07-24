@@ -1,16 +1,12 @@
 package ifTG.travelPlan.controller.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
 import ifTG.travelPlan.domain.post.PostImg;
 import ifTG.travelPlan.dto.post.enums.Companions;
 import ifTG.travelPlan.dto.post.enums.Regions;
 import ifTG.travelPlan.dto.post.enums.Seasons;
 import ifTG.travelPlan.dto.post.enums.Themes;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,7 +34,7 @@ public class PostDto {
     private final boolean isLiked;
     @Builder
     public PostDto(Long postId, String profileImgUri, String title, String nickname, LocalDate startDate, LocalDate endDate, List<PostImg> postImgUri, String content, Integer likeNum, Integer commentNum, LocalDateTime createAt
-        ,List<Themes> themes, List<Regions> regions, List<Seasons> seasons, List<Companions> companions, boolean isLiked) {
+        ,List<String> themes, List<String> regions, List<String> seasons, List<String> companions, boolean isLiked) {
         this.postId = postId;
         this.profileImgUri = profileImgUri;
         this.title = title;
@@ -62,10 +58,10 @@ public class PostDto {
         }
 
         this.createAt = createAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
-        this.themes = themes.stream().map(Themes::getValue).toList();
-        this.regions = regions.stream().map(Regions::getValue).toList();
-        this.seasons = seasons.stream().map(Seasons::getValue).toList();
-        this.companions = companions.stream().map(Companions::getValue).toList();
+        this.themes = themes;
+        this.regions = regions;
+        this.seasons = seasons;
+        this.companions = companions;
         this.isLiked = isLiked;
     }
 }

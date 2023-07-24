@@ -1,11 +1,8 @@
 package ifTG.travelPlan.controller.post;
 
 import ifTG.travelPlan.controller.dto.Result;
-import ifTG.travelPlan.dto.post.PostCreateDto;
+import ifTG.travelPlan.dto.post.*;
 import ifTG.travelPlan.controller.dto.PostDto;
-import ifTG.travelPlan.dto.post.PostDeleteDto;
-import ifTG.travelPlan.dto.post.PostRequestDto;
-import ifTG.travelPlan.dto.post.PostUpdateDto;
 import ifTG.travelPlan.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +14,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/post")
 @RequiredArgsConstructor
-public class postListController {
+public class postController {
     private final PostService postService;
 
     @GetMapping("/list")
@@ -31,13 +28,14 @@ public class postListController {
     }
 
     @DeleteMapping()
-    public Boolean deletePost(@RequestBody PostDeleteDto postDeleteDto){
-        return postService.deletePost(postDeleteDto);
+    public Boolean deletePost(@RequestBody PostIdDto postIdDto){
+        return postService.deletePost(postIdDto);
     }
 
     @PutMapping()
     public PostDto deletePost(@RequestBody PostUpdateDto postUpdateDto){
         return postService.updatePost(postUpdateDto);
     }
+
 
 }

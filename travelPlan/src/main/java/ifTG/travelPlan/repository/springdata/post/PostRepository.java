@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     /**
@@ -38,4 +40,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     /**
      * select one
      */
+    @Query("SELECT p FROM Post p JOIN FETCH p.user LEFT JOIN FETCH p.postImgList LEFT JOIN FETCH p.postCategoryList WHERE p.id = :postId")
+    Optional<Post> findByIdWithUserAndPostImgAndPostCategory(Long postId);
+
 }

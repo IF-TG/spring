@@ -1,20 +1,13 @@
 package ifTG.travelPlan.service.post;
 
-import ifTG.travelPlan.domain.build.PostBuilder;
 import ifTG.travelPlan.domain.post.*;
 import ifTG.travelPlan.domain.user.User;
-import ifTG.travelPlan.dto.post.PostCreateDto;
-import ifTG.travelPlan.dto.post.PostDeleteDto;
-import ifTG.travelPlan.dto.post.PostRequestDto;
-import ifTG.travelPlan.dto.post.PostUpdateDto;
-import ifTG.travelPlan.dto.post.enums.Companions;
-import ifTG.travelPlan.dto.post.enums.Regions;
-import ifTG.travelPlan.dto.post.enums.Seasons;
-import ifTG.travelPlan.dto.post.enums.Themes;
+import ifTG.travelPlan.dto.post.*;
+import ifTG.travelPlan.dto.post.enums.*;
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.repository.querydsl.QPostRepository;
+import ifTG.travelPlan.repository.springdata.post.PostCategoryRepository;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
-import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -24,10 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * to do
- * 1 : post dto에 담아서 보내기
+ * 1 : post dto에 담아서 보내기 o
+ * 2 : 서브 카테고리 레퍼지토리를 좀 줄일 수 없을까? 해당 레퍼지토리로 삭제하는게 아니라면 여러번의 delete문이 나가 성능저하 가능성
  * 5 : handle~ 함수들 중복 코드 ( 은근 enum 합치기 힘들다. )
  */
 @RequiredArgsConstructor
@@ -38,135 +33,106 @@ public class PostServiceImpl implements PostService{
     private final QPostRepository qPostRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final PostCategoryRepository postCategoryRepository;
+
 
     @Override
     public List<PostDto> findAllPostWithPostRequestDto(PostRequestDto postRequestDto){
         User user = userRepository.findByUserIdWithUserBlockAndPostLike(postRequestDto.getUserId());
         log.info("{}", user.getUserId());
         List<Long> blockedUserIdList = user.getUserBlockList().stream().map(ub -> ub.getUser().getId()).toList();
-        List<Long> likedPostId = user.getPostLikeList().stream().map(pl -> pl.getPostLikeId().getPostId()).toList();
+        List<Long> likedPostIdByUser = user.getPostLikeList().stream().map(pl -> pl.getPostLikeId().getPostId()).toList();
         Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(postRequestDto, blockedUserIdList);
-        return getPostDtoList(postList, likedPostId);
+        return getPostDtoList(postList, likedPostIdByUser);
     }
 
     @Override
     public PostDto savePost(PostCreateDto postCreateDto) {
-        User user = userRepository.findByUserId(postCreateDto.getUserId());
+        User user = userRepository.findById(postCreateDto.getUserId()).orElseThrow(EntityNotFoundException::new);
         Post post = getPostByPostCreateDto(postCreateDto, user);
         Post savedPost = postRepository.save(post);
-        addTravelThemeToSavedPost(postCreateDto, savedPost);
+        saveAllPostSubCategoryByPostCreateDto(postCreateDto, savedPost);
         return getPostDto(postRepository.save(savedPost), false);
+    }
+    @Override
+    public PostDto updatePost(PostUpdateDto postUpdateDto) {
+        Long postId = postUpdateDto.getPostId();
+        deleteSubCategory(postId);
+        Post post = postRepository.findByIdWithUserAndPostImgAndPostCategory(postUpdateDto.getPostId()).orElseThrow(EntityNotFoundException::new);
+        updatePost(postUpdateDto, post);
+        saveAllPostSubCategoryByPostCreateDto(postUpdateDto.getPost(), post);
+        postRepository.save(post);
+        return getPostDto(post, false);
+    }
+
+
+
+    private void deleteSubCategory(Long postId) {
+        postCategoryRepository.deleteAllByPostId(postId);
+    }
+    private static void updatePost(PostUpdateDto postUpdateDto, Post post) {
+        PostCreateDto postDto = postUpdateDto.getPost();
+        log.info("update Post = {}, {}, {}, {}", postDto.getTitle(), post.getContent(), postDto.getStartDate(), postDto.getEndDate());
+        post.updatePost(
+                postDto.getTitle(),
+                postDto.getContent(),
+                postDto.getStartDate(),
+                postDto.getEndDate()
+        );
     }
 
     @Override
-    public Boolean deletePost(PostDeleteDto postDeleteDto) {
-        postRepository.deleteById(postDeleteDto.getPostId());
+    public Boolean deletePost(PostIdDto postIdDto) {
+        postRepository.deleteById(postIdDto.getPostId());
         return true;
     }
 
-    @Override
-    public PostDto updatePost(PostUpdateDto postUpdateDto) {
-        log.info("updatePost = {}", postUpdateDto.getPostId());
-        Post post = postRepository.findById(postUpdateDto.getPostId()).orElseThrow(() -> new EntityNotFoundException("Post not found"));
-        log.info("findById = {}", post.getId());
-        post.updatePost(post.getTitle(), post.getContent(), post.getStartDate(), post.getEndDate());
-        log.info("updatePost = {}", post.getTitle());
-        post.clearSubCategory();
-        log.info("clearSubCategory");
-        addTravelThemeToSavedPost(postUpdateDto.getPost(), post);
-        log.info("addSub");
-        Post updatePost = postRepository.save(post);
-        return getPostDto(updatePost, false);
-    }
+
+
 
     private static Post getPostByPostCreateDto(PostCreateDto postCreateDto, User user) {
-        Post post = Post.builder()
-                        .title(postCreateDto.getTitle())
-                        .content(postCreateDto.getContent())
-                        .startDate(postCreateDto.getStartDate())
-                        .endDate(postCreateDto.getEndDate())
-                        .user(user)
-                .build();
-        return post;
+        return Post.builder()
+                   .title(postCreateDto.getTitle())
+                   .content(postCreateDto.getContent())
+                   .startDate(postCreateDto.getStartDate())
+                   .endDate(postCreateDto.getEndDate())
+                   .user(user)
+                   .build();
     }
 
-    private static void addTravelThemeToSavedPost(PostCreateDto postCreateDto, Post savedPost) {
-        List<PostTheme> themes = postCreateDto.getThemes().stream().map(theme->new PostTheme(theme, savedPost)).toList();
-        List<PostRegion> regions = postCreateDto.getRegions().stream().map(region->new PostRegion(region, savedPost)).toList();
-        List<PostSeason> seasons = postCreateDto.getSeasons().stream().map(season->new PostSeason(season,savedPost)).toList();
-        List<PostCompanion> companions = postCreateDto.getCompanions().stream().map(companion->new PostCompanion(companion, savedPost)).toList();
-        savedPost.setTravelSubCategories(themes, regions, companions, seasons);
+    private void saveAllPostSubCategoryByPostCreateDto(PostCreateDto postCreateDto, Post savedPost) {
+        Set<PostCategory> postCategoryList = savedPost.getPostCategoryList();
+        postCategoryList.addAll(postCreateDto.getCompanions().stream().map(companion -> new PostCategory(savedPost, MainCategory.COMPANION, companion)).toList());
+        postCategoryList.addAll(postCreateDto.getSeasons().stream().map(season -> new PostCategory(savedPost, MainCategory.SEASON, season)).toList());
+        postCategoryList.addAll(postCreateDto.getRegions().stream().map(region -> new PostCategory(savedPost, MainCategory.REGION, region)).toList());
+        postCategoryList.addAll(postCreateDto.getThemes().stream().map(themes -> new PostCategory(savedPost, MainCategory.THEME, themes)).toList());
     }
 
 
     private Page<Post> findAllPostsBySubCategoryOrderByOrderMethod(PostRequestDto postRequestDto, List<Long> blockedUserIdList) {
-        Page<Post> postList;
-        switch(postRequestDto.getMainCategory()){
-            case ORIGINAL -> postList = handleOriginalEnumType(postRequestDto, blockedUserIdList);
-            case SEASON -> postList = handleSeasonEnumType(postRequestDto, blockedUserIdList);
-            case THEME -> postList = handleThemeEnumType(postRequestDto, blockedUserIdList);
-            case REGION -> postList = handleRegionEnumType(postRequestDto, blockedUserIdList);
-            case COMPANION -> postList = handleCompanionEnumType(postRequestDto, blockedUserIdList);
-            default -> throw new RuntimeException("잘못된 요청 > MainCategory");
-        }
-        return postList;
-    }
-
-    private Page<Post> handleOriginalEnumType(PostRequestDto postRequestDto, List<Long> blockedUserIdList) {
-        /**
-         * 기본일경우 일단 전체적으로 보여주는 것으로
-         * 단 , 나중에 바꿀거임
-         */
-        return qPostRepository.findAll(
+        return qPostRepository.findAllBySubCategoryOrderByOrderMethod(
                 postRequestDto.getPageable(),
                 postRequestDto.getOrderMethod(),
-                blockedUserIdList
-        );
-    }
-
-    private Page<Post> handleCompanionEnumType(PostRequestDto postRequestDto, List<Long> blockedUserIdList) {
-        return qPostRepository.findAllWithCompanionBySubCategory(
-                postRequestDto.getPageable(),
-                postRequestDto.getOrderMethod(),
-                (Companions) postRequestDto.getSubCategory(),
-                blockedUserIdList
-        );
-    }
-
-    private Page<Post> handleRegionEnumType(PostRequestDto postRequestDto, List<Long> blockedUserIdList) {
-        return qPostRepository.findAllWithRegionBySubCategory(
-                postRequestDto.getPageable(),
-                postRequestDto.getOrderMethod(),
-                (Regions) postRequestDto.getSubCategory(),
-                blockedUserIdList
-        );
-    }
-
-    private Page<Post> handleThemeEnumType(PostRequestDto postRequestDto, List<Long> blockedUserIdList) {
-        return qPostRepository.findAllWithThemeBySubCategory(
-                postRequestDto.getPageable(),
-                postRequestDto.getOrderMethod(),
-                (Themes) postRequestDto.getSubCategory(),
-                blockedUserIdList
-        );
-    }
-
-    private Page<Post> handleSeasonEnumType(PostRequestDto postRequestDto, List<Long> blockedUserIdList) {
-        return qPostRepository.findAllWithSeasonBySubCategory(
-                postRequestDto.getPageable(),
-                postRequestDto.getOrderMethod(),
-                (Seasons) postRequestDto.getSubCategory(),
+                postRequestDto.getSubCategory(),
                 blockedUserIdList
         );
     }
 
     private static List<PostDto> getPostDtoList(Page<Post> postList, List<Long> likedPostIdList) {
         return postList.stream()
-                .map(p->getPostDto(p, likedPostIdList.contains(p.getId())))
+                .map(p->getPostDto(p, isLiked(likedPostIdList, p)))
                 .toList();
     }
 
+    private static boolean isLiked(List<Long> likedPostIdListByUser, Post p) {
+        return likedPostIdListByUser.contains(p.getId());
+    }
+
     private static PostDto getPostDto(Post post, boolean isLiked){
+        List<String> seasons = getPostCategoryFilterMainCategory(post, MainCategory.SEASON);
+        List<String> regions = getPostCategoryFilterMainCategory(post, MainCategory.REGION);
+        List<String> themes = getPostCategoryFilterMainCategory(post, MainCategory.THEME);
+        List<String> companions = getPostCategoryFilterMainCategory(post, MainCategory.COMPANION);
         return PostDto.builder()
                       .postId(post.getId())
                       .profileImgUri(post.getUser().getProfileImgUrl())
@@ -179,12 +145,16 @@ public class PostServiceImpl implements PostService{
                       .likeNum(post.getLikeNum())
                       .commentNum(post.getCommentNum())
                       .createAt(post.getCreateAt())
-                      .seasons(post.getPostSeasonList().stream().map(PostSeason::getSeasons).toList())
-                      .companions(post.getPostCompanionList().stream().map(PostCompanion::getCompanions).toList())
-                      .regions(post.getPostRegionList().stream().map(PostRegion::getRegions).toList())
-                      .themes(post.getPostThemeList().stream().map(PostTheme::getThemes).toList())
+                      .seasons(seasons)
+                      .companions(companions)
+                      .regions(regions)
+                      .themes(themes)
                       .isLiked(isLiked)
                       .build();
+    }
+
+    private static List<String> getPostCategoryFilterMainCategory(Post post, MainCategory mainCategory) {
+        return post.getPostCategoryList().stream().filter(postCategory -> postCategory.getMainCategory().equals(mainCategory)).map(PostCategory::getSubCategory).toList();
     }
 
 }

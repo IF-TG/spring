@@ -2,10 +2,10 @@ package ifTG.travelPlan.domain.user;
 
 import ifTG.travelPlan.domain.diary.Diary;
 import ifTG.travelPlan.domain.post.PostLike;
-import ifTG.travelPlan.domain.post.PostRegion;
-import ifTG.travelPlan.domain.post.PostTheme;
 import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.post.Post;
+import ifTG.travelPlan.domain.post.comment.CommentLike;
+import ifTG.travelPlan.domain.post.comment.NestedCommentLike;
 import ifTG.travelPlan.domain.travel.TravelPlan;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -68,6 +68,10 @@ public class User {
     private final Set<UserBlock> userBlockList = new HashSet<>();
     @OneToMany(mappedBy = "user")
     private final Set<PostLike> postLikeList = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private final Set<CommentLike> commentLikeList = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private final Set<NestedCommentLike> nestedCommentLikeList = new HashSet<>();
     @Builder
     public User(String userId, String pw, String nickname, String name, Sex sex, LocalDate birthDate, String phoneNumber, String email, UserAddress userAddress) {
         this.userId = userId;

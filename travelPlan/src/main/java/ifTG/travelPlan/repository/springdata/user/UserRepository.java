@@ -56,6 +56,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByPhoneNumber(String phoneNumber);
     User findByEmail(String email);
     User findByNickname(String nickname);
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.userBlockList ub LEFT JOIN FETCH u.postLikeList pl WHERE u.userId = :userId")
-    User findByUserIdWithUserBlockAndPostLike(String userId);
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.userBlockList ub LEFT JOIN FETCH u.postLikeList pl WHERE u.id = :id")
+    User findByUserIdWithUserBlockAndPostLike(Long id);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.postLikeList pl WHERE u.userId = :userId")
+    User findByUserIdWithPostLike(String userId);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.commentLikeList LEFT JOIN FETCH u.nestedCommentLikeList WHERE u.id = :id")
+    User findWithCommentLikeAndNestedCommentLikeByUserId(Long id);
 }

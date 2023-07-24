@@ -28,14 +28,14 @@ public class PostCreateDto {
     private final String content;
     private LocalDate startDate;
     private LocalDate endDate;
-    private final String userId;
+    private final Long userId;
     private final List<Themes> themes;
     private final List<Regions> regions;
     private final List<Seasons> seasons = new ArrayList<>();
     private final List<Companions> companions;
 
     @Builder
-    public PostCreateDto(String title, String content, String startDate, String endDate, String userId, List<Themes> themes, List<Regions> regions, List<Companions> companions) {
+    public PostCreateDto(String title, String content, String startDate, String endDate, Long userId, List<Themes> themes, List<Regions> regions, List<Companions> companions) {
         this.title = title;
         this.content = content;
         putDate(startDate, endDate);

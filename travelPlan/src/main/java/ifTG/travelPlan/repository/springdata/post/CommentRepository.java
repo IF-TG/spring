@@ -25,4 +25,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(value = "SELECT c FROM Comment c WHERE c.post.id = :id ORDER BY c.createdAt",
         countQuery = "SELECT COUNT(c) FROM Comment c WHERE c.post.id = :id")
     Page<Comment> findAllByPostId(Long id, Pageable pageable);
+
+    @Query(value = "SELECT c FROM Comment c LEFT JOIN FETCH c.nestedCommentList JOIN FETCH c.user WHERE c.post.id = :id ORDER BY c.createdAt DESC",
+        countQuery = "SELECT COUNT(c) FROM Comment c WHERE c.post.id = :id")
+    Page<Comment> findAllWithNestedCommentWithUserByPostId(Pageable pageable, Long postId);
+
 }

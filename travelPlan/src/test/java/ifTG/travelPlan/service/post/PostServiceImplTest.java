@@ -116,17 +116,6 @@ class PostServiceImplTest {
                          .build();
         postRepository.save(postA);
 
-        postA.addPostLikeByUser(userA);
-
-
-        postA.addPostThemeByThemes(Themes.LOCAL_EXPERIENCE);
-        postA.addPostThemeByThemes(Themes.ADVENTURE);
-
-        postA.addPostRegionByRegions(Regions.GYEONGGI);
-
-        postA.addPostSeasonBySeasons(Seasons.SUMMER);
-
-        postA.addPostCompanionByCompanions(Companions.ALONE);
 
         /**
          * Post B 정보
@@ -144,18 +133,7 @@ class PostServiceImplTest {
                          .endDate(LocalDate.of(2022, 7, 2)).build();
         postRepository.save(postB);
 
-        postB.addPostLikeByUser(userA);
-        postB.addPostLikeByUser(userB);
 
-        postB.addPostThemeByThemes(Themes.FESTIVAL);
-
-        postB.addPostCompanionByCompanions(Companions.ALONE);
-        postB.addPostCompanionByCompanions(Companions.FRIEND);
-        postB.addPostCompanionByCompanions(Companions.PET);
-
-        postB.addPostRegionByRegions(Regions.DAEJEON);
-
-        postB.addPostSeasonBySeasons(Seasons.SUMMER);
 
         /**
          * post C 정보
@@ -172,16 +150,7 @@ class PostServiceImplTest {
                          .endDate(LocalDate.now()).build();
         postRepository.save(postC);
 
-        postC.addPostLikeByUser(userB);
 
-        postC.addPostThemeByThemes(Themes.SHOPPING);
-
-        postC.addPostCompanionByCompanions(Companions.ALONE);
-        postC.addPostCompanionByCompanions(Companions.FAMILY);
-
-        postC.addPostSeasonBySeasons(Seasons.WINTER);
-
-        postC.addPostRegionByRegions(Regions.CHUNGNAM);
 
 
         /**
@@ -195,7 +164,6 @@ class PostServiceImplTest {
                          .endDate(LocalDate.now()).build();
         postRepository.save(postD);
 
-        postD.addPostCompanionByCompanions(Companions.ALONE);
 
         postRepository.save(postA);
         postRepository.save(postB);

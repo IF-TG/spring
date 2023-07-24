@@ -17,10 +17,10 @@ public class PostRequestDto {
     private final OrderMethod orderMethod;
     private final MainCategory mainCategory;
     private Enum<?> subCategory;
-    private final String userId;
+    private final Long userId;
 
     @Builder
-    public PostRequestDto(int page, int perPage, OrderMethod orderMethod, MainCategory mainCategory, String subCategory, String userId) throws IllegalAccessException {
+    public PostRequestDto(int page, int perPage, OrderMethod orderMethod, MainCategory mainCategory, String subCategory, Long userId) throws IllegalAccessException {
         isNullCategory(orderMethod, mainCategory);
         log.info("request mainCategory={} subCategory={}", mainCategory, subCategory);
         this.pageable = PageRequest.of(page, perPage);

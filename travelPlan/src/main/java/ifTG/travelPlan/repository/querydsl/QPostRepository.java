@@ -50,43 +50,13 @@ public class QPostRepository {
         queryFactory = new JPAQueryFactory(em);
     }
 
-    public Page<Post> findAllWithCompanionBySubCategory(Pageable pageable, OrderMethod orderMethod, Companions subCategory, List<Long> blockedUserIdList) {
-        log.info("subCategory = {}", subCategory.getValue());
+    public Page<Post> findAllBySubCategoryOrderByOrderMethod(Pageable pageable, OrderMethod orderMethod, Enum<?> subCategory, List<Long> blockedUserIdList) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        booleanBuilder.and(post.postCompanionList.any().companions.eq(subCategory));
-        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiersFromPost(orderMethod);
-        return findAllBySubCategory(pageable, booleanBuilder, orderSpecifiers, blockedUserIdList);
-    }
-    public Page<Post> findAllWithRegionBySubCategory(Pageable pageable, OrderMethod orderMethod, Regions subCategory, List<Long> blockedUserIdList) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if(subCategory != null){
-            booleanBuilder.and(post.postRegionList.any().regions.eq(subCategory));
+        if(subCategory != null) {
+            booleanBuilder.and(post.postCategoryList.any().subCategory.eq(subCategory.toString()));
         }
         List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiersFromPost(orderMethod);
         return findAllBySubCategory(pageable, booleanBuilder, orderSpecifiers, blockedUserIdList);
-    }
-
-    public Page<Post> findAllWithThemeBySubCategory(Pageable pageable, OrderMethod orderMethod, Themes subCategory, List<Long> blockedUserIdList) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if(subCategory != null){
-            booleanBuilder.and(post.postThemeList.any().themes.eq(subCategory));
-        }
-        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiersFromPost(orderMethod);
-        return findAllBySubCategory(pageable, booleanBuilder, orderSpecifiers, blockedUserIdList);
-    }
-
-    public Page<Post> findAllWithSeasonBySubCategory(Pageable pageable, OrderMethod orderMethod, Seasons subCategory, List<Long> blockedUserIdList) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if (subCategory != null) {
-            booleanBuilder.and(post.postSeasonList.any().seasons.eq(subCategory));
-        }
-        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiersFromPost(orderMethod);
-        return findAllBySubCategory(pageable, booleanBuilder, orderSpecifiers, blockedUserIdList);
-    }
-
-    public Page<Post> findAll(Pageable pageable, OrderMethod orderMethod, List<Long> blockedUserIdList) {
-        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiersFromPost(orderMethod);
-        return findAllBySubCategory(pageable, new BooleanBuilder(), orderSpecifiers, blockedUserIdList);
     }
 
     private static List<OrderSpecifier<?>> getOrderSpecifiersFromPost(OrderMethod orderMethod) {
@@ -107,7 +77,6 @@ public class QPostRepository {
                 .select(post)
                 .from(post)
                 .innerJoin(post.user, user).fetchJoin()
-                .leftJoin(post.postImgList, postImg).fetchJoin()
                 .where(booleanBuilder.and(user.id.notIn(blockedUserIdList)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
