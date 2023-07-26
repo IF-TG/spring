@@ -25,16 +25,12 @@ public class TravelPlanDestinationRoute {
     private TravelPlan travelPlan;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "destination_id", insertable=false, updatable=false),
-            @JoinColumn(name = "destination_type", insertable=false, updatable=false)
-    })
+    @JoinColumn(name = "destination_route_id", insertable=false, updatable=false)
     private DestinationRoute destinationRoute;
 
     @Column(nullable = false)
-    private int destination_order;
-    @Column(nullable = false)
-    private LocalDateTime eta;
+    private int order;
+
     //양방향 매핑
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "diary_id")

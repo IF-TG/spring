@@ -24,7 +24,8 @@ public interface TravelPlanDestinationRouteRepository extends JpaRepository<Trav
     @Query("SELECT tpdr FROM TravelPlanDestinationRoute tpdr " +
             "JOIN FETCH tpdr.travelPlan tp " +
             "JOIN FETCH tpdr.destinationRoute dr " +
-            "WHERE tp.id = :id")
+            "WHERE tp.id = :id" +
+            "ORDER BY tpdr.order")
     List<TravelPlanDestinationRoute> findWithTravelPlanAndDestinationRouteById(@Param("id") Long id);
 
 }

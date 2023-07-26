@@ -12,8 +12,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +49,10 @@ public class User {
     private String email;
     @Column(length = 30, nullable = true)
     private String nickname;
+
+    @CreationTimestamp
+    private LocalDateTime createAt;
+
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_address_id", nullable = false)
     private UserAddress userAddress;
@@ -63,7 +69,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private final List<ScrapFolder> scrapFolderList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private final List<SearchHistory> searchHistorieList = new ArrayList<>();
+    private final List<SearchHistory> searchHistoryList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private final Set<UserBlock> userBlockList = new HashSet<>();
     @OneToMany(mappedBy = "user")

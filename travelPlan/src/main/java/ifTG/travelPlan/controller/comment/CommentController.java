@@ -51,7 +51,7 @@ public class CommentController {
         return commentService.deleteNestedComment(nestedCommentIdDto);
     }
     @PutMapping("/nestedComment")
-    public NestedUpdateCommentDto updateNestedComment(@RequestBody RequestBodtUpdateNestedCommentDto requestBodtUpdateNestedCommentDto){
-        return commentService.updateNestedUpdateComment(requestBodtUpdateNestedCommentDto);
+    public NestedUpdateCommentDto updateNestedComment(@RequestBody RequestUpdateNestedCommentDto requestUpdateNestedCommentDto){
+        return commentService.updateNestedUpdateComment(requestUpdateNestedCommentDto);
     }   
 }

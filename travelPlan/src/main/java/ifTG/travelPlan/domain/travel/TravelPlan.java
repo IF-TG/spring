@@ -36,10 +36,13 @@ public class TravelPlan {
     private final List<TravelPlanDestinationRoute> travelPlanDestinationRoute = new ArrayList<>();
 
     @Builder
-    public TravelPlan(Long travelPlanId, String title, User user) {
-        this.travelPlanId = travelPlanId;
+    public TravelPlan(String title, User user) {
         this.title = title;
         this.user = user;
         this.user.getTravelPlanList().add(this);
+    }
+
+    public void updateTravelPlan(String title) {
+        this.title = title;
     }
 }
