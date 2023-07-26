@@ -4,6 +4,7 @@ import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.dto.comment.CommentDtoWithUserInfo;
 import ifTG.travelPlan.dto.comment.CommentUpdateDto;
 import ifTG.travelPlan.dto.comment.NestedCommentDto;
+import ifTG.travelPlan.dto.comment.NestedUpdateCommentDto;
 import ifTG.travelPlan.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ public class CommentController {
         return commentService.deleteNestedComment(nestedCommentIdDto);
     }
     @PutMapping("/nestedComment")
-    public NestedUpdateCommentDto updateNestedComment(@RequestBody RequestBodtUpdateNestedCommentDto requestBodtUpdateNestedCommentDto){
-        return commentService.updateNestedUpdateComment(requestBodtUpdateNestedCommentDto);
+    public NestedUpdateCommentDto updateNestedComment(@RequestBody RequestUpdateNestedCommentDto requestUpdateNestedCommentDto){
+        return commentService.updateNestedUpdateComment(requestUpdateNestedCommentDto);
     }   
 }

@@ -5,6 +5,7 @@ import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.dto.comment.CommentDtoWithUserInfo;
 import ifTG.travelPlan.dto.comment.CommentUpdateDto;
 import ifTG.travelPlan.dto.comment.NestedCommentDto;
+import ifTG.travelPlan.dto.comment.NestedUpdateCommentDto;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface CommentService {
     CommentUpdateDto updateComment(RequestUpdateCommentDto requestUpdateCommentDto);
     NestedCommentDto saveNestedComment(RequestCreateNestedCommentDto nestedCommentDto);
     Boolean deleteNestedComment(NestedCommentIdDto nestedCommentIdDto);
+    NestedUpdateCommentDto updateNestedUpdateComment(RequestUpdateNestedCommentDto requestUpdateNestedCommentDto);
 }
