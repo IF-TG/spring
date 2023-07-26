@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "destination_routes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class DestinationRoute {
-    @EmbeddedId
-    private DestinationRouteId destinationRouteId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "destination_route_id")
+    private Long id;
 
-    public DestinationRoute(DestinationRouteId destinationRouteId) {
-        this.destinationRouteId = destinationRouteId;
-    }
+
 }

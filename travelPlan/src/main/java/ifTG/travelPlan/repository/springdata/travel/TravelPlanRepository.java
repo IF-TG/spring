@@ -21,5 +21,6 @@ public interface TravelPlanRepository extends JpaRepository<TravelPlan, Long> {
     @Query("SELECT tp FROM TravelPlan tp JOIN FETCH tp.travelPlanDestinationRoute tpdr WHERE tpdr.id = :id")
     List<TravelPlan> findAllWithTravelPlanDestinationRouteById(@Param("id") Long id);
 
-
+    @Query("SELECT tp FROM TravelPlan tp WHERE tp.user = :userId")
+    List<TravelPlan> findAllByUserId(Long userId);
 }

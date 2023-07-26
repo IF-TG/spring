@@ -45,4 +45,11 @@ public class NestedComment {
         this.user = user;
         this.parentComment = parentComment;
     }
+
+    /**
+     * setter
+     */
+    public void updateComment(String comment){
+        this.comment = comment;
+    }
 }
