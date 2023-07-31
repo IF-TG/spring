@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -90,8 +91,9 @@ class PostServiceImplTest {
 
         userAddressRepository.save(userAddressA);
         userAddressRepository.save(userAddressB);
-        userRepository.save(userA);
-        userRepository.save(userB);
+        userA = userRepository.save(userA);
+        userB = userRepository.save(userB);
+        log.info("userA = {}", userA.getId());
 
         /**
          * userA는 userB를 차단
@@ -173,7 +175,7 @@ class PostServiceImplTest {
 
     @Test
     void createPostDto() throws IllegalAccessException {
-        PostRequestDto postRequestDtoA = new PostRequestDto(0, 4, OrderMethod.RECENT_ORDER, MainCategory.ORIGINAL, null, 0L);
+        PostRequestDto postRequestDtoA = new PostRequestDto(0, 4, OrderMethod.RECENT_ORDER, MainCategory.ORIGINAL, null, 16L);
         List<PostDto> lpA = postService.findAllPostWithPostRequestDto(postRequestDtoA);
 
         lpA.forEach(l->
@@ -181,7 +183,7 @@ class PostServiceImplTest {
                   );
         Assertions.assertThat(lpA.size()).isEqualTo(1);
 
-        PostRequestDto postRequestDtoB = new PostRequestDto(0, 4, OrderMethod.RECENT_ORDER, MainCategory.ORIGINAL, null, 1L);
+        PostRequestDto postRequestDtoB = new PostRequestDto(0, 4, OrderMethod.RECENT_ORDER, MainCategory.ORIGINAL, null, 17L);
         List<PostDto> lpB = postService.findAllPostWithPostRequestDto(postRequestDtoB);
 
         lpB.forEach(l->

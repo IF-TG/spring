@@ -34,4 +34,6 @@ public class DestinationRouteController {
     public List<DestinationRouteDto> updateDestinationToTravelPlanById(DestinationRouteListWithTravelPlanIdDto dto){
         return destinationRouteService.updateDestinationToTravelPlan(dto);
     }
+
+
 }

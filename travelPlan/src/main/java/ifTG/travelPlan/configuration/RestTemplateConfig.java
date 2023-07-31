@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.api;
+package ifTG.travelPlan.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
