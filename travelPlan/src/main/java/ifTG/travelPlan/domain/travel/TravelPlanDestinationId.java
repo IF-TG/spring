@@ -14,9 +14,6 @@ public class TravelPlanDestinationRouteId implements Serializable {
     @Column(name = "travel_plan_id")
     private Long travelPlanId;
 
-    @Column(name = "destination_id")
-    private String destinationId;
-
-    @Column(name = "destination_type")
-    private String type;
+    @Column(name = "destination")
+    private Long destinationId;
 }

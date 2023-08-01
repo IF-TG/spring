@@ -1,13 +1,10 @@
 package ifTG.travelPlan.domain.travel;
 
 import ifTG.travelPlan.domain.diary.Diary;
-import ifTG.travelPlan.domain.travel.destinationroute.DestinationRoute;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.*;
 
@@ -15,7 +12,7 @@ import static jakarta.persistence.FetchType.*;
 @Table(name = "travel_plan_destination_route")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TravelPlanDestinationRoute {
+public class TravelPlanDestination {
     @EmbeddedId
     @Column(name = "travel_plan_destination_route_id")
     private TravelPlanDestinationRouteId id;

@@ -1,8 +1,6 @@
 package ifTG.travelPlan.domain.travel.destinationroute;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
@@ -15,7 +13,11 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "destinations")
-public class Destination extends DestinationRoute{
+public class Destination{
+    @Id @Column(name = "destination_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String destinationName;
     private String location;
     @Formula("(SELECT COUNT(1) FROM destination_likes d WHERE d.destinationId = id AND d.type = type)")
