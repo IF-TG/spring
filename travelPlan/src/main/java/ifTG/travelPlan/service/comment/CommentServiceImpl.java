@@ -1,7 +1,7 @@
 package ifTG.travelPlan.service.comment;
 
-import ifTG.travelPlan.controller.comment.NestedCommentIdDto;
-import ifTG.travelPlan.controller.comment.NestedUpdateCommentDto;
+import ifTG.travelPlan.controller.dto.NestedCommentIdDto;
+import ifTG.travelPlan.controller.dto.NestedUpdateCommentDto;
 import ifTG.travelPlan.controller.dto.RequestUpdateNestedCommentDto;
 import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.domain.post.Post;
@@ -89,7 +89,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Boolean deleteNestedComment(NestedCommentIdDto nestedCommentIdDto) {
-        nestedCommentRepository.deleteById(nestedCommentIdDto.getNestedCommentId());
+        nestedCommentRepository.deleteByNestedCommentId(nestedCommentIdDto.getNestedCommentId());
         return true;
     }
 

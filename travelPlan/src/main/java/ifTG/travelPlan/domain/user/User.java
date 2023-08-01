@@ -65,11 +65,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private final List<TravelPlan> travelPlanList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private final List<Diary> diaryList = new ArrayList<>();
-    @OneToMany(mappedBy = "user")
     private final List<ScrapFolder> scrapFolderList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private final List<SearchHistory> searchHistoryList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private final List<UserLog> userLogList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private final Set<UserBlock> userBlockList = new HashSet<>();
     @OneToMany(mappedBy = "user")
@@ -78,6 +78,7 @@ public class User {
     private final Set<CommentLike> commentLikeList = new HashSet<>();
     @OneToMany(mappedBy = "user")
     private final Set<NestedCommentLike> nestedCommentLikeList = new HashSet<>();
+
     @Builder
     public User(String userId, String pw, String nickname, String name, Sex sex, LocalDate birthDate, String phoneNumber, String email, UserAddress userAddress) {
         this.userId = userId;

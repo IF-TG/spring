@@ -13,8 +13,5 @@ public class DestinationLikeId implements Serializable {
     private Long userId;
 
     @Column(name = "destination_id")
-    private String destinationId;
-
-    @Column(name = "destination_type")
-    private String destinationType;
+    private Long destinationId;
 }

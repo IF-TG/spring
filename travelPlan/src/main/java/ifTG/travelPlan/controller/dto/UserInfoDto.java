@@ -1,4 +1,4 @@
-package ifTG.travelPlan.controller.user;
+package ifTG.travelPlan.controller.dto;
 
 import lombok.Getter;
 

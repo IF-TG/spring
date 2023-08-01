@@ -1,13 +1,12 @@
 package ifTG.travelPlan.domain.travel;
 
+import ifTG.travelPlan.domain.diary.Diary;
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class TravelPlan {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "travel_plan_id")
-    private Long travelPlanId;
+    private Long id;
 
     @Column(length = 100, nullable = false)
     private String title;
@@ -33,7 +32,10 @@ public class TravelPlan {
 
     //양방향 매핑
     @OneToMany(mappedBy = "travelPlan")
-    private final List<TravelPlanDestinationRoute> travelPlanDestinationRoute = new ArrayList<>();
+    private final List<TravelPlanDestination> travelPlanDestinationList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "travelPlan")
+    private final List<Diary> dairyList = new ArrayList<>();
 
     @Builder
     public TravelPlan(String title, User user) {

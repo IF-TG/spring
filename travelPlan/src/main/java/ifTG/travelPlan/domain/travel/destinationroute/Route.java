@@ -1,3 +1,4 @@
+/*
 package ifTG.travelPlan.domain.travel.destinationroute;
 
 import jakarta.persistence.*;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "routes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Route extends DestinationRoute{
+public class Route{
     private String apiId;
     @Enumerated(value = EnumType.STRING)
     private RouteType roteType;
@@ -20,4 +21,4 @@ public class Route extends DestinationRoute{
     private Float distance;
     private Integer charge;
     private String name;
-}
+}*/

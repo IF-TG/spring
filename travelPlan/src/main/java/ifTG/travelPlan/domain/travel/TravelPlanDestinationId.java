@@ -10,10 +10,10 @@ import java.io.Serializable;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TravelPlanDestinationRouteId implements Serializable {
+public class TravelPlanDestinationId implements Serializable {
     @Column(name = "travel_plan_id")
     private Long travelPlanId;
 
-    @Column(name = "destination")
+    @Column(name = "destination_id")
     private Long destinationId;
 }

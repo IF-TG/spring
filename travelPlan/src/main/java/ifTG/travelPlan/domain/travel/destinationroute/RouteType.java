@@ -1,3 +1,4 @@
+/*
 package ifTG.travelPlan.domain.travel.destinationroute;
 
 public enum RouteType {
@@ -9,3 +10,4 @@ public enum RouteType {
     INTERCITY_BUS,
     ETC_MOVEMENT
 }
+*/

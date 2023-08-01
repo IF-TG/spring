@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface NestedCommentRepository extends JpaRepository<NestedComment, Long> {
-    @Query("DELETE nc FROM NestedComment nc WHERE nc.id = :id")
+    @Query("DELETE NestedComment nc WHERE nc.id = :id")
     @Modifying
-    void deleteById(Long id);
+    void deleteByNestedCommentId(Long id);
 }

@@ -28,7 +28,7 @@ public class TravelPlanServiceImpl implements TravelPlanService{
 
         travelPlan = travelPlanRepository.save(travelPlan);
 
-        return new TravelPlanDto(travelPlan.getTravelPlanId(), travelPlan.getTitle());
+        return new TravelPlanDto(travelPlan.getId(), travelPlan.getTitle());
     }
 
     @Override
@@ -36,7 +36,7 @@ public class TravelPlanServiceImpl implements TravelPlanService{
         TravelPlan travelPlan = travelPlanRepository.findById(requestTravelPlanDto.getUserId()).orElseThrow(EntityNotFoundException::new);
         travelPlan.updateTravelPlan(requestTravelPlanDto.getTitle());
 
-        return new TravelPlanDto(travelPlan.getTravelPlanId(), travelPlan.getTitle());
+        return new TravelPlanDto(travelPlan.getId(), travelPlan.getTitle());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class TravelPlanServiceImpl implements TravelPlanService{
 
         return travelPlanList.stream().map(
                 travelPlan ->
-                        new TravelPlanDto(travelPlan.getTravelPlanId(), travelPlan.getTitle())
+                        new TravelPlanDto(travelPlan.getId(), travelPlan.getTitle())
         ).toList();
     }
 

@@ -4,7 +4,6 @@ import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.dto.comment.CommentDtoWithUserInfo;
 import ifTG.travelPlan.dto.comment.CommentUpdateDto;
 import ifTG.travelPlan.dto.comment.NestedCommentDto;
-import ifTG.travelPlan.dto.comment.NestedUpdateCommentDto;
 import ifTG.travelPlan.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

@@ -14,7 +14,7 @@ import java.util.List;
  * joined 전략을 취하는게 옳은 일일까?? - 성능 테스트 예정
  */
 @Repository
-public interface TravelPlanDestinationRouteRepository extends JpaRepository<TravelPlanDestination, Long> {
+public interface TravelPlanDestinationRepository extends JpaRepository<TravelPlanDestination, Long> {
     /**
      * select all
      */

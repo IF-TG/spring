@@ -1,5 +1,6 @@
 package ifTG.travelPlan.domain.diary;
 
+import ifTG.travelPlan.domain.travel.TravelPlan;
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,8 +31,8 @@ public class Diary {
     private LocalDateTime createAt;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "travel_plan_id", nullable = false)
+    private TravelPlan travelPlan;
 
     //양방향 매핑
     @OneToMany(mappedBy = "diary", cascade = CascadeType.MERGE, orphanRemoval = true)

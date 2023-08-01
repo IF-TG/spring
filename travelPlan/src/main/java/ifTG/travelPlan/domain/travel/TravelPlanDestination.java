@@ -1,35 +1,39 @@
 package ifTG.travelPlan.domain.travel;
 
-import ifTG.travelPlan.domain.diary.Diary;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.*;
 
 @Entity
-@Table(name = "travel_plan_destination_route")
+@Table(name = "travel_plan_destination")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TravelPlanDestination {
     @EmbeddedId
-    @Column(name = "travel_plan_destination_route_id")
-    private TravelPlanDestinationRouteId id;
+    @Column(name = "travel_plan_destination_id")
+    private TravelPlanDestinationId id;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "travel_plan_id", insertable=false, updatable=false)
     private TravelPlan travelPlan;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "destination_route_id", insertable=false, updatable=false)
-    private DestinationRoute destinationRoute;
+    @JoinColumn(name = "destination_id", insertable = false, updatable = false)
+    private Destination destination;
 
     @Column(nullable = false)
-    private int order;
+    private LocalDateTime eta;
 
-    //양방향 매핑
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "diary_id")
-    private Diary dairy;
+    @Builder
+    public TravelPlanDestination(TravelPlan travelPlan, Destination destination, LocalDateTime eta) {
+        this.travelPlan = travelPlan;
+        this.destination = destination;
+        this.eta = eta;
+    }
 }

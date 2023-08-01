@@ -1,4 +1,4 @@
-package ifTG.travelPlan.dto;
+package ifTG.travelPlan.dto.travel;
 
 public enum DataType {
     ROUTE,

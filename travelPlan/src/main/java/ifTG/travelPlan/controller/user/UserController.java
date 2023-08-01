@@ -1,5 +1,7 @@
 package ifTG.travelPlan.controller.user;
 
+import ifTG.travelPlan.controller.dto.UserCreateDto;
+import ifTG.travelPlan.controller.dto.UserInfoDto;
 import ifTG.travelPlan.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
