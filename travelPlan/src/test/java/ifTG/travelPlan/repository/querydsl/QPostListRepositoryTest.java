@@ -5,32 +5,27 @@ import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.user.Sex;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.domain.user.UserAddress;
-import ifTG.travelPlan.dto.post.enums.*;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Commit;
 
 import java.time.LocalDate;
 
 @Transactional
 @SpringBootTest
 @Slf4j
-class QPostRepositoryTest {
+class QPostListRepositoryTest {
     @PersistenceContext
     EntityManager em;
     JPAQueryFactory queryFactory;
-    @Autowired QPostRepository qPostRepository;
+    @Autowired
+    QPostListRepository qPostListRepository;
     @Autowired
     PostRepository postRepository;
 

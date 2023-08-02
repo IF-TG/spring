@@ -24,4 +24,8 @@ public class UserBlock {
     public UserBlock(UserBlockId userBlockId) {
         this.userBlockId = userBlockId;
     }
+
+    public Long getBlockedUserId(){
+        return this.userBlockId.getBlockedUserId();
+    }
 }

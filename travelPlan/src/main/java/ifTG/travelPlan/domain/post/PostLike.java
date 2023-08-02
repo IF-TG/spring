@@ -10,7 +10,6 @@ import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 
 @Entity
-@Getter
 @Table(name = "post_likes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostLike {
@@ -27,5 +26,9 @@ public class PostLike {
 
     public PostLike(PostLikeId postLikeId) {
         this.postLikeId = postLikeId;
+    }
+
+    public Long getPostLikedId(){
+        return this.postLikeId.getPostId();
     }
 }

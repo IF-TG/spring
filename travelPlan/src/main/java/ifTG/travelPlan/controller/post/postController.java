@@ -1,9 +1,11 @@
 package ifTG.travelPlan.controller.post;
 
+import ifTG.travelPlan.controller.dto.RequestSearchPostDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.*;
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.service.post.PostService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,8 @@ public class postController {
     private final PostService postService;
 
     @GetMapping("/list")
-    public Result<List<PostDto>> getPostListWithCategory(@RequestBody PostRequestDto postRequestDto){
-        return new Result<>(postService.findAllPostWithPostRequestDto(postRequestDto));
+    public Result<List<PostDto>> getPostListWithCategory(@RequestBody RequestPostListDto requestPostListDto){
+        return new Result<>(postService.findAllPostWithPostRequestDto(requestPostListDto));
     }
 
     @PostMapping()
