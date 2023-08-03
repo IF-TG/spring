@@ -35,12 +35,5 @@ class PostRepositoryTest {
     @Test
     public void 별읩려거테스트(){        queryFactory = new JPAQueryFactory(em);
 
-        QUser qUser = user;
-        User findUser = queryFactory
-                .select(user)
-                .from(user)
-                .where(user.userId.eq("11"))
-                .fetchOne();
-
     }
 }

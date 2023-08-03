@@ -1,4 +1,4 @@
-package ifTG.travelPlan.configuration;
+/*package ifTG.travelPlan.configuration;
 
 import jakarta.websocket.WebSocketContainer;
 import org.springframework.context.annotation.Configuration;
@@ -15,4 +15,4 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         //registry.addHandler(, \"/ws").setAllowedOrigins("*");
     }
-}
+}*/

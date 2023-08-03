@@ -2,6 +2,7 @@ package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.controller.dto.RequestSearchPostDto;
+import ifTG.travelPlan.controller.dto.UserIdDto;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.user.User;
@@ -38,4 +39,6 @@ public class PostSearchServiceImpl implements PostSearchService{
                 );
         return postConvertDto.getPostDtoList(postList, likedPostList);
     }
+
+
 }
