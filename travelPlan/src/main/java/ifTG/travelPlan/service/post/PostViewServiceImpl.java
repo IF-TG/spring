@@ -14,5 +14,6 @@ public class PostViewServiceImpl implements PostViewService{
 
     public void addPostViewByPostIdAndUserId(Long postId, Long userId) {
         PostView postView = new PostView(new PostViewId(userId, postId));
+        postViewRepository.save(postView);
     }
 }

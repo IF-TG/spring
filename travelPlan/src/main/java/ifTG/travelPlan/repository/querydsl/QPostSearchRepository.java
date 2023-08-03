@@ -41,9 +41,10 @@ public class QPostSearchRepository {
     private static BooleanBuilder getBooleanBuilder(String keyword, boolean isContent, boolean isTitle) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if(isContent){
-            booleanBuilder.or(post.content.like(keyword));
-        }else if(isTitle){
-            booleanBuilder.or(post.title.like(keyword));
+            booleanBuilder.or(post.content.like("%"+keyword+"%"));
+        }
+        if(isTitle){
+            booleanBuilder.or(post.title.like("%"+keyword+"%"));
         }
         return booleanBuilder;
     }

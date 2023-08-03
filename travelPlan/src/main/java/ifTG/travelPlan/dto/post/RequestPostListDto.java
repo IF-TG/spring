@@ -77,7 +77,7 @@ public class RequestPostListDto {
         isNullSubCategory();
     }
     private void isNullSubCategory() {
-        Optional.ofNullable(subCategory)
+        Optional.ofNullable(this.subCategory)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subcategory selection"));
     }
 }

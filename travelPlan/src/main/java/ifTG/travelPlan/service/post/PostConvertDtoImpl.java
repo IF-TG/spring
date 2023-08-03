@@ -5,9 +5,11 @@ import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostCategory;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class PostConvertDtoImpl implements PostConvertDto{
     @Override
     public List<PostDto> getPostDtoList(Page<Post> postList, List<Long> likedPostIdList) {

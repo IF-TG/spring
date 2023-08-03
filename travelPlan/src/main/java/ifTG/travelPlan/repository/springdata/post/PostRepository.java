@@ -32,17 +32,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             countQuery = "SELECT count(p) FROM Post p WHERE p.user.nickname = :nickname")
     Page<Post> findAllWithUserByUserNickname(@Param("nickname") String nickname, Pageable pageable);
 
-    @Query(value = "SELECT p FROM Post p WHERE p.id NOT IN :blockedIds AND p.title LIKE %:title% ORDER BY p.createAt DESC",
-        countQuery = "SELECT COUNT(p) FROM Post p WHERE p.id NOT IN :blockedIds AND p.title LIKE %:title%")
-    Page<Post> findAllLikeTitleNotInBlockedPost(@Param("title") String title, @Param("blockedIds") List<Long> blockedPostIdList, Pageable pageable);
-
-    @Query(value = "SELECT p FROM Post p WHERE NOT IN :blockedIds AND p.content LIKE %:content% ORDER BY p.createAt DESC",
-        countQuery = "SELECT COUNT(p) FROM Post p WHERE NOT IN :blockedIds AND p.content LIKE %:content%")
-    Page<Post> findAllLikeContentNotInBlockedPost(@Param("content")String content, @Param("blockedIds") List<Long> blockedUserIdList, Pageable pageable);
-
-    @Query(value = "SELECT p FROM Post p WHERE NOT IN :blockedIds AND (p.content LIKE %:keyword% OR p.title LIKE %:keyword%) ORDER BY p.createAt DESC",
-            countQuery = "SELECT COUNT(p) FROM Post p WHERE NOT IN :blockedIds AND (p.content LIKE %:keyword% OR p.title LIKE %:keyword%)")
-    Page<Post> findAllLikeContentAndTitleNotInBlockedPost(@Param("keyword")String keyword, @Param("blockedIds") List<Long> blockedUserIdList, Pageable pageable);
 
     /**
      * select one
