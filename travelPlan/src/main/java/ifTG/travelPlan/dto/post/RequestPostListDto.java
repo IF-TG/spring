@@ -3,7 +3,6 @@ package ifTG.travelPlan.dto.post;
 import ifTG.travelPlan.dto.post.enums.*;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,7 @@ import java.util.Optional;
 
 @Data
 @Slf4j
-public class PostRequestDto {
+public class RequestPostListDto {
     private final Pageable pageable;
     private final OrderMethod orderMethod;
     private final MainCategory mainCategory;
@@ -20,7 +19,7 @@ public class PostRequestDto {
     private final Long userId;
 
     @Builder
-    public PostRequestDto(int page, int perPage, OrderMethod orderMethod, MainCategory mainCategory, String subCategory, Long userId) throws IllegalAccessException {
+    public RequestPostListDto(int page, int perPage, OrderMethod orderMethod, MainCategory mainCategory, String subCategory, Long userId) throws IllegalAccessException {
         isNullCategory(orderMethod, mainCategory);
         log.info("request mainCategory={} subCategory={}", mainCategory, subCategory);
         this.pageable = PageRequest.of(page, perPage);
@@ -78,7 +77,7 @@ public class PostRequestDto {
         isNullSubCategory();
     }
     private void isNullSubCategory() {
-        Optional.ofNullable(subCategory)
+        Optional.ofNullable(this.subCategory)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subcategory selection"));
     }
 }

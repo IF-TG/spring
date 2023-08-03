@@ -1,11 +1,13 @@
 package ifTG.travelPlan.service.post;
 
+import ifTG.travelPlan.controller.dto.RequestSearchPostDto;
 import ifTG.travelPlan.domain.post.*;
 import ifTG.travelPlan.domain.user.User;
+import ifTG.travelPlan.domain.user.UserBlock;
 import ifTG.travelPlan.dto.post.*;
 import ifTG.travelPlan.dto.post.enums.*;
 import ifTG.travelPlan.controller.dto.PostDto;
-import ifTG.travelPlan.repository.querydsl.QPostRepository;
+import ifTG.travelPlan.repository.querydsl.QPostListRepository;
 import ifTG.travelPlan.repository.springdata.post.PostCategoryRepository;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
@@ -20,30 +22,26 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * to do
- * 1 : post dto에 담아서 보내기 o
- * 2 : 서브 카테고리 레퍼지토리를 좀 줄일 수 없을까? 해당 레퍼지토리로 삭제하는게 아니라면 여러번의 delete문이 나가 성능저하 가능성
- * 5 : handle~ 함수들 중복 코드 ( 은근 enum 합치기 힘들다. )
+ * 결합도 낮출것, 그러니까 클래스 좀 더 나누자 나중에
  */
 @RequiredArgsConstructor
 @Service
 @Transactional
 @Slf4j
 public class PostServiceImpl implements PostService{
-    private final QPostRepository qPostRepository;
+    private final QPostListRepository qPostListRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PostCategoryRepository postCategoryRepository;
-
+    private final PostConvertDto postConvertDto;
 
     @Override
-    public List<PostDto> findAllPostWithPostRequestDto(PostRequestDto postRequestDto){
-        User user = userRepository.findByUserIdWithUserBlockAndPostLike(postRequestDto.getUserId());
-        log.info("{}", user.getUserId());
-        List<Long> blockedUserIdList = user.getUserBlockList().stream().map(ub -> ub.getUser().getId()).toList();
-        List<Long> likedPostIdByUser = user.getPostLikeList().stream().map(pl -> pl.getPostLikeId().getPostId()).toList();
-        Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(postRequestDto, blockedUserIdList);
-        return getPostDtoList(postList, likedPostIdByUser);
+    public List<PostDto> findAllPostWithPostRequestDto(RequestPostListDto requestPostListDto){
+        User user = userRepository.findByUserIdWithUserBlockAndPostLike(requestPostListDto.getUserId());
+        List<Long> blockedUserIdList = user.getUserBlockList().stream().map(UserBlock::getBlockedUserId).toList();
+        List<Long> likedPostListByUser = user.getPostLikeList().stream().map(PostLike::getPostLikedId).toList();
+        Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(requestPostListDto, blockedUserIdList);
+        return postConvertDto.getPostDtoList(postList, likedPostListByUser);
     }
 
     @Override
@@ -52,7 +50,7 @@ public class PostServiceImpl implements PostService{
         Post post = getPostByPostCreateDto(postCreateDto, user);
         Post savedPost = postRepository.save(post);
         saveAllPostSubCategoryByPostCreateDto(postCreateDto, savedPost);
-        return getPostDto(postRepository.save(savedPost), false);
+        return postConvertDto.getPostDto(postRepository.save(savedPost), false);
     }
     @Override
     public PostDto updatePost(PostUpdateDto postUpdateDto) {
@@ -62,13 +60,16 @@ public class PostServiceImpl implements PostService{
         updatePost(postUpdateDto, post);
         saveAllPostSubCategoryByPostCreateDto(postUpdateDto.getPost(), post);
         postRepository.save(post);
-        return getPostDto(post, false);
+        return postConvertDto.getPostDto(post, false);
     }
+
 
 
     private void deleteSubCategory(Long postId) {
         postCategoryRepository.deleteAllByPostId(postId);
     }
+
+
     private static void updatePost(PostUpdateDto postUpdateDto, Post post) {
         PostCreateDto postDto = postUpdateDto.getPost();
         log.info("update Post = {}, {}, {}, {}", postDto.getTitle(), post.getContent(), postDto.getStartDate(), postDto.getEndDate());
@@ -108,52 +109,19 @@ public class PostServiceImpl implements PostService{
     }
 
 
-    private Page<Post> findAllPostsBySubCategoryOrderByOrderMethod(PostRequestDto postRequestDto, List<Long> blockedUserIdList) {
-        return qPostRepository.findAllBySubCategoryOrderByOrderMethod(
-                postRequestDto.getPageable(),
-                postRequestDto.getOrderMethod(),
-                postRequestDto.getSubCategory(),
+    private Page<Post> findAllPostsBySubCategoryOrderByOrderMethod(RequestPostListDto requestPostListDto, List<Long> blockedUserIdList) {
+        return qPostListRepository.findAllBySubCategoryOrderByOrderMethod(
+                requestPostListDto.getPageable(),
+                requestPostListDto.getOrderMethod(),
+                requestPostListDto.getSubCategory(),
                 blockedUserIdList
         );
     }
 
-    private static List<PostDto> getPostDtoList(Page<Post> postList, List<Long> likedPostIdList) {
-        return postList.stream()
-                .map(p->getPostDto(p, isLiked(likedPostIdList, p)))
-                .toList();
-    }
 
-    private static boolean isLiked(List<Long> likedPostIdListByUser, Post p) {
-        return likedPostIdListByUser.contains(p.getId());
-    }
 
-    private static PostDto getPostDto(Post post, boolean isLiked){
-        List<String> seasons = getPostCategoryFilterMainCategory(post, MainCategory.SEASON);
-        List<String> regions = getPostCategoryFilterMainCategory(post, MainCategory.REGION);
-        List<String> themes = getPostCategoryFilterMainCategory(post, MainCategory.THEME);
-        List<String> companions = getPostCategoryFilterMainCategory(post, MainCategory.COMPANION);
-        return PostDto.builder()
-                      .postId(post.getId())
-                      .profileImgUri(post.getUser().getProfileImgUrl())
-                      .title(post.getTitle())
-                      .nickname(post.getUser().getNickname())
-                      .startDate(post.getStartDate())
-                      .endDate(post.getEndDate())
-                      .postImgUri(post.getPostImgList())
-                      .content(post.getContent())
-                      .likeNum(post.getLikeNum())
-                      .commentNum(post.getCommentNum())
-                      .createAt(post.getCreateAt())
-                      .seasons(seasons)
-                      .companions(companions)
-                      .regions(regions)
-                      .themes(themes)
-                      .isLiked(isLiked)
-                      .build();
-    }
 
-    private static List<String> getPostCategoryFilterMainCategory(Post post, MainCategory mainCategory) {
-        return post.getPostCategoryList().stream().filter(postCategory -> postCategory.getMainCategory().equals(mainCategory)).map(PostCategory::getSubCategory).toList();
-    }
+
+
 
 }

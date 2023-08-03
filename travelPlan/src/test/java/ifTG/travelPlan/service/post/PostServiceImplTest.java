@@ -3,7 +3,7 @@ package ifTG.travelPlan.service.post;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.user.*;
 import ifTG.travelPlan.controller.dto.PostDto;
-import ifTG.travelPlan.dto.post.PostRequestDto;
+import ifTG.travelPlan.dto.post.RequestPostListDto;
 import ifTG.travelPlan.dto.post.enums.*;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -175,16 +174,16 @@ class PostServiceImplTest {
 
     @Test
     void createPostDto() throws IllegalAccessException {
-        PostRequestDto postRequestDtoA = new PostRequestDto(0, 4, OrderMethod.RECENT_ORDER, MainCategory.ORIGINAL, null, 16L);
-        List<PostDto> lpA = postService.findAllPostWithPostRequestDto(postRequestDtoA);
+        RequestPostListDto requestPostListDtoA = new RequestPostListDto(0, 4, OrderMethod.RECENT_ORDER, MainCategory.ORIGINAL, null, 16L);
+        List<PostDto> lpA = postService.findAllPostWithPostRequestDto(requestPostListDtoA);
 
         lpA.forEach(l->
                           log.info("{}, {}, {}, {}, {}", l.getPostId(), l.getTitle(), l.getContent(), l.getCreateAt(), l.getLikeNum())
                   );
         Assertions.assertThat(lpA.size()).isEqualTo(1);
 
-        PostRequestDto postRequestDtoB = new PostRequestDto(0, 4, OrderMethod.RECENT_ORDER, MainCategory.ORIGINAL, null, 17L);
-        List<PostDto> lpB = postService.findAllPostWithPostRequestDto(postRequestDtoB);
+        RequestPostListDto requestPostListDtoB = new RequestPostListDto(0, 4, OrderMethod.RECENT_ORDER, MainCategory.ORIGINAL, null, 17L);
+        List<PostDto> lpB = postService.findAllPostWithPostRequestDto(requestPostListDtoB);
 
         lpB.forEach(l->
                 log.info("{}, {}, {}, {}, {}", l.getPostId(), l.getTitle(), l.getContent(), l.getCreateAt(), l.getLikeNum())

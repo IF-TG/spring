@@ -1,4 +1,4 @@
-package ifTG.travelPlan.annotation;
+package ifTG.travelPlan.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

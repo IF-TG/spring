@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -31,11 +32,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             countQuery = "SELECT count(p) FROM Post p WHERE p.user.nickname = :nickname")
     Page<Post> findAllWithUserByUserNickname(@Param("nickname") String nickname, Pageable pageable);
 
-    @Query("SELECT p FROM Post p WHERE p.title LIKE %:title%")
-    Page<Post> findAllByTitle(@Param("title") String title, Pageable pageable);
-
-    @Query("SELECT p FROM Post p WHERE p.content LIKE %:content%")
-    Page<Post> findAllByContent(@Param("content")String content, Pageable pageable);
 
     /**
      * select one
