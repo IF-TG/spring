@@ -12,5 +12,8 @@ import java.util.List;
 public interface DestinationRouteService {
     List<DestinationRouteDto> getDestinationRouteByTravelPlanId(TravelPlanIdDto travelPlanId);
 
-    DestinationDto addDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto);
+    List<DestinationRouteDto> addDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto);
+
+    List<DestinationRouteDto> updateDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto);
+
 }

@@ -66,7 +66,6 @@ public class PostServiceImpl implements PostService{
     }
 
 
-
     private void deleteSubCategory(Long postId) {
         postCategoryRepository.deleteAllByPostId(postId);
     }

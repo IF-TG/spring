@@ -4,15 +4,11 @@ import ifTG.travelPlan.dto.post.enums.Companions;
 import ifTG.travelPlan.dto.post.enums.Regions;
 import ifTG.travelPlan.dto.post.enums.Seasons;
 import ifTG.travelPlan.dto.post.enums.Themes;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;

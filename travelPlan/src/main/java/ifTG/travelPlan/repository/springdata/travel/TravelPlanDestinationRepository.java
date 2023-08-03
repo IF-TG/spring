@@ -1,5 +1,7 @@
 package ifTG.travelPlan.repository.springdata.travel;
 
+
+
 import ifTG.travelPlan.domain.travel.TravelPlanDestination;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +29,5 @@ public interface TravelPlanDestinationRepository extends JpaRepository<TravelPla
             "ORDER BY tpd.eta")
     List<TravelPlanDestination> findWithTravelPlanAndDestinationRouteByTravelPlanId(@Param("id") Long id);
 
+    List<TravelPlanDestination> findAllByTravelPlanId(Long travelPlanId);
 }

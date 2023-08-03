@@ -16,4 +16,10 @@ public class TravelPlanDestinationId implements Serializable {
 
     @Column(name = "destination_id")
     private Long destinationId;
+
+    public TravelPlanDestinationId(Long travelPlanId, Long destinationId) {
+        this.travelPlanId = travelPlanId;
+        this.destinationId = destinationId;
+    }
+
 }

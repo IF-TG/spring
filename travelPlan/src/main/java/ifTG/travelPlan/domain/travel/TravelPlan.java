@@ -31,7 +31,7 @@ public class TravelPlan {
     private User user;
 
     //양방향 매핑
-    @OneToMany(mappedBy = "travelPlan")
+    @OneToMany(mappedBy = "travelPlan", cascade = CascadeType.REMOVE)
     private final List<TravelPlanDestination> travelPlanDestinationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "travelPlan")

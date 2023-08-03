@@ -20,4 +20,8 @@ public class NestedCommentLike {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "nested_comment_id", insertable = false, updatable = false)
     private NestedComment nestedComment;
+
+    public NestedCommentLike(NestedCommentLikeId nestedCommentLikeId) {
+        this.nestedCommentLikeId = nestedCommentLikeId;
+    }
 }

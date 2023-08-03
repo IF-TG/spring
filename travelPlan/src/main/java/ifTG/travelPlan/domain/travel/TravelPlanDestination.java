@@ -31,9 +31,12 @@ public class TravelPlanDestination {
     private LocalDateTime eta;
 
     @Builder
-    public TravelPlanDestination(TravelPlan travelPlan, Destination destination, LocalDateTime eta) {
-        this.travelPlan = travelPlan;
-        this.destination = destination;
+    public TravelPlanDestination(Long travelPlanId, Long destinationId, LocalDateTime eta) {
+        this.id = new TravelPlanDestinationId(travelPlanId, destinationId);
+        this.eta = eta;
+    }
+
+    public void updateTravelPlanDestination(LocalDateTime eta){
         this.eta = eta;
     }
 }
