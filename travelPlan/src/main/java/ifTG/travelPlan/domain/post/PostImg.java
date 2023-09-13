@@ -1,6 +1,5 @@
 package ifTG.travelPlan.domain.post;
 
-import ifTG.travelPlan.domain.post.Post;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,17 +18,27 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "post_imgs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostImg {
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "post_img_id")
     private Long id;
 
     @Column(nullable = false)
-    private String imgURL;
+    private String fileName;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean isThumbnail;
 
+
+    public PostImg(String fileName, Post post, boolean isThumbnail) {
+        this.fileName = fileName;
+        this.post = post;
+        this.isThumbnail = isThumbnail;
+        post.addPostImgUri(this);
+    }
 }

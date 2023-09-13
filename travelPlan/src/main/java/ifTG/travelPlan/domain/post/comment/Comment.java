@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
@@ -50,12 +51,13 @@ public class Comment {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @Formula("(SELECT COUNT(1) FROM comment_likes c WHERE c.comment_id = id)")
+    @Formula("(SELECT COUNT(1) FROM comment_likes c WHERE c.comment_id = comment_id)")
     private int likeNum;
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "parentComment")
     private final List<NestedComment> nestedCommentList = new ArrayList<>();
     @OneToMany(mappedBy = "comment")

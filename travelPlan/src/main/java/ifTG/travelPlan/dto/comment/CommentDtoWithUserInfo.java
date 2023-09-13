@@ -16,8 +16,8 @@ public class CommentDtoWithUserInfo {
     private final String createAt;
     private final int LikeNum;
     private final String comment;
-    private List<NestedCommentDto> nestedCommentDtoList;
     private final boolean isDeleted;
+    private List<NestedCommentDto> nestedCommentDtoList;
 
     @Builder
     public CommentDtoWithUserInfo(Long commentId, String profileImgUri, String nickname, boolean isLiked, LocalDateTime createAt, int likeNum, String comment, List<NestedCommentDto> nestedCommentDtoList, boolean isDeleted) {

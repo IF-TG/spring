@@ -1,4 +1,4 @@
-package ifTG.travelPlan.controller.post;
+package ifTG.travelPlan.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,5 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RequestLikeDto {
     private final Long userId;
-    private final Long ObjectId;
+
+    private final Long objectId;
 }

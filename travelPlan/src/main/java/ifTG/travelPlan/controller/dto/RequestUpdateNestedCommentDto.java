@@ -6,10 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RequestUpdateNestedCommentDto {
-
-    private final Long commentId;
-    private final String comment;
-
     private Long nestedCommentId;
-
+    private final String comment;
 }

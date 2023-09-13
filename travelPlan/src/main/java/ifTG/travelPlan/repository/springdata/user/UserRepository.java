@@ -64,4 +64,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.commentLikeList LEFT JOIN FETCH u.nestedCommentLikeList WHERE u.id = :id")
     User findWithCommentLikeAndNestedCommentLikeByUserId(Long id);
+
 }

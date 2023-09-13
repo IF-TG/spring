@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "title": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "info": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "blindInfo": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "thumbnailUrl": {
+      "type": "keyword"
+    },
+    "keywordList": {
+      "type": "text",
+      "analyzer": "korean"
+    }
+  }
+}

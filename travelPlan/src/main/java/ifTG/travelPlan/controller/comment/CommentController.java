@@ -5,6 +5,7 @@ import ifTG.travelPlan.dto.comment.CommentDtoWithUserInfo;
 import ifTG.travelPlan.dto.comment.CommentUpdateDto;
 import ifTG.travelPlan.dto.comment.NestedCommentDto;
 import ifTG.travelPlan.service.comment.CommentService;
+import ifTG.travelPlan.service.comment.NestedCommentLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,19 +17,13 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("/byPost")
-    public Result<List<CommentDtoWithUserInfo>> getCommentListByPostAndSavePostView(@RequestBody RequestCommentByPostDto requestCommentByPostDto){
-        return new Result<>(commentService.getCommentListByPostAndSavePostView(requestCommentByPostDto));
-    }
-
-    @GetMapping("/comments")
-    public Result<List<CommentDtoWithUserInfo>> getCommentList(@RequestBody RequestCommentByPostDto requestCommentByPostDto){
-        return new Result<>(commentService.getCommentListByPost(requestCommentByPostDto));
-    }
-
     @PostMapping
     public CommentDtoWithUserInfo saveComment(@RequestBody RequestCreateCommentDto createCommentDto){
         return commentService.saveComment(createCommentDto);
+    }
+    @GetMapping("/list")
+    public Result<List<CommentDtoWithUserInfo>> getCommentList(@RequestBody RequestCommentByPostDto requestCommentByPostDto){
+        return new Result<>(commentService.getCommentListByPost(requestCommentByPostDto));
     }
 
     @DeleteMapping

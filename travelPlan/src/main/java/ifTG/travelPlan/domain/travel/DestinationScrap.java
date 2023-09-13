@@ -20,4 +20,6 @@ public class DestinationScrap {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "folder_id", referencedColumnName = "scrap_folder_id", insertable = false, updatable = false)
     private ScrapFolder scrapFolder;
+
+    private String thumbnail;
 }

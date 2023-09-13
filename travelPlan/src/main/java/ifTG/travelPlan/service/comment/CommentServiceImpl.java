@@ -17,15 +17,18 @@ import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.post.PostViewService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
@@ -37,11 +40,7 @@ public class CommentServiceImpl implements CommentService{
     public List<CommentDtoWithUserInfo> getCommentListByPost(RequestCommentByPostDto requestCommentByPostDto) {
         return getCommentList(requestCommentByPostDto);
     }
-    @Override
-    public List<CommentDtoWithUserInfo> getCommentListByPostAndSavePostView(RequestCommentByPostDto requestCommentByPostDto) {
-        postViewService.addPostViewByPostIdAndUserId(requestCommentByPostDto.getPostId(), requestCommentByPostDto.getUserId());
-        return getCommentList(requestCommentByPostDto);
-    }
+
     @Override
     public CommentDtoWithUserInfo saveComment(RequestCreateCommentDto createCommentDto) {
         User user = getUser(createCommentDto.getUserId());
@@ -57,9 +56,13 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Boolean deleteComment(CommentIdDto commentIdDto) {
-        Comment comment = commentRepository.findById(commentIdDto.getCommentId()).orElseThrow(EntityNotFoundException::new);
-        comment.deleteComment();
-        commentRepository.save(comment);
+        Comment comment = commentRepository.findWithNestedCommentById(commentIdDto.getCommentId()).orElseThrow(EntityNotFoundException::new);
+        if(comment.getNestedCommentList().isEmpty()){
+            commentRepository.delete(comment);
+        }else{
+            comment.deleteComment();
+            commentRepository.save(comment);
+        }
         return true;
     }
 
@@ -70,6 +73,7 @@ public class CommentServiceImpl implements CommentService{
             throw new RuntimeException("이미 삭제된 댓글입니다.");
         }
         comment.updateComment(requestUpdateCommentDto.getComment());
+        commentRepository.save(comment);
         return new CommentUpdateDto(comment.getId(), comment.getComment());
     }
 
@@ -89,7 +93,9 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Boolean deleteNestedComment(NestedCommentIdDto nestedCommentIdDto) {
-        nestedCommentRepository.deleteByNestedCommentId(nestedCommentIdDto.getNestedCommentId());
+        nestedCommentRepository.deleteById(nestedCommentIdDto.getNestedCommentId());
+        commentRepository.deleteCommentWithSoftDeletedNestedComments(nestedCommentIdDto.getNestedCommentId());
+
         return true;
     }
 
@@ -155,17 +161,30 @@ public class CommentServiceImpl implements CommentService{
     private CommentDtoWithUserInfo getCommentDtoWithNestedDto(Comment comment, List<Long> likedNestedCommentIdListByUser, boolean likedComment) {
         return CommentDtoWithUserInfo.builder()
                 .commentId(comment.getId())
-                .nickname(comment.getUser().getNickname())
+                .nickname(getNickname(comment))
                 .isLiked(likedComment)
                 .profileImgUri(comment.getUser().getProfileImgUrl())
                 .createAt(comment.getCreatedAt())
                 .likeNum(comment.getLikeNum())
                 .comment(comment.getComment())
-                .nestedCommentDtoList(
-                        comment.getNestedCommentList().stream().map(
-                                nestedComment -> getNestedCommentDto(nestedComment, isLikedComment(likedNestedCommentIdListByUser, nestedComment.getId()))
-                        ).toList()
-                ).build();
+                .isDeleted(comment.isDeleted())
+                .nestedCommentDtoList(getNestedCommentDtoList(comment, likedNestedCommentIdListByUser)).build();
+    }
+
+    private List<NestedCommentDto> getNestedCommentDtoList(Comment comment, List<Long> likedNestedCommentIdListByUser) {
+        List<NestedComment> nestedCommentList = comment.getNestedCommentList();
+        nestedCommentList.sort(Comparator.comparing(NestedComment::getCreatedAt));
+        return nestedCommentList.stream().map(
+                nestedComment -> getNestedCommentDto(nestedComment, isLikedComment(likedNestedCommentIdListByUser, nestedComment.getId()))
+        ).toList();
+    }
+
+    private static String getNickname(Comment comment) {
+        String nickname = null;
+        if(!comment.isDeleted()){
+            nickname = comment.getUser().getNickname();
+        }
+        return nickname;
     }
 
     private NestedCommentDto getNestedCommentDto(NestedComment nestedComment, boolean isLiked) {
@@ -176,6 +195,7 @@ public class CommentServiceImpl implements CommentService{
                                .createAt(nestedComment.getCreatedAt())
                                .comment(nestedComment.getComment())
                                .isLiked(isLiked)
+                                .likeNum(nestedComment.getLikeNum())
                                .build();
     }
 

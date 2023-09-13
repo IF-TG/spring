@@ -23,9 +23,17 @@ public class SearchHistory {
     private User user;
 
     @CreationTimestamp
-    @UpdateTimestamp
     private LocalDateTime search_time;
 
     @Column(nullable = false)
     private String history;
+
+    public SearchHistory(User user, String history) {
+        this.user = user;
+        this.history = history;
+    }
+
+    public void updateTimeSearchHistory(){
+        search_time = LocalDateTime.now();
+    }
 }

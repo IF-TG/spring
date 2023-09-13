@@ -1,6 +1,7 @@
 package ifTG.travelPlan.controller.post;
 
 
+import ifTG.travelPlan.controller.dto.RequestLikeDto;
 import ifTG.travelPlan.dto.post.LikeDto;
 import ifTG.travelPlan.service.post.PostLikeService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class PostLikeController {
     private final PostLikeService postLikeService;
     @PostMapping
     public LikeDto toggleLikePost(@RequestBody RequestLikeDto requestLikeDto){
+        log.info("likedto = {}, {}", requestLikeDto.getObjectId(), requestLikeDto.getUserId());
         return postLikeService.toggleLikePost(requestLikeDto);
     }
 }

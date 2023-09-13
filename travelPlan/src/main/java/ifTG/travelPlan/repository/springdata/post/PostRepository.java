@@ -21,12 +21,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAll(Pageable pageable);
 
     @Query(value = "SELECT p FROM Post p JOIN FETCH p.user u ORDER BY p.createAt DESC ",
-        countQuery = "SELECT count(p) FROM Post p")
+            countQuery = "SELECT count(p) FROM Post p")
     Page<Post> findAllWithUser(Pageable pageable);
 
-    @Query(value = "SELECT p FROM Post p JOIN FETCH p.user u WHERE u.userId = :userId ORDER BY p.createAt DESC ",
-            countQuery = "SELECT count(p) FROM Post p WHERE p.user.userId = :userId")
-    Page<Post> findAllWithUserByUserId(@Param("userId") String userId, Pageable pageable);
+    @Query(value = "SELECT p FROM Post p JOIN FETCH p.user u WHERE u.id = :id ORDER BY p.createAt DESC ",
+            countQuery = "SELECT count(p) FROM Post p WHERE p.user.id = :id")
+    Page<Post> findAllWithUserByUserId(@Param("id") Long id, Pageable pageable);
 
     @Query(value = "SELECT p FROM Post p JOIN FETCH p.user u WHERE u.nickname = :nickname ORDER BY p.createAt DESC ",
             countQuery = "SELECT count(p) FROM Post p WHERE p.user.nickname = :nickname")
@@ -38,5 +38,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      */
     @Query("SELECT p FROM Post p JOIN FETCH p.user LEFT JOIN FETCH p.postImgList LEFT JOIN FETCH p.postCategoryList WHERE p.id = :postId")
     Optional<Post> findByIdWithUserAndPostImgAndPostCategory(Long postId);
+
 
 }

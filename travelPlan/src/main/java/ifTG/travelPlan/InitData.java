@@ -4,31 +4,58 @@ import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.user.Sex;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.domain.user.UserAddress;
+import ifTG.travelPlan.elasticsearch.domain.EDestination;
+import ifTG.travelPlan.elasticsearch.repository.EDestinationRepository;
 import ifTG.travelPlan.repository.springdata.NestedCommentRepository;
 import ifTG.travelPlan.repository.springdata.post.CommentRepository;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
+import ifTG.travelPlan.service.api.TourApi;
+import ifTG.travelPlan.service.api.dto.CatDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class InitData {
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
-    private final NestedCommentRepository nestedCommentRepository;
+    private final TourApi tourApi;
     private final UserRepository userRepository;
     private final UserAddressRepository userAddressRepository;
+    private final EDestinationRepository eDestinationRepository;
 
-    @PostConstruct
+    //@PostConstruct
     public void initData(){
+       /* log.info("eDestination insert");
+        List<String> keywordList = new ArrayList<>();
+        keywordList.add("수원 맛집");
+        EDestination eDestination = EDestination.builder()
+                        .id(UUID.randomUUID().toString())
+                        .info("")
+                        .blindInfo("")
+                        .thumbnailUrl("")
+                        .title("")
+                        .keywordList(keywordList)
+                        .build();
+        eDestinationRepository.save(eDestination);
+        log.info("eDestination insert finish");*/
+
+        addData();
+
+
+    }
+
+    private void addData() {
         UserAddress userAddressA = UserAddress.builder()
                 .sido("서울")
                 .sigungu("강남")
@@ -41,11 +68,12 @@ public class InitData {
         User userA = User.builder()
                 .userId("dlaruddhks99")
                 .pw("dla10241024@")
-                .name("양승현")
+                .name("케인")
                 .sex(Sex.FEMALE)
                 .birthDate(LocalDate.of(1944, 12, 12))
                 .phoneNumber("010-1234-5678")
                 .email("kimdo@naver.com")
+                .nickname("kaneTV")
                 .userAddress(userAddressA)
                 .build();
 
@@ -67,6 +95,7 @@ public class InitData {
                 .birthDate(LocalDate.of(1999, 10, 24))
                 .phoneNumber("010-6768-7937")
                 .email("ruddhks00@gmail.com")
+                .nickname("moondoooo")
                 .userAddress(userAddressB)
                 .build();
 
@@ -90,7 +119,6 @@ public class InitData {
                 .build();
         log.info("postA persist");
         postRepository.save(postA);
-
 
 
         /**
@@ -126,7 +154,6 @@ public class InitData {
         postRepository.save(postC);
 
 
-
         /**
          * postD 정보
          */
@@ -137,8 +164,6 @@ public class InitData {
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now()).build();
         postRepository.save(postD);
-
-
-
     }
+
 }

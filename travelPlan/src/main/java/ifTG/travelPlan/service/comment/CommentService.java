@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface CommentService {
     List<CommentDtoWithUserInfo> getCommentListByPost(RequestCommentByPostDto requestCommentByPostDto);
-    List<CommentDtoWithUserInfo> getCommentListByPostAndSavePostView(RequestCommentByPostDto requestCommentByPostDto);
     CommentDtoWithUserInfo saveComment(RequestCreateCommentDto createCommentDto);
     Boolean deleteComment(CommentIdDto commentIdDto);
     CommentUpdateDto updateComment(RequestUpdateCommentDto requestUpdateCommentDto);

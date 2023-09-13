@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class PostViewServiceImpl implements PostViewService{
     private final PostViewRepository postViewRepository;
 
-
     public void addPostViewByPostIdAndUserId(Long postId, Long userId) {
         PostView postView = new PostView(new PostViewId(userId, postId));
         postViewRepository.save(postView);

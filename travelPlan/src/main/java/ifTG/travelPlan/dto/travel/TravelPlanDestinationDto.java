@@ -1,17 +1,12 @@
 package ifTG.travelPlan.dto.travel;
 
-import ifTG.travelPlan.domain.travel.Destination;
-import lombok.Getter;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class DestinationRouteDto {
+public class TravelPlanDestinationDto {
     private final Map<DataType, Object> data = new HashMap<>();
     private String eta;
 

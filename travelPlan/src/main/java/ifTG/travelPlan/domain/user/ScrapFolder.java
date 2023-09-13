@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.FetchType.*;
 
@@ -24,7 +26,7 @@ public class ScrapFolder {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(nullable = false, name = "userId", referencedColumnName = "id")
+    @JoinColumn(nullable = false, name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(nullable = false, length = 100)
@@ -34,11 +36,16 @@ public class ScrapFolder {
      * 양방향 매핑
      */
     @OneToMany(mappedBy = "scrapFolder")
-    private final List<DestinationScrap> destinationScrapList = new ArrayList<>();
+    private final Set<DestinationScrap> destinationScrapList = new HashSet<>();
 
     @OneToMany(mappedBy = "scrapFolder")
-    private final List<PostScrap> postScrapList = new ArrayList<>();
+    private final Set<PostScrap> postScrapList = new HashSet<>();
 
+    @OneToMany(mappedBy = "scrapFolder")
+    private final List<ScrapFolderImg> scrapFolderImgList = new ArrayList<>();
 
-
+    public ScrapFolder(User user, String folderName) {
+        this.user = user;
+        this.folderName = folderName;
+    }
 }

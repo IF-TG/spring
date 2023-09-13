@@ -1,11 +1,10 @@
 package ifTG.travelPlan.controller.post;
 
-import ifTG.travelPlan.controller.dto.RequestSearchPostDto;
+import ifTG.travelPlan.controller.dto.RequestPostListByUserIdDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.*;
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.service.post.PostService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +15,19 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/post")
 @RequiredArgsConstructor
-public class postController {
+public class PostController {
     private final PostService postService;
 
     @GetMapping("/list")
-    public Result<List<PostDto>> getPostListWithCategory(@RequestBody RequestPostListDto requestPostListDto){
+    public Result<List<PostWithThumbnailDto>> getPostListWithCategory(@RequestBody RequestPostListDto requestPostListDto){
         return new Result<>(postService.findAllPostWithPostRequestDto(requestPostListDto));
     }
+
+    @GetMapping("/byUser")
+    public Result<List<PostDto>> getPostByUserId(@RequestBody RequestPostListByUserIdDto dto ){
+        return new Result<>(postService.findByUserId(dto));
+    }
+
 
     @PostMapping()
     public PostDto savePost(@RequestBody PostCreateDto postCreateDto){
@@ -35,7 +40,7 @@ public class postController {
     }
 
     @PutMapping()
-    public PostDto deletePost(@RequestBody PostUpdateDto postUpdateDto){
+    public PostDto updatePost(@RequestBody PostUpdateDto postUpdateDto){
         return postService.updatePost(postUpdateDto);
     }
 

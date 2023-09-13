@@ -29,9 +29,9 @@ public class PostCreateDto {
     private final List<Regions> regions;
     private final List<Seasons> seasons = new ArrayList<>();
     private final List<Companions> companions;
-
+    private final List<ImgFile> imgFileList;
     @Builder
-    public PostCreateDto(String title, String content, String startDate, String endDate, Long userId, List<Themes> themes, List<Regions> regions, List<Companions> companions) {
+    public PostCreateDto(String title, String content, String startDate, String endDate, Long userId, List<Themes> themes, List<Regions> regions, List<Companions> companions, List<ImgFile> imgFileList) {
         this.title = title;
         this.content = content;
         putDate(startDate, endDate);
@@ -39,6 +39,7 @@ public class PostCreateDto {
         this.themes = themes;
         this.regions = regions;
         this.companions = companions;
+        this.imgFileList = imgFileList;
         boolean[] isSeason = getIsSeason();
         addSeasons(isSeason);
     }

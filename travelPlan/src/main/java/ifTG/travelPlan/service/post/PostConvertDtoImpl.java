@@ -3,11 +3,15 @@ package ifTG.travelPlan.service.post;
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostCategory;
+import ifTG.travelPlan.dto.ImageToString;
+import ifTG.travelPlan.dto.ImageType;
+import ifTG.travelPlan.dto.post.PostWithThumbnailDto;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PostConvertDtoImpl implements PostConvertDto{
@@ -22,6 +26,26 @@ public class PostConvertDtoImpl implements PostConvertDto{
         return postList.stream()
                        .map(p->getPostDto(p, isLiked(likedPostIdList, p)))
                        .toList();
+    }
+    @Override
+    public List<PostWithThumbnailDto> getPostWithThumbnailDtoList(Page<Post> postList, Map<Long, List<ImageToString>> thumbnailMap, List<Long> likedPostListByUser) {
+        return postList.stream()
+                .filter(
+                        post -> thumbnailMap.containsKey(post.getId())
+                )
+                .map(
+                        post -> {
+                            return PostWithThumbnailDto.builder()
+                                                .thumbnail(thumbnailMap.get(post.getId()))
+                                                .post(getPostDto(post, isLiked(likedPostListByUser, post)))
+                                    .build();
+                        }
+                ).toList();
+    }
+
+    private List<ImageToString> getImageToStringDtoList(Map<String, ImageType> thumbNailWithImageType){
+        return thumbNailWithImageType.keySet().stream()
+                                     .map(thumbnail -> new ImageToString(thumbnail, thumbNailWithImageType.get(thumbnail))).toList();
     }
 
     @Override
@@ -49,6 +73,8 @@ public class PostConvertDtoImpl implements PostConvertDto{
                       .isLiked(isLiked)
                       .build();
     }
+
+
 
     private static List<String> getPostCategoryFilterMainCategory(Post post, MainCategory mainCategory) {
         return post.getPostCategoryList().stream().filter(postCategory -> postCategory.getMainCategory().equals(mainCategory)).map(PostCategory::getSubCategory).toList();

@@ -1,6 +1,6 @@
 package ifTG.travelPlan.controller.comment;
 
-import ifTG.travelPlan.controller.post.RequestLikeDto;
+import ifTG.travelPlan.controller.dto.RequestLikeDto;
 import ifTG.travelPlan.dto.post.LikeDto;
 import ifTG.travelPlan.service.comment.CommentLikeService;
 import lombok.RequiredArgsConstructor;

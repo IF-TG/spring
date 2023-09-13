@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ifTG.travelPlan.domain.post.QPost.post;
-import static ifTG.travelPlan.domain.post.QPostImg.postImg;
 import static ifTG.travelPlan.domain.user.QUser.user;
 
 

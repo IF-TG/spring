@@ -1,10 +1,6 @@
 package ifTG.travelPlan.controller.dto;
 
 import ifTG.travelPlan.domain.post.PostImg;
-import ifTG.travelPlan.dto.post.enums.Companions;
-import ifTG.travelPlan.dto.post.enums.Regions;
-import ifTG.travelPlan.dto.post.enums.Seasons;
-import ifTG.travelPlan.dto.post.enums.Themes;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -42,7 +38,7 @@ public class PostDto {
         this.startDate =  startDate.format(DateTimeFormatter.ofPattern("yy.MM.dd"));
         this.endDate =  endDate.format(DateTimeFormatter.ofPattern("yy.MM.dd"));
         this.postImgUri = postImgUri.stream()
-                .map(PostImg::getImgURL)
+                .map(PostImg::getFileName)
                 .collect(Collectors.toList());
         this.content = content;
 

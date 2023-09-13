@@ -54,12 +54,6 @@ public class Post {
     @Column(nullable = false)
     private LocalDateTime createAt;
 
-    @Formula("(SELECT COALESCE(COUNT(1),0) FROM post_likes l WHERE l.post_id = post_id)")
-    private Integer likeNum;
-
-    @Formula("(SELECT COALESCE(COUNT(1),0) FROM comments c WHERE c.post_id = post_id)")
-    private Integer commentNum;
-
     @Column(columnDefinition = "DOUBLE DEFAULT 0")
     private Double score;
 
@@ -67,13 +61,19 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Formula("(SELECT COALESCE(COUNT(1),0) FROM post_likes l WHERE l.post_id = post_id)")
+    private Integer likeNum;
+
+    @Formula("(SELECT COALESCE(COUNT(1),0) FROM comments c WHERE c.post_id = post_id)")
+    private Integer commentNum;
+
     private LocalDate startDate;
     private LocalDate endDate;
 
 
     //양방향 매핑
-    @BatchSize(size = 100)
-    @OneToMany(mappedBy = "post", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @BatchSize(size = 500)
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private final List<PostImg> postImgList = new ArrayList<>();
 
     @BatchSize(size = 100)
@@ -89,6 +89,10 @@ public class Post {
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private final List<PostView> postViewList = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<PostScrap> postScrapList = new ArrayList<>();
 
     @Builder
     public Post(String title, String content, User user, LocalDate startDate, LocalDate endDate) {
@@ -123,5 +127,19 @@ public class Post {
 
     public void addPostViewByUser(User user){
         postViewList.add(new PostView(new PostViewId(user.getId(), this.getId())));
+    }
+
+    public void addPostImgUri(PostImg postImg) {
+        log.info("postImg = {}", postImg.getId());
+        this.postImgList.add(postImg);
+    }
+
+    public void removePostImgById(String postImgFileName) {
+        for(int i = 0; i<this.postImgList.size(); i++){
+            if(postImgList.get(i).getFileName().equals(postImgFileName)){
+                postImgList.remove(i);
+                return;
+            }
+        }
     }
 }

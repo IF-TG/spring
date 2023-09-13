@@ -1,6 +1,6 @@
 package ifTG.travelPlan.aop;
 
-import ifTG.travelPlan.controller.post.RequestLikeDto;
+import ifTG.travelPlan.controller.dto.RequestLikeDto;
 import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.post.PostLikeId;
 import ifTG.travelPlan.domain.post.comment.CommentLike;
