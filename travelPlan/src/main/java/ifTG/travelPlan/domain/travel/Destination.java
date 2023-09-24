@@ -37,18 +37,11 @@ public class Destination{
 
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;
-
     private Double mapX;
-
     private Double mapY;
-
     private Integer mLevel;
-
     private String info;
-
     private String petAccommodationAllowed;
-
-    private String petCompanionRequirements;
 
     /**
      * 양방향 매핑

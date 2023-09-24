@@ -2,6 +2,7 @@ package ifTG.travelPlan.service.api;
 
 import ifTG.travelPlan.service.api.dto.MapXY;
 import ifTG.travelPlan.service.api.dto.*;
+import ifTG.travelPlan.service.api.dto.tourapi.AreaBasedSyncListDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -259,16 +260,18 @@ public class TourApiImpl implements TourApi{
     }
 
     @Override
-    public String selectAreaBasedSynList(int page){
+    public AreaBasedSyncListDto selectAreaBasedSynList(int page){
         String url = basedURL + areaBasedSynList;
         UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), page)
+                .queryParam("showflag", 1)
                 .build(true);
         log.info("tour api url = {}", builder.toUriString());
 
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
-        ResponseEntity<String> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity, String.class);
 
-        return getBody(response);
+        ResponseEntity<AreaBasedSyncListDto> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity, AreaBasedSyncListDto.class);
+
+        return response.getBody();
     }
 
     @Override
@@ -287,7 +290,7 @@ public class TourApiImpl implements TourApi{
 
     public UriComponentsBuilder getUriComponentToTourApi(UriComponentsBuilder uriComponentsBuilder, int page){
         return uriComponentsBuilder
-                .queryParam("numOfRows", 100)
+                .queryParam("numOfRows", 10)
                 .queryParam("pageNo", page)
                 .queryParam("MobileOS", "ETC")
                 .queryParam("MobileApp", "travelPlan")
@@ -302,4 +305,5 @@ public class TourApiImpl implements TourApi{
             throw  new RuntimeException("Tour API 호출에 실패했습니다.");
         }
     }
+
 }

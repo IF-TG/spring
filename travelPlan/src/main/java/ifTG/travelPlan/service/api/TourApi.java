@@ -2,6 +2,7 @@ package ifTG.travelPlan.service.api;
 
 import ifTG.travelPlan.service.api.dto.MapXY;
 import ifTG.travelPlan.service.api.dto.*;
+import ifTG.travelPlan.service.api.dto.tourapi.AreaBasedSyncListDto;
 
 import java.io.UnsupportedEncodingException;
 
@@ -30,7 +31,7 @@ public interface TourApi {
 
     String selectDetailImage(Long contentId);
 
-    String selectAreaBasedSynList(int page);
+    AreaBasedSyncListDto selectAreaBasedSynList(int page);
 
     String selectDetailPetTour(Long contentId);
 }

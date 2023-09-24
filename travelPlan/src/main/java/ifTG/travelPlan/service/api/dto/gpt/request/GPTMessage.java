@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class GPTMessage {
-    String role;
-    String content;
+    private String role;
+    private String content;
 }

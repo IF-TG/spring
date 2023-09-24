@@ -14,6 +14,7 @@ import java.net.URI;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 public class TripAdvisorImpl implements TripAdvisor{
     @Value("${api.trip_advisor.secure_key}")
     private String secureKey;

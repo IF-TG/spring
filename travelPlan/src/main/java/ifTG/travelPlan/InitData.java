@@ -13,6 +13,7 @@ import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.api.TourApi;
 import ifTG.travelPlan.service.api.dto.CatDto;
+import ifTG.travelPlan.service.api.dto.tourapi.AreaBasedSyncListDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +35,10 @@ public class InitData {
     private final UserAddressRepository userAddressRepository;
     private final EDestinationRepository eDestinationRepository;
 
-    //@PostConstruct
+    @PostConstruct
     public void initData(){
+        AreaBasedSyncListDto destinationList = tourApi.selectAreaBasedSynList(0);
+        log.info("{}", destinationList);
        /* log.info("eDestination insert");
         List<String> keywordList = new ArrayList<>();
         keywordList.add("수원 맛집");

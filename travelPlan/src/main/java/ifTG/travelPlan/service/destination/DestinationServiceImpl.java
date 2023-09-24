@@ -19,11 +19,7 @@ public class DestinationServiceImpl implements DestinationService{
     private final EDestinationCustomRepository eDestinationCustomRepository;
     @Override
     public List<EDestination> findAllByKeyword(RequestSearchDestinationDto dto){
-        //List<String> relatedKeywordList  = chatGPT.findRelatedKeywords(dto.getKeyword());
-        List<String> relatedKeywordList = new ArrayList<>();
-        relatedKeywordList.add("문화재");
-        relatedKeywordList.add("관광");
-        relatedKeywordList.add("맛집");
+        List<String> relatedKeywordList  = chatGPT.findRelatedKeywords(dto.getKeyword());
         log.info("{}",relatedKeywordList.toString());
         return eDestinationCustomRepository.findAllByUserKeywordAndGPTKeywordList(dto.getKeyword(), relatedKeywordList, dto.getPageable());
     }
