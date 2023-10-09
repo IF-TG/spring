@@ -33,7 +33,7 @@ public class PostConstructor {
 
     @PostConstruct
     public void initData(){
-        Object o = tourApiDetailIntro.selectIntroductionIntro("2674675", ContentType.Event_Performance_Festival);
+        Object o = tourApiDetailIntro.selectIntroductionIntro("", ContentType.Sightseeing);
         log.info("dto = {}", o);
         /*tourApi.selectDetailPetTour("", 6);*/
         //destinationList.getItems().getItem().stream().filter(i->!(i.getContenttypeid()==25||i.getContenttypeid()==32)).forEach(i->tourApi.selectDetailPetTour(i.getContentid()));
