@@ -1,10 +1,8 @@
 package ifTG.travelPlan.controller.destination;
 
 import ifTG.travelPlan.controller.dto.RequestSearchDestinationDto;
-import ifTG.travelPlan.dto.destination.DestinationSearchDto;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.service.destination.DestinationService;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

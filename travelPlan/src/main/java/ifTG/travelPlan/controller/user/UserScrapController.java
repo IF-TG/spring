@@ -1,7 +1,6 @@
 package ifTG.travelPlan.controller.user;
 
 import ifTG.travelPlan.controller.dto.RequestCreateScrapFolderDto;
-
 import ifTG.travelPlan.controller.dto.RequestGetAllScrapByUserDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.user.ScrapFolderDto;

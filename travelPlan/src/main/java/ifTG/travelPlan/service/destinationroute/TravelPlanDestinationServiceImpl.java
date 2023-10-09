@@ -1,11 +1,11 @@
 package ifTG.travelPlan.service.destinationroute;
 
 import ifTG.travelPlan.controller.dto.DestinationRouteListWithTravelPlanIdDto;
+import ifTG.travelPlan.controller.dto.TravelPlanIdDto;
 import ifTG.travelPlan.domain.travel.Destination;
+import ifTG.travelPlan.domain.travel.TravelPlanDestination;
 import ifTG.travelPlan.dto.travel.DestinationDto;
 import ifTG.travelPlan.dto.travel.TravelPlanDestinationDto;
-import ifTG.travelPlan.controller.dto.TravelPlanIdDto;
-import ifTG.travelPlan.domain.travel.TravelPlanDestination;
 import ifTG.travelPlan.repository.jdbc.JdbcDestinationRouteRepository;
 import ifTG.travelPlan.repository.springdata.travel.TravelPlanDestinationRepository;
 import jakarta.transaction.Transactional;

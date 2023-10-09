@@ -1,8 +1,8 @@
 package ifTG.travelPlan.service.api;
 
-import ifTG.travelPlan.service.api.dto.MapXY;
 import ifTG.travelPlan.service.api.dto.*;
-import ifTG.travelPlan.service.api.dto.tourapi.AreaBasedSyncListDto;
+import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
+import ifTG.travelPlan.service.api.dto.tourapi.detailcommon.DetailCommonDto;
 
 import java.io.UnsupportedEncodingException;
 
@@ -23,9 +23,9 @@ public interface TourApi {
 
     String searchStay(ArrangeToTourApi arrange, AreaCodeDto areaCodeDto, int page);
 
-    String selectDetailCommon(Long contentId, ContentType contentTypeId);
+    DetailCommonDto selectDetailCommon(String contentId, ContentType contentTypeId);
 
-    String selectIntroductionIntro(Long contentId, ContentType contentTypeId);
+    String selectIntroductionIntro(String contentId, ContentType contentTypeId);
 
     String selectDetailInfo(Long contentId, ContentType contentTypeId);
 
@@ -33,5 +33,5 @@ public interface TourApi {
 
     AreaBasedSyncListDto selectAreaBasedSynList(int page);
 
-    String selectDetailPetTour(Long contentId);
+    String selectDetailPetTour(String contentId, int page);
 }

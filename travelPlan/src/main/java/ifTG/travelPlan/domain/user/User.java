@@ -1,9 +1,8 @@
 package ifTG.travelPlan.domain.user;
 
-import ifTG.travelPlan.domain.diary.Diary;
+import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.post.comment.Comment;
-import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.comment.CommentLike;
 import ifTG.travelPlan.domain.post.comment.NestedCommentLike;
 import ifTG.travelPlan.domain.travel.TravelPlan;
@@ -21,8 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static jakarta.persistence.FetchType.*;
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity @Getter
 @Table(name = "users")

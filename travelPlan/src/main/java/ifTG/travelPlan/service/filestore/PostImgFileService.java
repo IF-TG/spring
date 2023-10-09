@@ -1,8 +1,6 @@
 package ifTG.travelPlan.service.filestore;
 
 import ifTG.travelPlan.domain.post.Post;
-import ifTG.travelPlan.domain.post.PostScrap;
-import ifTG.travelPlan.domain.user.ScrapFolder;
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.post.ImgFile;
 

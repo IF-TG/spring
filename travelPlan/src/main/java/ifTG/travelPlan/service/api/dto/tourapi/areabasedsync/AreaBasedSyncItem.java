@@ -1,11 +1,13 @@
-package ifTG.travelPlan.service.api.dto.tourapi;
+package ifTG.travelPlan.service.api.dto.tourapi.areabasedsync;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class AreaBasedSyncItem {
    private String addr1;
@@ -15,7 +17,7 @@ public class AreaBasedSyncItem {
    private String cat1;
    private String cat2;
    private String cat3;
-   private Long contentId;
+   private String contentid;
    private int contenttypeid;
    private String createdtime;
    private String firstimage;

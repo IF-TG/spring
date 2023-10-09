@@ -1,7 +1,6 @@
 package ifTG.travelPlan.domain.post;
 
 import ifTG.travelPlan.domain.user.ScrapFolder;
-import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

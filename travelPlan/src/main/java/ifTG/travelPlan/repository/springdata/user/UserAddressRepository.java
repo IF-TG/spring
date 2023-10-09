@@ -1,6 +1,5 @@
 package ifTG.travelPlan.repository.springdata.user;
 
-import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.domain.user.UserAddress;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

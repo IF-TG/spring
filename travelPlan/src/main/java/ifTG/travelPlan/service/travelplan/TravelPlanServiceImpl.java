@@ -1,6 +1,9 @@
 package ifTG.travelPlan.service.travelplan;
 
-import ifTG.travelPlan.controller.dto.*;
+import ifTG.travelPlan.controller.dto.RequestTravelPlanDto;
+import ifTG.travelPlan.controller.dto.RequestTravelPlanListDto;
+import ifTG.travelPlan.controller.dto.TravelPlanDto;
+import ifTG.travelPlan.controller.dto.TravelPlanIdDto;
 import ifTG.travelPlan.domain.travel.TravelPlan;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.repository.springdata.travel.TravelPlanRepository;
@@ -11,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

@@ -1,6 +1,5 @@
 package ifTG.travelPlan.repository.springdata.post;
 
-import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostImg;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

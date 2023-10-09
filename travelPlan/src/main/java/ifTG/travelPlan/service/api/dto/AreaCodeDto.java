@@ -1,6 +1,5 @@
 package ifTG.travelPlan.service.api.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter

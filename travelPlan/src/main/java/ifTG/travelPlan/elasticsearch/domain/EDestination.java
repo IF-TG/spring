@@ -8,7 +8,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.data.elasticsearch.annotations.Setting;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Document(indexName = "e_destination")

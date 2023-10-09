@@ -1,6 +1,5 @@
 package ifTG.travelPlan.domain.user;
 
-import ifTG.travelPlan.dto.user.ScrapFolderDto;
 import ifTG.travelPlan.dto.user.ScrapType;
 import jakarta.persistence.*;
 import lombok.Getter;

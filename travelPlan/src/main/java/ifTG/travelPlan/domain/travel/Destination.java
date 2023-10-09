@@ -1,15 +1,11 @@
 package ifTG.travelPlan.domain.travel;
 
-import ifTG.travelPlan.service.api.dto.CatDto;
 import ifTG.travelPlan.service.api.dto.ContentType;
-import ifTG.travelPlan.service.api.dto.MapXY;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Formula;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package ifTG.travelPlan.domain.diary;
 
 import ifTG.travelPlan.domain.travel.TravelPlan;
-import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity @Getter
 @Table(name = "diaries")
