@@ -9,9 +9,8 @@ import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.api.TourApi;
+import ifTG.travelPlan.service.api.TourApiDetailIntro;
 import ifTG.travelPlan.service.api.dto.ContentType;
-import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
-import ifTG.travelPlan.service.api.dto.tourapi.detailcommon.DetailCommonDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -31,11 +29,12 @@ public class PostConstructor {
     private final UserRepository userRepository;
     private final UserAddressRepository userAddressRepository;
     private final EDestinationRepository eDestinationRepository;
+    private final TourApiDetailIntro tourApiDetailIntro;
 
     @PostConstruct
     public void initData(){
-        DetailCommonDto dto = tourApi.selectDetailCommon("126508", null);
-
+        Object o = tourApiDetailIntro.selectIntroductionIntro("2674675", ContentType.Event_Performance_Festival);
+        log.info("dto = {}", o);
         /*tourApi.selectDetailPetTour("", 6);*/
         //destinationList.getItems().getItem().stream().filter(i->!(i.getContenttypeid()==25||i.getContenttypeid()==32)).forEach(i->tourApi.selectDetailPetTour(i.getContentid()));
 

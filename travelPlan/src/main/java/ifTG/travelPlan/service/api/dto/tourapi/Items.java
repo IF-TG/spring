@@ -1,4 +1,4 @@
-﻿package ifTG.travelPlan.service.api.dto.tourapi;
+package ifTG.travelPlan.service.api.dto.tourapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -12,13 +12,13 @@ import lombok.ToString;
 public class AreaBasedSyncItem {
    private String addr1;
    private String addr2;
-   private int areaCode;
+   private String areaCode;
    private Integer booktour;
    private String cat1;
    private String cat2;
    private String cat3;
    private String contentid;
-   private int contenttypeid;
+   private String contenttypeid;
    private String createdtime;
    private String firstimage;
    private String firstimage2;

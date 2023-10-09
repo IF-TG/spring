@@ -1,13 +1,14 @@
-﻿package ifTG.travelPlan.service.api.dto.tourapi.detailcommon;
+package ifTG.travelPlan.service.api.dto.tourapi.detailcommon;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@RequiredArgsConstructor
+@ToString
 public class DetailCommonDto {
-    private DetailCommonItem item;
+    private List<DetailCommonItem> item = new ArrayList<>();
 }

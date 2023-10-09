@@ -40,6 +40,7 @@ public class ChatGPTImpl implements ChatGPT{
         return getKeywords(uri, httpEntity);
     }
 
+
     private static ChatGPTRequestDto getHttpBody(String search) {
         final String systemMessage = "You are a travel destination search engine assistant. Respond with 10 keywords related to the user's input. Also sort by importance. Please provide the keywords in Korean. It would be better if each keyword includes a location.";
         List<GPTMessage> messages = getGptMessages(search, systemMessage);

@@ -3,6 +3,7 @@ package ifTG.travelPlan.service.api;
 import ifTG.travelPlan.service.api.dto.*;
 import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailcommon.DetailCommonDto;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.UnsupportedEncodingException;
 
@@ -25,13 +26,13 @@ public interface TourApi {
 
     DetailCommonDto selectDetailCommon(String contentId, ContentType contentTypeId);
 
-    String selectIntroductionIntro(String contentId, ContentType contentTypeId);
-
-    String selectDetailInfo(Long contentId, ContentType contentTypeId);
-
     String selectDetailImage(Long contentId);
 
     AreaBasedSyncListDto selectAreaBasedSynList(int page);
 
+    Object selectDetailInfo(String contentId, ContentType contentTypeId);
+
     String selectDetailPetTour(String contentId, int page);
+
+    UriComponentsBuilder getUriComponentToTourApi(UriComponentsBuilder uriComponentsBuilder, int page);
 }
