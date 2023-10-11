@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.api.dto.tourapi.detailintro.destination;
+package ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing;
 
 import lombok.*;
 

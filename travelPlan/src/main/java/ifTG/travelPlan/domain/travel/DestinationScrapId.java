@@ -10,6 +10,6 @@ public class DestinationScrapId implements Serializable {
     @Column(name = "destination_id")
     private Long destinationId;
 
-    @Column(name = "folder_id")
-    private Long folderId;
+    @Column(name = "user_id")
+    private Long userId;
 }
