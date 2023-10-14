@@ -16,4 +16,5 @@ public interface PostImgFileService {
     void deleteAllById(Long postId);
 
     ImageToString getPostThumbnailByFilename(String fileName);
+     String getPostThumbnailUrl(Long postId, String imageFileName);
 }

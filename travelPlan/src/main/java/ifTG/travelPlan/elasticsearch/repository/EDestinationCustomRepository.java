@@ -22,33 +22,6 @@ public class EDestinationCustomRepository {
 
     private final ElasticsearchOperations elasticsearchOperations;
 
-    /**
-     *
-     * must 부분 _all을 multi_match로 바꾸어야한다.->일단 _all을 info로 변환해놓겠음
-     * {
-     *     "query":{
-     *         "bool":{
-     *             "must":[
-     *                  {
-     *                      "match":{
-     *                          "info":"userKeyword"
-     *                      }
-     *                  }
-     *             ],
-     *             "should":[
-     *                  {
-     *                      "match":{
-     *                          "keywordList":"1"
-     *                      },
-     *                      "match"{
-     *                          "keywordList":"2"
-     *                      }
-     *                  }
-     *             ]
-     *         }
-     *     }
-     * }
-     */
     public List<EDestination> findAllByUserKeywordAndGPTKeywordList(String userKeyword, List<String> gptKeywordList, Pageable pageable){
 
         Query multiMatchQuery = NativeQuery.builder()

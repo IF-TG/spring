@@ -12,7 +12,7 @@ import lombok.ToString;
 public class AreaBasedSyncItem {
    private String addr1;
    private String addr2;
-   private String areaCode;
+   private String areacode;
    private Integer booktour;
    private String cat1;
    private String cat2;
@@ -31,5 +31,5 @@ public class AreaBasedSyncItem {
    private int sigungucode;
    private String tel;
    private String title;
-   private int zipcode;
+   private String zipcode;
 }

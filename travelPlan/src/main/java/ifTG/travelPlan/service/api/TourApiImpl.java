@@ -216,6 +216,7 @@ public class TourApiImpl implements TourApi{
         String url = basedURL + areaBasedSynList;
         UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), page)
                 .queryParam("showflag", 1)
+                //.queryParam("contentTypeId", ContentType.Cultural_Facility.getValue())
                 .build(true);
         log.info("tour api url = {}", builder.toUriString());
 
@@ -233,7 +234,7 @@ public class TourApiImpl implements TourApi{
         return response.getResponse().getBody().getItems();
     }
     @Override
-    public DetailCommonDto selectDetailCommon(String contentId, ContentType contentTypeId){
+    public DetailCommonDto selectDetailCommon(Long contentId, ContentType contentTypeId){
         String url = basedURL + detailCommon;
         UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), 0)
                 .queryParam("contentId", contentId)

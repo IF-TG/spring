@@ -1,7 +1,7 @@
 package ifTG.travelPlan.controller.comment;
 
 import ifTG.travelPlan.controller.dto.RequestLikeDto;
-import ifTG.travelPlan.dto.post.LikeDto;
+import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.service.comment.CommentLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ public class CommentLikeController {
     private final CommentLikeService commentLikeService;
 
     @PostMapping
-    public LikeDto toggleLikeComment(@RequestBody RequestLikeDto requestLikeDto){
+    public ToggleDto toggleLikeComment(@RequestBody RequestLikeDto requestLikeDto){
         return commentLikeService.toggleLikeComment(requestLikeDto);
     }
 

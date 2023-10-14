@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RequestPostScrapDto {
-    private final Long postId;
+public class RequestScrapDto {
+    private final Long objectId;
     private final Long userId;
     private final String folderName;
 }

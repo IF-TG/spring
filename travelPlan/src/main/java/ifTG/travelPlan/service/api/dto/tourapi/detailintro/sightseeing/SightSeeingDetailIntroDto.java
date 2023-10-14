@@ -1,14 +1,14 @@
 package ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing;
 
+import ifTG.travelPlan.service.api.dto.tourapi.detailintro.DetailIntroDto;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 @ToString
-public class SightSeeingDetailIntroDto {
-    private List<SightSeeingDetailIntroItem> item = new ArrayList<>();
+public class SightSeeingDetailIntroDto implements DetailIntroDto {
+    private final List<SightSeeingDetailIntroItem> item = new ArrayList<>();
 }

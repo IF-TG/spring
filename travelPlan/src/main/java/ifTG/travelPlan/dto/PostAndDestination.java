@@ -1,2 +1,5 @@
-package ifTG.travelPlan.dto;public class PostAndDestination {
+package ifTG.travelPlan.dto;
+
+public enum PostAndDestination {
+    post, destination
 }

@@ -12,4 +12,9 @@ public class PostScrapId {
 
     @Column(name = "user_id")
     private Long userId;
+
+    public PostScrapId(Long postId, Long userId) {
+        this.postId = postId;
+        this.userId = userId;
+    }
 }

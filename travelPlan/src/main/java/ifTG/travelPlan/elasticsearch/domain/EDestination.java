@@ -18,15 +18,12 @@ import java.util.List;
 @Builder
 public class EDestination {
     @Id
-    private String id;
-
+    private Long id;
     private String title;
-
     private List<String> keywordList;
-
     private String thumbnailUrl;
-
     private String info;
-
+    private Long likeNum;
     private String blindInfo;
+    private String address;
 }

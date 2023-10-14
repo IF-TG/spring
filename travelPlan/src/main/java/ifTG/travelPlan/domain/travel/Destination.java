@@ -2,10 +2,7 @@ package ifTG.travelPlan.domain.travel;
 
 import ifTG.travelPlan.service.api.dto.ContentType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.List;
 @Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "destinations")
+@ToString
 public class Destination{
     @Id @Column(name = "destination_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +32,8 @@ public class Destination{
     private Double mapX;
     private Double mapY;
     private Integer mLevel;
+    private String zipcode;
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String overview;
     private String tel;
 
@@ -44,19 +44,22 @@ public class Destination{
     private List<DestinationImg> destinationImgList = new ArrayList<>();
 
     @Builder
-    public Destination(Long id, Long tourApiContentId, ContentType contentType, String address, String addressDetail, String thumbNail, String title, Integer areaCode, Double mapX, Double mapY, Integer mLevel, String overview, String tel) {
-        this.id = id;
+    public Destination(Long tourApiContentId, ContentType contentType, String zipcode, String address, String addressDetail, String thumbNail, String title, Integer areaCode, Double mapX, Double mapY, Integer mLevel, String tel) {
         this.tourApiContentId = tourApiContentId;
         this.contentType = contentType;
         this.address = address;
         this.addressDetail = addressDetail;
+        this.zipcode = zipcode;
         this.thumbNail = thumbNail;
         this.title = title;
         this.areaCode = areaCode;
         this.mapX = mapX;
         this.mapY = mapY;
         this.mLevel = mLevel;
-        this.overview = overview;
         this.tel = tel;
+    }
+
+    public void insertOverViewAtTourApiDetailCommon(String overview){
+        this.overview = overview;
     }
 }

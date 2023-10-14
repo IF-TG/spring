@@ -1,5 +1,13 @@
 package ifTG.travelPlan.service.api.dto.tourapi.detailintro.leisuresports;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class LeisureSportsDetailIntroItem {
     private String contentid;
     private String contenttypeid;

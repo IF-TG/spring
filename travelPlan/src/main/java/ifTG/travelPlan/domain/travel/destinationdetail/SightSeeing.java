@@ -3,6 +3,7 @@ package ifTG.travelPlan.domain.travel.destinationdetail;
 import ifTG.travelPlan.domain.travel.Destination;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,8 +22,19 @@ public class SightSeeing {
     private String experienceGuide;
     private String checkBabyStroller;
     private String restDate;
-    private String usagePeriod;
     private String usageTime;
     private String openDate;
     private String checkPet;
+
+    @Builder
+    public SightSeeing(Destination destination, String capacity, String experienceGuide, String checkBabyStroller, String restDate, String usageTime, String openDate, String checkPet) {
+        this.destination = destination;
+        this.capacity = capacity;
+        this.experienceGuide = experienceGuide;
+        this.checkBabyStroller = checkBabyStroller;
+        this.restDate = restDate;
+        this.usageTime = usageTime;
+        this.openDate = openDate;
+        this.checkPet = checkPet;
+    }
 }

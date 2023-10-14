@@ -1,5 +1,9 @@
 package ifTG.travelPlan.service.api.dto;
 
+import org.springframework.data.crossstore.ChangeSetPersister;
+
+import java.util.Optional;
+
 public enum ContentType {
     Sightseeing(12),
     Cultural_Facility(14),
@@ -18,5 +22,25 @@ public enum ContentType {
 
     public int getValue() {
         return value;
+    }
+
+    public static Optional<ContentType> getContentType(int contentId){
+        for (ContentType c: ContentType.values()){
+            if (c.value == contentId){
+                return Optional.of(c);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public static Optional<ContentType> getContentType(String contentId){
+        for (ContentType c: ContentType.values()){
+            if (c.value == Integer.parseInt(contentId)){
+                return Optional.of(c);
+            }
+        }
+
+        return Optional.empty();
     }
 }

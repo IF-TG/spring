@@ -3,6 +3,7 @@ package ifTG.travelPlan.domain.travel.destinationdetail;
 import ifTG.travelPlan.domain.travel.Destination;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,18 @@ public class Event {
     private String spendTime;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    @Builder
+    public Event(Destination destination, String sponsor, String usageFee, String eventPlace, String program, String ageLimit, String showtime, String spendTime, LocalDate startDate, LocalDate endDate) {
+        this.destination = destination;
+        this.sponsor = sponsor;
+        this.usageFee = usageFee;
+        this.eventPlace = eventPlace;
+        this.program = program;
+        this.ageLimit = ageLimit;
+        this.showtime = showtime;
+        this.spendTime = spendTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

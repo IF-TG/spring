@@ -24,7 +24,7 @@ public interface TourApi {
 
     String searchStay(ArrangeToTourApi arrange, AreaCodeDto areaCodeDto, int page);
 
-    DetailCommonDto selectDetailCommon(String contentId, ContentType contentTypeId);
+    DetailCommonDto selectDetailCommon(Long contentId, ContentType contentTypeId);
 
     String selectDetailImage(Long contentId);
 

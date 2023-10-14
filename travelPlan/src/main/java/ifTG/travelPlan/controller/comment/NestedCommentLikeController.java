@@ -1,7 +1,7 @@
 package ifTG.travelPlan.controller.comment;
 
 import ifTG.travelPlan.controller.dto.RequestLikeDto;
-import ifTG.travelPlan.dto.post.LikeDto;
+import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.service.comment.NestedCommentLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +16,7 @@ public class NestedCommentLikeController {
     private final NestedCommentLikeService nestedCommentLikeService;
 
     @PostMapping
-    public LikeDto toggleLikeNestedComment(@RequestBody RequestLikeDto requestLikeDto){
+    public ToggleDto toggleLikeNestedComment(@RequestBody RequestLikeDto requestLikeDto){
         return nestedCommentLikeService.toggleLikeNestedComment(requestLikeDto);
     }
 }

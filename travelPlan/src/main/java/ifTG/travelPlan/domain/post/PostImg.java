@@ -18,7 +18,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "post_imgs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostImg {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "post_img_id")

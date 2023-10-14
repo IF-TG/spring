@@ -28,6 +28,8 @@ public class PostImgFileServiceImpl implements PostImgFileService {
 
     @Value("${thumbnail.path}")
     private String thumbnailPath;
+    @Value("${IMG_SERVER_URL}")
+    private String imgServerUrl;
 
     private final FileStore fileStore;
     private final PostImgRepository postImgRepository;
@@ -174,6 +176,9 @@ public class PostImgFileServiceImpl implements PostImgFileService {
 
     private String getPostPath(Long postId) {
         return postPath + postId + "\\";
+    }
+    public String getPostThumbnailUrl(Long postId, String imageFileName){
+        return imgServerUrl + postId + thumbnailPath + imageFileName;
     }
 }
 

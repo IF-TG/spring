@@ -1,5 +1,6 @@
 package ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing;
 
+import ifTG.travelPlan.service.api.dto.tourapi.detailintro.DetailIntroDto;
 import lombok.*;
 
 @Getter
@@ -9,19 +10,19 @@ import lombok.*;
 public class SightSeeingDetailIntroItem {
     private String contentid;
     private String contenttypeid;
+    private String heritage1;
+    private String heritage2;
+    private String heritage3;
+    private String infocenter;
     private String accomcount;
+    private String opendate;
+    private String restdate;
     private String chkbabycarriage;
     private String chkcreditcard;
     private String chkpet;
     private String expagerange;
     private String expguide;
-    private String heritage1;
-    private String heritage2;
-    private String heritage3;
-    private String infocenter;
-    private String opendate;
     private String parking;
-    private String restdate;
     private String useseason;
     private String usetime;
 }

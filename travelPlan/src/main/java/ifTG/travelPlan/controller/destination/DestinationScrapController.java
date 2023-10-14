@@ -1,7 +1,7 @@
 package ifTG.travelPlan.controller.destination;
 
 import ifTG.travelPlan.controller.dto.RequestScrapDto;
-import ifTG.travelPlan.dto.PostScrapDto;
+import ifTG.travelPlan.dto.ScrapDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.service.destination.DestinationScrapService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class DestinationScrapController {
         return destinationScrapService.toggleDestinationScrap(dto);
     }
     @PutMapping
-    public PostScrapDto updateFolderName(RequestScrapDto dto) {
+    public ScrapDto updateFolderName(RequestScrapDto dto) {
         return destinationScrapService.updateFolderName(dto);
     }
 }

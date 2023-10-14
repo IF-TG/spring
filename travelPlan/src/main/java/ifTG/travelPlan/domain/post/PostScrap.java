@@ -25,4 +25,14 @@ public class PostScrap {
     private User user;
 
     private String folderName;
+
+    public PostScrap updateFolderName(String folderName){
+        this.folderName = folderName;
+        return this;
+    }
+
+    public PostScrap(PostScrapId postScrapId, String folderName) {
+        this.postScrapId = postScrapId;
+        this.folderName = folderName;
+    }
 }

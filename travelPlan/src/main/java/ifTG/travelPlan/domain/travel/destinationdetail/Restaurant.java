@@ -3,6 +3,7 @@ package ifTG.travelPlan.domain.travel.destinationdetail;
 import ifTG.travelPlan.domain.travel.Destination;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,18 @@ public class Restaurant {
     private String restDate;
     private String seat;
     private String scale;
+
+    @Builder
+    public Restaurant(Destination destination, String featuredMenu, String treatMenu, String openDate, String openTime, String packing, String parking, String restDate, String seat, String scale) {
+        this.destination = destination;
+        this.featuredMenu = featuredMenu;
+        this.treatMenu = treatMenu;
+        this.openDate = openDate;
+        this.openTime = openTime;
+        this.packing = packing;
+        this.parking = parking;
+        this.restDate = restDate;
+        this.seat = seat;
+        this.scale = scale;
+    }
 }
