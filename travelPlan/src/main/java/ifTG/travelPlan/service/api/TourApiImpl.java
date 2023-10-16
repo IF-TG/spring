@@ -31,7 +31,6 @@ public class TourApiImpl implements TourApi{
     private String secureKey;
     @Value("${api.tour.url.search_keyword}")
     private String searchKeywordMethod;
-
     @Value("${api.tour.url.location_base}")
     private String selectLocationBase;
     @Value("${api.tour.url.category_code}")
