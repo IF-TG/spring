@@ -1,6 +1,5 @@
 package ifTG.travelPlan.repository.springdata.user;
 
-import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.domain.user.UserBlock;
 import ifTG.travelPlan.domain.user.UserBlockId;
 import org.springframework.data.jpa.repository.JpaRepository;

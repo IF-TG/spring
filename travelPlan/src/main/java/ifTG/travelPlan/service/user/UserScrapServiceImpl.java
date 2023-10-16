@@ -1,66 +1,104 @@
 package ifTG.travelPlan.service.user;
 
-import ifTG.travelPlan.controller.dto.RequestCreateScrapFolderDto;
-import ifTG.travelPlan.controller.dto.RequestGetAllScrapByUserDto;
+import ifTG.travelPlan.controller.dto.PostDto;
+import ifTG.travelPlan.controller.dto.RequestScrapFolderDto;
+import ifTG.travelPlan.controller.user.RequestScrapDetail;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostImg;
+import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.post.PostScrap;
-import ifTG.travelPlan.domain.user.ScrapFolder;
+import ifTG.travelPlan.domain.travel.DestinationScrap;
 import ifTG.travelPlan.domain.user.User;
-import ifTG.travelPlan.dto.ImageToString;
-import ifTG.travelPlan.dto.user.ScrapFolderDto;
-import ifTG.travelPlan.dto.user.ScrapTitleDto;
-import ifTG.travelPlan.dto.user.ScrapType;
+import ifTG.travelPlan.domain.user.UserBlock;
+import ifTG.travelPlan.dto.ScrapPostAndDestination;
+import ifTG.travelPlan.dto.user.UserScrapFolderDto;
+import ifTG.travelPlan.repository.springdata.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.PostScrapRepository;
 import ifTG.travelPlan.repository.springdata.post.PostImgRepository;
-import ifTG.travelPlan.repository.springdata.post.PostRepository;
-import ifTG.travelPlan.repository.springdata.user.ScrapFolderRepository;
+import ifTG.travelPlan.repository.springdata.travel.DestinationScrapRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
-import ifTG.travelPlan.service.filestore.PostImgFileServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
+import ifTG.travelPlan.service.post.PostConvertDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-public class UserScrapServiceImpl implements UserScrapService{
+@RequiredArgsConstructor
+public class UserScrapServiceImpl implements UserScrapService {
+    static class CountAndThumbnail{
+        private Integer count;
+        private String thumbnailUri;
+
+        public CountAndThumbnail(String thumbnailUri){
+            this.thumbnailUri = thumbnailUri;
+            this.count = 1;
+        }
+        public void increaseCount(){
+            this.count++;
+        }
+    }
     private final PostScrapRepository postScrapRepository;
-    private final UserRepository userRepository;
-    private final ScrapFolderRepository scrapFolderRepository;
-    private final PostRepository postRepository;
+    private final DestinationScrapRepository destinationScrapRepository;
+    private final PostImgRepository postImgRepository;
     private final PostImgFileService postImgFileService;
-    @Override
-    public ScrapTitleDto createScrapFolder(RequestCreateScrapFolderDto dto) {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow(EntityNotFoundException::new);
-        ScrapFolder scrapFolder = scrapFolderRepository.save(new ScrapFolder(user, dto.getTitle()));
-        return new ScrapTitleDto(scrapFolder.getFolderName());
+    private final PostConvertDto postConvertDto;
+    private final PostLikeRepository postLikeRepository;
+    public List<UserScrapFolderDto> findAllScrapFolderByUser(RequestScrapFolderDto dto) {
+        List<PostScrap> postScrapList = postScrapRepository.findAllByUserId(dto.getUserId());
+        List<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllWithDestinationByUserId(dto.getUserId());
+
+
+        Map<String, CountAndThumbnail> scrapFolder = new HashMap<>();
+
+        destinationScrapList.forEach(ds->{
+            if (scrapFolder.containsKey(ds.getFolderName())){
+                CountAndThumbnail updateCT = scrapFolder.get(ds.getFolderName());
+                updateCT.increaseCount();
+                if (updateCT.thumbnailUri.isEmpty()){
+                    updateCT.thumbnailUri = ds.getDestination().getThumbNail();
+                }
+            }else{
+                scrapFolder.put(ds.getFolderName(), new CountAndThumbnail(ds.getDestination().getThumbNail()));
+            }
+        });
+
+        postScrapList.forEach(ps-> {
+            if (scrapFolder.containsKey(ps.getFolderName())){
+                scrapFolder.get(ps.getFolderName()).increaseCount();
+                if (scrapFolder.get(ps.getFolderName()).thumbnailUri.isEmpty()){
+                    Optional<PostImg> postImg =  postImgRepository.findFirstByPostIdAndIsThumbnail(ps.getPost().getId(), true);
+                    postImg.ifPresent(img -> scrapFolder.get(ps.getFolderName()).thumbnailUri = postImgFileService.getPostThumbnailUrl(
+                            img.getPost().getId(), img.getFileName()
+                    ));
+                }
+            }else{
+                scrapFolder.put(ps.getFolderName(), new CountAndThumbnail(null));
+                Optional<PostImg> postImg =  postImgRepository.findFirstByPostIdAndIsThumbnail(ps.getPost().getId(), true);
+                postImg.ifPresent(img -> scrapFolder.get(ps.getFolderName()).thumbnailUri = postImgFileService.getPostThumbnailUrl(
+                        img.getPost().getId(), img.getFileName()
+                ));
+            }
+        });
+
+        return scrapFolder.keySet().stream().map(sf -> new UserScrapFolderDto(sf, scrapFolder.get(sf).count, scrapFolder.get(sf).thumbnailUri)).toList();
     }
 
-    /**
-     * destination 업데이트 시 변경해야함
-     */
     @Override
-    public List<ScrapFolderDto> findAllScrapByUser(RequestGetAllScrapByUserDto dto) {
-        List<ScrapFolder> scrapFolderList = scrapFolderRepository.findAllWithScrapImgListByUserId(dto.getUserId());
-        Map<ScrapFolder, List<ImageToString>> scrapFolderImageListMap = scrapFolderList.stream().collect(Collectors.toMap(
-                scrapFolder -> scrapFolder,
-                scrapFolder ->  scrapFolder.getScrapFolderImgList().stream().filter(
-                        scrapFolderImg -> scrapFolderImg.getScrapType().equals(ScrapType.post)
-                ).map(
-                        scrapFolderImg -> postImgFileService.getPostThumbnailByFilename(scrapFolderImg.getFileName())
-                ).toList()
-        ));
-        return scrapFolderImageListMap.keySet().stream().map(
-                scrapFolder -> new ScrapFolderDto(scrapFolder.getFolderName(), scrapFolderImageListMap.get(scrapFolder))
-        ).toList();
+    public List<ScrapPostAndDestination> findAllScrapsByScrapFolderAndUserId(RequestScrapDetail dto) {
+        Slice<PostScrap> postScrapList = postScrapRepository.findAllWithPostByFolderNameAndUserId(dto.getFolderName(), dto.getUserId(), dto.getPageable());
+        Slice<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllWithDestinationByFolderNameAndUserId(dto.getFolderName(), dto.getUserId(), dto.getPageable());
+       List<Long> likedPostList = postLikeRepository.findPostIdByUserId(dto.getUserId());
+
+        /**
+         * destiantion dto 확정시 업데이트 필요
+         */
+        List<PostDto> postDtoList = postConvertDto.getPostDtoList(postScrapList.stream().map(ps->ps.getPost()).toList(), likedPostList);
+
+        return null;
     }
 }

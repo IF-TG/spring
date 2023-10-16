@@ -1,6 +1,5 @@
 package ifTG.travelPlan.service.api.dto.gpt.request;
 
-import ifTG.travelPlan.service.api.dto.gpt.request.GptItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

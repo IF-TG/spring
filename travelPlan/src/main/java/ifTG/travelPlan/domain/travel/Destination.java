@@ -1,15 +1,9 @@
 package ifTG.travelPlan.domain.travel;
 
-import ifTG.travelPlan.service.api.dto.CatDto;
 import ifTG.travelPlan.service.api.dto.ContentType;
-import ifTG.travelPlan.service.api.dto.MapXY;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Formula;
+import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,36 +13,29 @@ import java.util.List;
 @Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "destinations")
+@ToString
 public class Destination{
     @Id @Column(name = "destination_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String title;
-
-    private String address;
-
-    private String addressDetail;
-
-    private Integer areaCode;
-
     @Column(unique = true)
     private Long tourApiContentId;
-
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;
-
+    @Column(nullable = false)
+    private String address;
+    private String addressDetail;
+    private String thumbNail;
+    @Column(nullable = false)
+    private String title;
+    private Integer areaCode;
     private Double mapX;
-
     private Double mapY;
-
     private Integer mLevel;
-
-    private String info;
-
-    private String petAccommodationAllowed;
-
-    private String petCompanionRequirements;
+    private String zipcode;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String overview;
+    private String tel;
 
     /**
      * 양방향 매핑
@@ -56,5 +43,23 @@ public class Destination{
     @OneToMany(mappedBy = "destination", cascade = CascadeType.REMOVE)
     private List<DestinationImg> destinationImgList = new ArrayList<>();
 
+    @Builder
+    public Destination(Long tourApiContentId, ContentType contentType, String zipcode, String address, String addressDetail, String thumbNail, String title, Integer areaCode, Double mapX, Double mapY, Integer mLevel, String tel) {
+        this.tourApiContentId = tourApiContentId;
+        this.contentType = contentType;
+        this.address = address;
+        this.addressDetail = addressDetail;
+        this.zipcode = zipcode;
+        this.thumbNail = thumbNail;
+        this.title = title;
+        this.areaCode = areaCode;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.mLevel = mLevel;
+        this.tel = tel;
+    }
 
+    public void insertOverViewAtTourApiDetailCommon(String overview){
+        this.overview = overview;
+    }
 }

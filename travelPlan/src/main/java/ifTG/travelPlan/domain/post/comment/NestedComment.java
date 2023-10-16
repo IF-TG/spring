@@ -1,6 +1,5 @@
 package ifTG.travelPlan.domain.post.comment;
 
-import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -7,7 +7,7 @@ import ifTG.travelPlan.domain.post.comment.CommentLike;
 import ifTG.travelPlan.domain.post.comment.CommentLikeId;
 import ifTG.travelPlan.domain.post.comment.NestedCommentLike;
 import ifTG.travelPlan.domain.post.comment.NestedCommentLikeId;
-import ifTG.travelPlan.dto.post.LikeDto;
+import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.repository.springdata.CommentLikeRepository;
 import ifTG.travelPlan.repository.springdata.NestedCommentLikeRepository;
 import ifTG.travelPlan.repository.springdata.PostLikeRepository;
@@ -34,7 +34,7 @@ public class ToggleLikeAspect {
     private final PostLikeRepository postLikeRepository;
 
     @Around("@annotation(ToggleLike)")
-    public LikeDto toggleLike(ProceedingJoinPoint pjp){
+    public ToggleDto toggleLike(ProceedingJoinPoint pjp){
         RequestLikeDto requestLikeDto = (RequestLikeDto) pjp.getArgs()[0];
 
         if(pjp.getTarget() instanceof CommentLikeService){
@@ -43,10 +43,10 @@ public class ToggleLikeAspect {
 
             if(commentLike.isEmpty()){
                 commentLikeRepository.save(new CommentLike(commentLikeId));
-                return new LikeDto(commentLikeId.getCommentId(), true);
+                return new ToggleDto(commentLikeId.getCommentId(), true);
             }else{
                 commentLikeRepository.delete(commentLike.get());
-                return new LikeDto(commentLikeId.getCommentId(), false);
+                return new ToggleDto(commentLikeId.getCommentId(), false);
             }
         }
 
@@ -56,10 +56,10 @@ public class ToggleLikeAspect {
 
             if(nestedCommentLike.isEmpty()){
                 nestedCommentLikeRepository.save(new NestedCommentLike(nestedCommentLikeId));
-                return new LikeDto(nestedCommentLikeId.getNestedCommentId(), true);
+                return new ToggleDto(nestedCommentLikeId.getNestedCommentId(), true);
             }else{
                 nestedCommentLikeRepository.delete(nestedCommentLike.get());
-                return new LikeDto(nestedCommentLikeId.getNestedCommentId(), false);
+                return new ToggleDto(nestedCommentLikeId.getNestedCommentId(), false);
             }
 
         }
@@ -70,14 +70,14 @@ public class ToggleLikeAspect {
 
             if(postLike.isEmpty()){
                 postLikeRepository.save(new PostLike(postLikeId));
-                return new LikeDto(postLikeId.getPostId(), true);
+                return new ToggleDto(postLikeId.getPostId(), true);
             }else{
                 postLikeRepository.delete(postLike.get());
-                return new LikeDto(postLikeId.getPostId(), false);
+                return new ToggleDto(postLikeId.getPostId(), false);
             }
         }
 
-        return new LikeDto(requestLikeDto.getObjectId(), false);
+        return new ToggleDto(requestLikeDto.getObjectId(), false);
 
     }
 }

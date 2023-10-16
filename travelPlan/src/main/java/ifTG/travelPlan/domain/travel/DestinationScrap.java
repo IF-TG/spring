@@ -1,14 +1,17 @@
 package ifTG.travelPlan.domain.travel;
 
-import ifTG.travelPlan.domain.user.ScrapFolder;
+import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
 @Table(name = "destination_scraps")
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class DestinationScrap {
     @EmbeddedId
     private DestinationScrapId destinationLikeId;
@@ -18,8 +21,17 @@ public class DestinationScrap {
     private Destination destination;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "folder_id", referencedColumnName = "scrap_folder_id", insertable = false, updatable = false)
-    private ScrapFolder scrapFolder;
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
 
-    private String thumbnail;
+    private String folderName;
+
+    public DestinationScrap updateFolderName(String folderName){
+        this.folderName = folderName;
+        return this;
+    }
+    public DestinationScrap(DestinationScrapId destinationLikeId, String folderName) {
+        this.destinationLikeId = destinationLikeId;
+        this.folderName = folderName;
+    }
 }

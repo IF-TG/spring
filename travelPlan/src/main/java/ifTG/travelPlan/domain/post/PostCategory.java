@@ -1,6 +1,5 @@
 package ifTG.travelPlan.domain.post;
 
-import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

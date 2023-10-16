@@ -5,6 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ScrapTitleDto {
-    private final String title;
+public class UserScrapFolderDto {
+    private String folderName;
+    private int count;
+    private String thumbnail;
+
 }

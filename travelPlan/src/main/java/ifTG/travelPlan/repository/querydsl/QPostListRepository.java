@@ -6,11 +6,9 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import ifTG.travelPlan.domain.post.Post;
-
-import ifTG.travelPlan.dto.post.enums.*;
+import ifTG.travelPlan.dto.post.enums.OrderMethod;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-
 
 import java.util.ArrayList;
 import java.util.List;

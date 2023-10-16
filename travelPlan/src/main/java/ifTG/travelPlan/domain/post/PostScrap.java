@@ -1,6 +1,5 @@
 package ifTG.travelPlan.domain.post;
 
-import ifTG.travelPlan.domain.user.ScrapFolder;
 import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,9 +21,18 @@ public class PostScrap {
     private Post post;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "folder_id", referencedColumnName = "scrap_folder_id", insertable = false, updatable = false)
-    private ScrapFolder scrapFolder;
+    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
+    private User user;
 
-    @Column(nullable = true)
-    private String thumbnail;
+    private String folderName;
+
+    public PostScrap updateFolderName(String folderName){
+        this.folderName = folderName;
+        return this;
+    }
+
+    public PostScrap(PostScrapId postScrapId, String folderName) {
+        this.postScrapId = postScrapId;
+        this.folderName = folderName;
+    }
 }

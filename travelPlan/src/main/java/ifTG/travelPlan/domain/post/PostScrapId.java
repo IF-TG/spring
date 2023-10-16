@@ -10,6 +10,11 @@ public class PostScrapId {
     @Column(name = "post_id")
     private Long postId;
 
-    @Column(name = "folder_id")
-    private Long folderId;
+    @Column(name = "user_id")
+    private Long userId;
+
+    public PostScrapId(Long postId, Long userId) {
+        this.postId = postId;
+        this.userId = userId;
+    }
 }

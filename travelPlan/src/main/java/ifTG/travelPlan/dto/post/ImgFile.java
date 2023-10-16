@@ -3,7 +3,6 @@ package ifTG.travelPlan.dto.post;
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.ImageType;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 

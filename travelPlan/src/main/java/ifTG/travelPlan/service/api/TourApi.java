@@ -1,7 +1,9 @@
 package ifTG.travelPlan.service.api;
 
-import ifTG.travelPlan.service.api.dto.MapXY;
 import ifTG.travelPlan.service.api.dto.*;
+import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
+import ifTG.travelPlan.service.api.dto.tourapi.detailcommon.DetailCommonDto;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.UnsupportedEncodingException;
 
@@ -22,15 +24,15 @@ public interface TourApi {
 
     String searchStay(ArrangeToTourApi arrange, AreaCodeDto areaCodeDto, int page);
 
-    String selectDetailCommon(Long contentId, ContentType contentTypeId);
-
-    String selectIntroductionIntro(Long contentId, ContentType contentTypeId);
-
-    String selectDetailInfo(Long contentId, ContentType contentTypeId);
+    DetailCommonDto selectDetailCommon(Long contentId, ContentType contentTypeId);
 
     String selectDetailImage(Long contentId);
 
-    String selectAreaBasedSynList(int page);
+    AreaBasedSyncListDto selectAreaBasedSynList(int page);
 
-    String selectDetailPetTour(Long contentId);
+    Object selectDetailInfo(String contentId, ContentType contentTypeId);
+
+    String selectDetailPetTour(String contentId, int page);
+
+    UriComponentsBuilder getUriComponentToTourApi(UriComponentsBuilder uriComponentsBuilder, int page);
 }

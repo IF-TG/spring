@@ -1,11 +1,9 @@
 package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.RequestCommentAndImgsDto;
-import ifTG.travelPlan.controller.dto.RequestCommentByPostDto;
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.comment.CommentDtoWithUserInfo;
 import ifTG.travelPlan.dto.post.PostDetailsWithImagesAndCommentsDto;
-import ifTG.travelPlan.repository.springdata.post.PostViewRepository;
 import ifTG.travelPlan.service.comment.CommentService;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
 import jakarta.transaction.Transactional;
