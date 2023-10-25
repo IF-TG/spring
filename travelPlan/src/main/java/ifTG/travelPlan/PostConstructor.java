@@ -20,9 +20,11 @@ import ifTG.travelPlan.repository.springdata.travel.RestaurantRepository;
 import ifTG.travelPlan.repository.springdata.travel.SightSeeingRepository;
 import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
+import ifTG.travelPlan.service.api.NaverApi;
 import ifTG.travelPlan.service.api.TourApi;
 import ifTG.travelPlan.service.api.TourApiDetailIntro;
 import ifTG.travelPlan.service.api.dto.ContentType;
+import ifTG.travelPlan.service.api.dto.naver.NaverBlogApiDto;
 import ifTG.travelPlan.service.api.dto.tourapi.TourApiResponseDto;
 import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.culturalfacility.CulturalFacilityDetailIntroDto;
@@ -37,20 +39,26 @@ import ifTG.travelPlan.service.api.dto.tourapi.detailintro.shopping.ShoppingDeta
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.shopping.ShoppingDetailIntroItem;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing.SightSeeingDetailIntroDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing.SightSeeingDetailIntroItem;
+import ifTG.travelPlan.service.crawling.NaverBlogCrawling;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -69,108 +77,21 @@ public class PostConstructor {
     private final CulturalFacilityRepository culturalFacilityRepository;
     private final EventRepository eventRepository;
     private final RestaurantRepository restaurantRepository;
-
+    private final NaverApi naverApi;
+    private final NaverBlogCrawling naverBlogCrawling;
     @PostConstruct
     public void test(){}
 
-    //@PostConstruct
+    @PostConstruct
     @Transactional
     public void initData(){
+        /*
+        NaverBlogApiDto naverBlogApiDto = naverApi.selectBlogInfo("수원화성");
+        naverBlogCrawling.getNaverBlogContent(naverBlogApiDto.getItems().get(0).getLink());*/
         for (int i =1; i<3; i++){
-            List<Destination> destinationList = getDestinations(i);
+            /*List<Destination> destinationList = getDestinations(i);
+            getSubDestination(destinationList);*/
 
-            destinationList.forEach(d->{
-                switch (d.getContentType()){
-                    case Sightseeing -> {
-                        SightSeeingDetailIntroItem item =  tourApiDetailIntro.selectIntroductionIntro(SightSeeingDetailIntroDto.class,d.getTourApiContentId(), d.getContentType()).getItem().get(0);
-                        SightSeeing sightSeeing = SightSeeing.builder()
-                                .destination(d)
-                                .capacity(replaceBrTag(item.getAccomcount()))
-                                .experienceGuide(replaceBrTag(item.getExpguide()))
-                                .checkBabyStroller(replaceBrTag(item.getChkbabycarriage()))
-                                .restDate(replaceBrTag(item.getRestdate()))
-                                .openDate(replaceBrTag(item.getOpendate()))
-                                .usageTime(replaceBrTag(item.getUsetime()))
-                                .checkPet(replaceBrTag(item.getChkpet())).build();
-                        sightSeeingRepository.save(sightSeeing);
-                    }
-                    case Shopping -> {
-                        ShoppingDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(ShoppingDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
-                        Shopping shopping = Shopping.builder()
-                                .destination(d)
-                                .checkBabyStroller(item.getChkbabycarriageshopping())
-                                .checkPet(replaceBrTag(item.getChkpetshopping()))
-                                .openDate(replaceBrTag(item.getOpendateshopping()))
-                                .openTime(replaceBrTag(item.getOpentime()))
-                                .restDate(replaceBrTag(item.getRestdateshopping()))
-                                .fairDate(replaceBrTag(item.getFairday()))
-                                .saleItem(replaceBrTag(item.getSaleitem()))
-                                .scale(replaceBrTag(item.getScaleshopping())).build();
-                        shoppingRepository.save(shopping);
-                    }
-                    case Recreation -> {
-                        LeisureSportsDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(LeisureSportsDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
-                        LeisureSports leisureSports = LeisureSports.builder()
-                                .destination(d)
-                                .capacity(replaceBrTag(item.getAccomcountleports()))
-                                .usageTime(replaceBrTag(item.getUsetimeleports()))
-                                .openPeriod(replaceBrTag(item.getOpenperiod()))
-                                .parking(replaceBrTag(item.getParkingleports()))
-                                .parkingFee(replaceBrTag(item.getParkingfeeleports()))
-                                .usageFee(replaceBrTag(item.getUsefeeleports()))
-                                .checkPet(replaceBrTag(item.getChkpetleports()))
-                                .recommendedAge(replaceBrTag(item.getExpagerangeleports()))
-                                .checkBabyStroller(replaceBrTag(item.getChkbabycarriageleports())).build();
-                        leisureSportsRepository.save(leisureSports);
-                    }
-                    case Cultural_Facility -> {
-                        CulturalFacilityDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(CulturalFacilityDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
-                        CulturalFacility culturalFacility = CulturalFacility.builder()
-                                .destination(d)
-                                .capacity(replaceBrTag(item.getAccomcountculture()))
-                                .scale(replaceBrTag(item.getScale()))
-                                .usageFee(replaceBrTag(item.getUsefee()))
-                                .usageTime(replaceBrTag(item.getUsetimeculture()))
-                                .spendTime(replaceBrTag(item.getSpendtime()))
-                                .checkPet(replaceBrTag(item.getChkpetculture()))
-                                .checkBabyStroller(replaceBrTag(item.getChkbabycarriageculture()))
-                                .discountInfo(replaceBrTag(item.getDiscountinfo()))
-                                .parking(replaceBrTag(item.getParkingculture()))
-                                .parkingFee(replaceBrTag(item.getParkingfee())).build();
-                        culturalFacilityRepository.save(culturalFacility);
-                    }
-                    case Event_Performance_Festival -> {
-                        EventDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(EventDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
-                        Event event = Event.builder()
-                                .destination(d)
-                                .sponsor(replaceBrTag(item.getSponsor1()))
-                                .usageFee(replaceBrTag(item.getUsetimefestival()))
-                                .eventPlace(replaceBrTag(item.getEventplace()))
-                                .program(replaceBrTag(item.getProgram()))
-                                .ageLimit(replaceBrTag(item.getAgelimit()))
-                                .showtime(replaceBrTag(item.getPlaytime()))
-                                .spendTime(replaceBrTag(item.getSpendtimefestival()))
-                                .startDate(LocalDate.parse(item.getEventstartdate(), DateTimeFormatter.ofPattern("yyyyMMdd")))
-                                .endDate(LocalDate.parse(item.getEventenddate(), DateTimeFormatter.ofPattern("yyyyMMdd"))).build();
-                        eventRepository.save(event);
-                    }
-                    case Restaurant -> {
-                        RestaurantDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(RestaurantDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
-                        Restaurant restaurant = Restaurant.builder()
-                                .destination(d)
-                                .featuredMenu(replaceBrTag(item.getFirstmenu()))
-                                .treatMenu(replaceBrTag(item.getTreatmenu()))
-                                .openDate(replaceBrTag(item.getOpendatefood()))
-                                .openTime(replaceBrTag(item.getOpentimefood()))
-                                .packing(replaceBrTag(item.getPacking()))
-                                .parking(replaceBrTag(item.getParkingfood()))
-                                .restDate(replaceBrTag(item.getRestdatefood()))
-                                .seat(item.getSeat())
-                                .scale(replaceBrTag(item.getScalefood())).build();
-                        restaurantRepository.save(restaurant);
-                    }
-                }
-            });
         }
 
         /*tourApi.selectDetailPetTour("", 6);*/
@@ -194,6 +115,101 @@ public class PostConstructor {
         //addData();
 
 
+    }
+
+    private void getSubDestination(List<Destination> destinationList) {
+        destinationList.forEach(d->{
+            switch (d.getContentType()){
+                case Sightseeing -> {
+                    SightSeeingDetailIntroItem item =  tourApiDetailIntro.selectIntroductionIntro(SightSeeingDetailIntroDto.class,d.getTourApiContentId(), d.getContentType()).getItem().get(0);
+                    SightSeeing sightSeeing = SightSeeing.builder()
+                            .destination(d)
+                            .capacity(replaceBrTag(item.getAccomcount()))
+                            .experienceGuide(replaceBrTag(item.getExpguide()))
+                            .checkBabyStroller(replaceBrTag(item.getChkbabycarriage()))
+                            .restDate(replaceBrTag(item.getRestdate()))
+                            .openDate(replaceBrTag(item.getOpendate()))
+                            .usageTime(replaceBrTag(item.getUsetime()))
+                            .checkPet(replaceBrTag(item.getChkpet())).build();
+                    sightSeeingRepository.save(sightSeeing);
+                }
+                case Shopping -> {
+                    ShoppingDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(ShoppingDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
+                    Shopping shopping = Shopping.builder()
+                            .destination(d)
+                            .checkBabyStroller(item.getChkbabycarriageshopping())
+                            .checkPet(replaceBrTag(item.getChkpetshopping()))
+                            .openDate(replaceBrTag(item.getOpendateshopping()))
+                            .openTime(replaceBrTag(item.getOpentime()))
+                            .restDate(replaceBrTag(item.getRestdateshopping()))
+                            .fairDate(replaceBrTag(item.getFairday()))
+                            .saleItem(replaceBrTag(item.getSaleitem()))
+                            .scale(replaceBrTag(item.getScaleshopping())).build();
+                    shoppingRepository.save(shopping);
+                }
+                case Recreation -> {
+                    LeisureSportsDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(LeisureSportsDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
+                    LeisureSports leisureSports = LeisureSports.builder()
+                            .destination(d)
+                            .capacity(replaceBrTag(item.getAccomcountleports()))
+                            .usageTime(replaceBrTag(item.getUsetimeleports()))
+                            .openPeriod(replaceBrTag(item.getOpenperiod()))
+                            .parking(replaceBrTag(item.getParkingleports()))
+                            .parkingFee(replaceBrTag(item.getParkingfeeleports()))
+                            .usageFee(replaceBrTag(item.getUsefeeleports()))
+                            .checkPet(replaceBrTag(item.getChkpetleports()))
+                            .recommendedAge(replaceBrTag(item.getExpagerangeleports()))
+                            .checkBabyStroller(replaceBrTag(item.getChkbabycarriageleports())).build();
+                    leisureSportsRepository.save(leisureSports);
+                }
+                case Cultural_Facility -> {
+                    CulturalFacilityDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(CulturalFacilityDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
+                    CulturalFacility culturalFacility = CulturalFacility.builder()
+                            .destination(d)
+                            .capacity(replaceBrTag(item.getAccomcountculture()))
+                            .scale(replaceBrTag(item.getScale()))
+                            .usageFee(replaceBrTag(item.getUsefee()))
+                            .usageTime(replaceBrTag(item.getUsetimeculture()))
+                            .spendTime(replaceBrTag(item.getSpendtime()))
+                            .checkPet(replaceBrTag(item.getChkpetculture()))
+                            .checkBabyStroller(replaceBrTag(item.getChkbabycarriageculture()))
+                            .discountInfo(replaceBrTag(item.getDiscountinfo()))
+                            .parking(replaceBrTag(item.getParkingculture()))
+                            .parkingFee(replaceBrTag(item.getParkingfee())).build();
+                    culturalFacilityRepository.save(culturalFacility);
+                }
+                case Event_Performance_Festival -> {
+                    EventDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(EventDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
+                    Event event = Event.builder()
+                            .destination(d)
+                            .sponsor(replaceBrTag(item.getSponsor1()))
+                            .usageFee(replaceBrTag(item.getUsetimefestival()))
+                            .eventPlace(replaceBrTag(item.getEventplace()))
+                            .program(replaceBrTag(item.getProgram()))
+                            .ageLimit(replaceBrTag(item.getAgelimit()))
+                            .showtime(replaceBrTag(item.getPlaytime()))
+                            .spendTime(replaceBrTag(item.getSpendtimefestival()))
+                            .startDate(LocalDate.parse(item.getEventstartdate(), DateTimeFormatter.ofPattern("yyyyMMdd")))
+                            .endDate(LocalDate.parse(item.getEventenddate(), DateTimeFormatter.ofPattern("yyyyMMdd"))).build();
+                    eventRepository.save(event);
+                }
+                case Restaurant -> {
+                    RestaurantDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(RestaurantDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
+                    Restaurant restaurant = Restaurant.builder()
+                            .destination(d)
+                            .featuredMenu(replaceBrTag(item.getFirstmenu()))
+                            .treatMenu(replaceBrTag(item.getTreatmenu()))
+                            .openDate(replaceBrTag(item.getOpendatefood()))
+                            .openTime(replaceBrTag(item.getOpentimefood()))
+                            .packing(replaceBrTag(item.getPacking()))
+                            .parking(replaceBrTag(item.getParkingfood()))
+                            .restDate(replaceBrTag(item.getRestdatefood()))
+                            .seat(item.getSeat())
+                            .scale(replaceBrTag(item.getScalefood())).build();
+                    restaurantRepository.save(restaurant);
+                }
+            }
+        });
     }
 
     private List<Destination> getDestinations(int i) {

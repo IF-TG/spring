@@ -1,2 +1,4 @@
-package ifTG.travelPlan.service.travelplan;public interface TextRank {
+package ifTG.travelPlan.service.travelplan;
+
+public interface TextRank {
 }

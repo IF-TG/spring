@@ -1,5 +1,6 @@
 package ifTG.travelPlan.service.api;
 
+import ifTG.travelPlan.service.api.dto.naver.NaverBlogApiDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.Utf8Encoder;
@@ -26,15 +27,14 @@ public class NaverApiImpl implements NaverApi{
     private String blogApiUri;
 
     @Override
-    public String selectBlogInfo(String query){
+    public NaverBlogApiDto selectBlogInfo(String query){
         UriComponents uriComponents = UriComponentsBuilder.fromUriString(blogApiUri)
                                                           .queryParam("query", URLEncoder.encode(query, StandardCharsets.UTF_8)).build();
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Naver-Client-Id", "ASoK6DV_bhYnNFTVxhw9");
         httpHeaders.add("X-Naver-Client-Secret", "hT687kggdY");
         HttpEntity<?> entity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<String> response = restTemplate.exchange(uriComponents.toUri(), HttpMethod.GET, entity, String.class);
+        ResponseEntity<NaverBlogApiDto> response = restTemplate.exchange(uriComponents.toUri(), HttpMethod.GET, entity, NaverBlogApiDto.class);
         log.info("value = {}",response.getBody());
         return response.getBody();
     }

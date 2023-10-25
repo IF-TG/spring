@@ -1,5 +1,7 @@
 package ifTG.travelPlan.service.api;
 
+import ifTG.travelPlan.service.api.dto.naver.NaverBlogApiDto;
+
 public interface NaverApi {
-    String selectBlogInfo(String query);
+    NaverBlogApiDto selectBlogInfo(String query);
 }
