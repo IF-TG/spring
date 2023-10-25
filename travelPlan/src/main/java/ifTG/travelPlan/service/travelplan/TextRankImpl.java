@@ -4,7 +4,6 @@ import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.KomoranResult;
 import kr.co.shineware.nlp.komoran.model.Token;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +15,14 @@ import java.util.StringTokenizer;
 @Slf4j
 public class TextRankImpl implements TextRank{
 
-    //NNP, NNG
-    private List<String> textRank(String text){
+    //NNP, NNG, VA
+    @Override
+    public List<String> textRank(String text){
         List<String> keywordList = new ArrayList<>();
         List<Node> nodeList = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(text, ".");
         String s = null;
-        //형용사 추가하기
+
         while(st.hasMoreTokens()) {
             s = st.nextToken();
             Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
@@ -30,6 +30,7 @@ public class TextRankImpl implements TextRank{
             List<Token> tokenList =  komoranResult.getTokenList();
 
         }
+        return null;
     }
 
     static class Node{
