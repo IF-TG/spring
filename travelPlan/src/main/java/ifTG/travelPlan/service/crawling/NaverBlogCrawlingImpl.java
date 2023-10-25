@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
+@Deprecated
 public class NaverBlogCrawlingImpl implements NaverBlogCrawling {
 
     private final String WEB_DRIVER_PATH = "C:\\Users\\ImKyeongWan\\Documents\\chromedriver-win64\\chromedriver.exe";
