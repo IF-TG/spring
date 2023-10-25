@@ -1,10 +1,9 @@
 package ifTG.travelPlan.controller.destination;
 
 import ifTG.travelPlan.controller.dto.RequestSearchDestinationDto;
-import ifTG.travelPlan.dto.destination.DestinationSearchDto;
+import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.service.destination.DestinationService;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,10 @@ public class DestinationController {
     private final DestinationService destinationService;
 
     @GetMapping("/search")
-    public List<EDestination> findAllByKeyword(@RequestBody RequestSearchDestinationDto dto){
-        return destinationService.findAllByKeyword(dto);
+    public Result<List<EDestination>> findAllByKeyword(@RequestBody RequestSearchDestinationDto dto){
+        return new Result<>(destinationService.findAllByKeyword(dto));
     }
+
+    /*@GetMapping()
+    public List<DestinationDto>*/
 }

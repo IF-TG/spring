@@ -1,7 +1,6 @@
 package ifTG.travelPlan.repository.springdata.dairy;
 
 import ifTG.travelPlan.domain.diary.Diary;
-import ifTG.travelPlan.domain.post.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

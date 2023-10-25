@@ -1,7 +1,7 @@
 package ifTG.travelPlan.controller.user;
 
-import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.controller.dto.RequestSearchHistoryPageDto;
+import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.service.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

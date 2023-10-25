@@ -1,9 +1,6 @@
 package ifTG.travelPlan.repository.springdata.post;
 
-import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import ifTG.travelPlan.domain.user.QUser;
-import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -11,9 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static ifTG.travelPlan.domain.user.QUser.user;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

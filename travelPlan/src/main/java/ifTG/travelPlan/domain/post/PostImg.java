@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
@@ -18,7 +18,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "post_imgs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostImg {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "post_img_id")

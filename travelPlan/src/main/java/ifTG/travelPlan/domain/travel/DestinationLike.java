@@ -4,7 +4,7 @@ import ifTG.travelPlan.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter

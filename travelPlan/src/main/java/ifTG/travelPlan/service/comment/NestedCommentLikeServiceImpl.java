@@ -2,7 +2,7 @@ package ifTG.travelPlan.service.comment;
 
 import ifTG.travelPlan.aop.ToggleLike;
 import ifTG.travelPlan.controller.dto.RequestLikeDto;
-import ifTG.travelPlan.dto.post.LikeDto;
+import ifTG.travelPlan.dto.post.ToggleDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class NestedCommentLikeServiceImpl implements NestedCommentLikeService{
     @Override
     @ToggleLike
-    public LikeDto toggleLikeNestedComment(RequestLikeDto requestLikeDto) {
+    public ToggleDto toggleLikeNestedComment(RequestLikeDto requestLikeDto) {
         return null;
     }
 }

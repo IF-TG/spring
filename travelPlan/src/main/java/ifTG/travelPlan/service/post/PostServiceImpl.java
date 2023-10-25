@@ -1,13 +1,15 @@
 package ifTG.travelPlan.service.post;
 
+import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.controller.dto.RequestPostListByUserIdDto;
-import ifTG.travelPlan.domain.post.*;
+import ifTG.travelPlan.domain.post.Post;
+import ifTG.travelPlan.domain.post.PostCategory;
+import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.domain.user.UserBlock;
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.post.*;
-import ifTG.travelPlan.dto.post.enums.*;
-import ifTG.travelPlan.controller.dto.PostDto;
+import ifTG.travelPlan.dto.post.enums.MainCategory;
 import ifTG.travelPlan.repository.querydsl.QPostListRepository;
 import ifTG.travelPlan.repository.springdata.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.post.PostCategoryRepository;

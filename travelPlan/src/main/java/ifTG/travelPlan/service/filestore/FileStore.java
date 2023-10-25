@@ -1,12 +1,5 @@
 package ifTG.travelPlan.service.filestore;
 
-import ifTG.travelPlan.dto.ImageType;
-import ifTG.travelPlan.dto.post.ImgFile;
-
-import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Map;
-
 public interface FileStore {
 
     String saveFile(byte[] file, String uri, String type);

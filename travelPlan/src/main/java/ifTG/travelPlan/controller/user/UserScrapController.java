@@ -1,32 +1,34 @@
 package ifTG.travelPlan.controller.user;
 
-import ifTG.travelPlan.controller.dto.RequestCreateScrapFolderDto;
-
-import ifTG.travelPlan.controller.dto.RequestGetAllScrapByUserDto;
+import ifTG.travelPlan.controller.dto.RequestScrapFolderDto;
 import ifTG.travelPlan.controller.dto.Result;
-import ifTG.travelPlan.dto.user.ScrapFolderDto;
-import ifTG.travelPlan.dto.user.ScrapTitleDto;
+import ifTG.travelPlan.dto.ScrapPostAndDestination;
+import ifTG.travelPlan.dto.user.UserScrapFolderDto;
 import ifTG.travelPlan.service.user.UserScrapService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/userScrap")
+@Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/scrap")
 public class UserScrapController {
     private final UserScrapService userScrapService;
-    @PostMapping
-    public ScrapTitleDto createScrapFolder(@RequestBody RequestCreateScrapFolderDto requestCreateScrapFolderDto){
-        return userScrapService.createScrapFolder(requestCreateScrapFolderDto);
-    }
 
     @GetMapping
-    public Result<List<ScrapFolderDto>> findAllScrapByUser(@RequestBody RequestGetAllScrapByUserDto dto){
-        return new Result<>(userScrapService.findAllScrapByUser(dto));
+    public Result<List<UserScrapFolderDto>> findAllScrapByUser(@RequestBody RequestScrapFolderDto dto){
+        return new Result<>(userScrapService.findAllScrapFolderByUser(dto));
     }
-    /*
-    @PostMapping
-    public Boolean insertPostScrap(@RequestBody)*/
+
+    @GetMapping("/detail")
+    public Result<List<ScrapPostAndDestination>> findAllScrapsByScrapFolderAndUserId(@RequestBody RequestScrapDetail dto){
+        return new Result<>(userScrapService.findAllScrapsByScrapFolderAndUserId(dto));
+    }
 }

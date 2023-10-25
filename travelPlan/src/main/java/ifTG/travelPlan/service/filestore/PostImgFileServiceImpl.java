@@ -3,8 +3,6 @@ package ifTG.travelPlan.service.filestore;
 
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostImg;
-import ifTG.travelPlan.domain.post.PostScrap;
-import ifTG.travelPlan.domain.user.ScrapFolder;
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.ImageType;
 import ifTG.travelPlan.dto.post.ImgFile;
@@ -15,8 +13,9 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -29,6 +28,8 @@ public class PostImgFileServiceImpl implements PostImgFileService {
 
     @Value("${thumbnail.path}")
     private String thumbnailPath;
+    @Value("${IMG_SERVER_URL}")
+    private String imgServerUrl;
 
     private final FileStore fileStore;
     private final PostImgRepository postImgRepository;
@@ -175,6 +176,9 @@ public class PostImgFileServiceImpl implements PostImgFileService {
 
     private String getPostPath(Long postId) {
         return postPath + postId + "\\";
+    }
+    public String getPostThumbnailUrl(Long postId, String imageFileName){
+        return imgServerUrl + postId + thumbnailPath + imageFileName;
     }
 }
 

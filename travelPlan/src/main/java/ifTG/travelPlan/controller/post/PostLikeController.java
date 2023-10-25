@@ -2,7 +2,7 @@ package ifTG.travelPlan.controller.post;
 
 
 import ifTG.travelPlan.controller.dto.RequestLikeDto;
-import ifTG.travelPlan.dto.post.LikeDto;
+import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.service.post.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostLikeController {
     private final PostLikeService postLikeService;
     @PostMapping
-    public LikeDto toggleLikePost(@RequestBody RequestLikeDto requestLikeDto){
+    public ToggleDto toggleLikePost(@RequestBody RequestLikeDto requestLikeDto){
         log.info("likedto = {}, {}", requestLikeDto.getObjectId(), requestLikeDto.getUserId());
         return postLikeService.toggleLikePost(requestLikeDto);
     }

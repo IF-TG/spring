@@ -1,8 +1,5 @@
 package ifTG.travelPlan.service.comment;
 
-import ifTG.travelPlan.controller.dto.NestedCommentIdDto;
-import ifTG.travelPlan.controller.dto.NestedUpdateCommentDto;
-import ifTG.travelPlan.controller.dto.RequestUpdateNestedCommentDto;
 import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.comment.Comment;

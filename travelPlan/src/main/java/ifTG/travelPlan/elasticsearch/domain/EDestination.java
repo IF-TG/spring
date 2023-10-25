@@ -8,7 +8,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.data.elasticsearch.annotations.Setting;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Document(indexName = "e_destination")
@@ -19,15 +18,12 @@ import java.util.List;
 @Builder
 public class EDestination {
     @Id
-    private String id;
-
+    private Long id;
     private String title;
-
     private List<String> keywordList;
-
     private String thumbnailUrl;
-
     private String info;
-
+    private Long likeNum;
     private String blindInfo;
+    private String address;
 }

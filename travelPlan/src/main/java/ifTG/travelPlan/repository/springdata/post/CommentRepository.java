@@ -1,7 +1,7 @@
 package ifTG.travelPlan.repository.springdata.post;
 
-import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.post.Post;
+import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -3,7 +3,6 @@ package ifTG.travelPlan.service.post;
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.dto.ImageToString;
-import ifTG.travelPlan.dto.ImageType;
 import ifTG.travelPlan.dto.post.PostWithThumbnailDto;
 import org.springframework.data.domain.Page;
 

@@ -1,7 +1,6 @@
 package ifTG.travelPlan.controller.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;

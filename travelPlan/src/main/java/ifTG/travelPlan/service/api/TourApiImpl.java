@@ -1,10 +1,13 @@
 package ifTG.travelPlan.service.api;
 
-import ifTG.travelPlan.service.api.dto.MapXY;
 import ifTG.travelPlan.service.api.dto.*;
+import ifTG.travelPlan.service.api.dto.tourapi.TourApiResponseDto;
+import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
+import ifTG.travelPlan.service.api.dto.tourapi.detailcommon.DetailCommonDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -28,8 +31,6 @@ public class TourApiImpl implements TourApi{
     private String secureKey;
     @Value("${api.tour.url.search_keyword}")
     private String searchKeywordMethod;
-    @Value("${api.tour.url.detail_intro}")
-    private String selectIntroductionIntro;
     @Value("${api.tour.url.location_base}")
     private String selectLocationBase;
     @Value("${api.tour.url.category_code}")
@@ -44,10 +45,13 @@ public class TourApiImpl implements TourApi{
     private String detailCommon;
     @Value("${api.tour.url.detail_info}")
     private String detailInfo;
+
     @Value("${api.tour.url.detail_image}")
     private String detailImage;
     @Value("${api.tour.url.area_based_syncList}")
     private String areaBasedSynList;
+    @Value("${api.tour.url.detail_pet}")
+    private String detailPet;
 
     private final RestTemplate restTemplate;
 
@@ -186,60 +190,8 @@ public class TourApiImpl implements TourApi{
         return getBody(response);
     }
 
-    @Override
-    public String selectDetailCommon(Long contentId, ContentType contentTypeId){
-        String url = basedURL + detailCommon;
-        UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), 0)
-                .queryParam("contentId", contentId)
-                .queryParam("contentTypeId", contentTypeId)
-                .queryParam("defaultYN", "N")
-                .queryParam("firstImageYN", "Y")
-                .queryParam("areacodeYN", "Y")
-                .queryParam("catcodeYN","Y")
-                .queryParam("addrinfoYN", "Y")
-                .queryParam("overviewYN", "Y")
-                .build(true);
-        log.info("tour api url = {}", builder.toUriString());
-
-        HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
-        ResponseEntity<String> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity, String.class);
-
-        return getBody(response);
-
-    }
-
-    @Override
-    public String selectIntroductionIntro(Long contentId, ContentType contentTypeId){
-        String url = basedURL + selectIntroductionIntro;
-        UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), 0)
-                .queryParam("contentId", contentId)
-                .queryParam("contentTypeId", contentTypeId)
-                .build(true);
-        log.info("tour api url = {}", builder.toUriString());
 
 
-        HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
-        ResponseEntity<String> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity, String.class);
-
-        return getBody(response);
-
-    }
-
-    @Override
-    public String selectDetailInfo(Long contentId, ContentType contentTypeId){
-        String url = basedURL + detailInfo;
-        UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), 0)
-                .queryParam("contentId", contentId)
-                .queryParam("contentTypeId", contentTypeId)
-                .build(true);
-        log.info("tour api url = {}", builder.toUriString());
-
-
-        HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
-        ResponseEntity<String> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity, String.class);
-
-        return getBody(response);
-    }
 
     @Override
     public String selectDetailImage(Long contentId){
@@ -259,21 +211,73 @@ public class TourApiImpl implements TourApi{
     }
 
     @Override
-    public String selectAreaBasedSynList(int page){
+    public AreaBasedSyncListDto selectAreaBasedSynList(int page){
         String url = basedURL + areaBasedSynList;
         UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), page)
+                .queryParam("showflag", 1)
+                //.queryParam("contentTypeId", ContentType.Cultural_Facility.getValue())
                 .build(true);
         log.info("tour api url = {}", builder.toUriString());
 
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
-        ResponseEntity<String> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity, String.class);
 
-        return getBody(response);
+        TourApiResponseDto<AreaBasedSyncListDto> response = restTemplate.exchange(
+                builder.toUri(),
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<TourApiResponseDto<AreaBasedSyncListDto>>(){}
+        ).getBody();
+
+        if (response==null)throw new RuntimeException("Fail Connect to Tour API");
+
+        return response.getResponse().getBody().getItems();
     }
-
     @Override
-    public String selectDetailPetTour(Long contentId){
-        String url = basedURL + areaBasedSynList;
+    public DetailCommonDto selectDetailCommon(Long contentId, ContentType contentTypeId){
+        String url = basedURL + detailCommon;
+        UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), 0)
+                .queryParam("contentId", contentId)
+                .queryParam("contentTypeId", contentTypeId.getValue())
+                .queryParam("defaultYN", "N")
+                .queryParam("firstImageYN", "Y")
+                .queryParam("areacodeYN", "Y")
+                .queryParam("catcodeYN","Y")
+                .queryParam("addrinfoYN", "Y")
+                .queryParam("overviewYN", "Y")
+                .build(true);
+        log.info("tour api url = {}", builder.toUriString());
+
+        HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
+        TourApiResponseDto<DetailCommonDto> response = restTemplate.exchange(
+                builder.toUri(),
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<TourApiResponseDto<DetailCommonDto>>() {}).getBody();
+
+        if (response==null)throw new RuntimeException("Fail Connect to Tour API");
+
+        return response.getResponse().getBody().getItems();
+
+    }
+    @Override
+    public Object selectDetailInfo(String contentId, ContentType contentTypeId){
+        String url = basedURL + detailInfo;
+        UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), 0)
+                                       .queryParam("contentId", contentId)
+                                       .queryParam("contentTypeId", contentTypeId.getValue())
+                                       .build(true);
+        log.info("tour api url = {}", builder.toUriString());
+
+
+        HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
+        TourApiResponseDto<Object> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity,
+                new ParameterizedTypeReference<TourApiResponseDto<Object>>() {}).getBody();
+
+        return response.getResponse().getBody().getItems();
+    }
+    @Override
+    public String selectDetailPetTour(String contentId, int page){
+        String url = basedURL + detailPet;
         UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), 0)
                 .queryParam("contentId", contentId)
                 .build(true);
@@ -282,12 +286,14 @@ public class TourApiImpl implements TourApi{
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<String> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity, String.class);
 
+        log.info("{}", response.getBody());
         return getBody(response);
     }
 
+    @Override
     public UriComponentsBuilder getUriComponentToTourApi(UriComponentsBuilder uriComponentsBuilder, int page){
         return uriComponentsBuilder
-                .queryParam("numOfRows", 100)
+                .queryParam("numOfRows", 10)
                 .queryParam("pageNo", page)
                 .queryParam("MobileOS", "ETC")
                 .queryParam("MobileApp", "travelPlan")
@@ -302,4 +308,5 @@ public class TourApiImpl implements TourApi{
             throw  new RuntimeException("Tour API 호출에 실패했습니다.");
         }
     }
+
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class LikeDto {
+public class ToggleDto {
     private Long objectId;
-    private Boolean like;
+    private Boolean value;
 }

@@ -4,7 +4,6 @@ import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -23,33 +22,6 @@ public class EDestinationCustomRepository {
 
     private final ElasticsearchOperations elasticsearchOperations;
 
-    /**
-     *
-     * must 부분 _all을 multi_match로 바꾸어야한다.->일단 _all을 info로 변환해놓겠음
-     * {
-     *     "query":{
-     *         "bool":{
-     *             "must":[
-     *                  {
-     *                      "match":{
-     *                          "info":"userKeyword"
-     *                      }
-     *                  }
-     *             ],
-     *             "should":[
-     *                  {
-     *                      "match":{
-     *                          "keywordList":"1"
-     *                      },
-     *                      "match"{
-     *                          "keywordList":"2"
-     *                      }
-     *                  }
-     *             ]
-     *         }
-     *     }
-     * }
-     */
     public List<EDestination> findAllByUserKeywordAndGPTKeywordList(String userKeyword, List<String> gptKeywordList, Pageable pageable){
 
         Query multiMatchQuery = NativeQuery.builder()

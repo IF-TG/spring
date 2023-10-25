@@ -1,11 +1,12 @@
 package ifTG.travelPlan.domain.user;
 
-import ifTG.travelPlan.domain.diary.Diary;
-import ifTG.travelPlan.domain.post.PostLike;
-import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.post.Post;
+import ifTG.travelPlan.domain.post.PostLike;
+import ifTG.travelPlan.domain.post.PostScrap;
+import ifTG.travelPlan.domain.post.comment.Comment;
 import ifTG.travelPlan.domain.post.comment.CommentLike;
 import ifTG.travelPlan.domain.post.comment.NestedCommentLike;
+import ifTG.travelPlan.domain.travel.DestinationScrap;
 import ifTG.travelPlan.domain.travel.TravelPlan;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,8 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static jakarta.persistence.FetchType.*;
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity @Getter
 @Table(name = "users")
@@ -65,7 +66,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private final List<TravelPlan> travelPlanList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private final List<ScrapFolder> scrapFolderList = new ArrayList<>();
+    private final List<PostScrap> postScrapList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private final List<DestinationScrap> destinationScrapList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private final List<SearchHistory> searchHistoryList = new ArrayList<>();
     @OneToMany(mappedBy = "user")

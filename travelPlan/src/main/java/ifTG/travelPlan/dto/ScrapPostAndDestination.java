@@ -1,8 +1,6 @@
-package ifTG.travelPlan.dto.user;
+package ifTG.travelPlan.dto;
 
 import ifTG.travelPlan.controller.dto.PostDto;
-import ifTG.travelPlan.dto.ImageToString;
-import ifTG.travelPlan.dto.post.ImgFile;
 import ifTG.travelPlan.dto.travel.DestinationDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +11,8 @@ import java.util.Map;
 
 @Getter
 @AllArgsConstructor
-public class ScrapFolderDto {
-    private String title;
-    private List<ImageToString> thumbnailList;
+public class ScrapPostAndDestination {
+    private final Long userId;
+    private final List<DestinationDto> destinationList;
+    private final List<PostDto> postDtoList;
 }

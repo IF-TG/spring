@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "travel_plan_destination")

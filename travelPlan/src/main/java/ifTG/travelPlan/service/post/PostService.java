@@ -1,8 +1,8 @@
 package ifTG.travelPlan.service.post;
 
+import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.controller.dto.RequestPostListByUserIdDto;
 import ifTG.travelPlan.dto.post.*;
-import ifTG.travelPlan.controller.dto.PostDto;
 
 import java.util.List;
 
