@@ -1,0 +1,43 @@
+{
+  "properties": {
+    "id": {
+      "type": "long"
+    },
+    "title": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "info": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "blindInfo": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "thumbnailUrl": {
+      "type": "keyword"
+    },
+    "keywordList": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "address": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "category": {
+      "properties": {
+        "largeCategory": {
+          "type": "keyword"
+        },
+        "middleCategory": {
+          "type": "keyword"
+        },
+        "smallCategory": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
