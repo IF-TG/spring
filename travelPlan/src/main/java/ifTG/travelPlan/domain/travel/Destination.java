@@ -1,6 +1,9 @@
 package ifTG.travelPlan.domain.travel;
 
+<<<<<<< HEAD
 import ifTG.travelPlan.dto.travel.enums.Category;
+=======
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 import ifTG.travelPlan.service.api.dto.ContentType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,8 +37,11 @@ public class Destination{
     private Double mapY;
     private Integer mLevel;
     private String zipcode;
+<<<<<<< HEAD
     @Embedded
     private Category category;
+=======
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
     @Column(columnDefinition = "TEXT", nullable = false)
     private String overview;
     private String tel;
@@ -47,8 +53,12 @@ public class Destination{
     private List<DestinationImg> destinationImgList = new ArrayList<>();
 
     @Builder
+<<<<<<< HEAD
     public Destination(Long tourApiContentId, ContentType contentType, String zipcode, String address, String addressDetail, String thumbNail,
                        String title, Integer areaCode, Double mapX, Double mapY, Integer mLevel, String tel, Category category) {
+=======
+    public Destination(Long tourApiContentId, ContentType contentType, String zipcode, String address, String addressDetail, String thumbNail, String title, Integer areaCode, Double mapX, Double mapY, Integer mLevel, String tel) {
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
         this.tourApiContentId = tourApiContentId;
         this.contentType = contentType;
         this.address = address;
@@ -61,7 +71,10 @@ public class Destination{
         this.mapY = mapY;
         this.mLevel = mLevel;
         this.tel = tel;
+<<<<<<< HEAD
         this.category =category;
+=======
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
     }
 
     public void insertOverViewAtTourApiDetailCommon(String overview){

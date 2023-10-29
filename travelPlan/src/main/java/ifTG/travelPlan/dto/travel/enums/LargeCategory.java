@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package ifTG.travelPlan.dto.travel.enums;
 
 import lombok.Getter;
@@ -28,4 +29,7 @@ public enum LargeCategory {
         }
         throw new IllegalArgumentException("No enum found with code: " + code);
     }
+=======
+package ifTG.travelPlan.dto.travel.enums;public class LargeCategory {
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 }

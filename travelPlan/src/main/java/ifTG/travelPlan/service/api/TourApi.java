@@ -2,7 +2,10 @@ package ifTG.travelPlan.service.api;
 
 import ifTG.travelPlan.service.api.dto.*;
 import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
+<<<<<<< HEAD
 import ifTG.travelPlan.service.api.dto.tourapi.categorycode.CategoryCodeDto;
+=======
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 import ifTG.travelPlan.service.api.dto.tourapi.detailcommon.DetailCommonDto;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -13,7 +16,11 @@ public interface TourApi {
 
     String selectLocationBase(Long areaCode);
 
+<<<<<<< HEAD
     CategoryCodeDto selectCategoryCode(ContentType contentTypeId, CatDto catDto);
+=======
+    String selectCategoryCode(ContentType contentTypeId, CatDto catDto);
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 
     String selectAreaBased(ArrangeToTourApi arrange, ContentType contentTypeId, AreaCodeDto areaCodeDto, CatDto cat, int page);
 

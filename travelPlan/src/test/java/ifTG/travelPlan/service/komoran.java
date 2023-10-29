@@ -6,19 +6,26 @@ import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.KomoranResult;
 import kr.co.shineware.nlp.komoran.model.Token;
 import lombok.extern.slf4j.Slf4j;
+<<<<<<< HEAD
 import org.assertj.core.api.Assertions;
+=======
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+=======
+import java.util.List;
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -27,6 +34,7 @@ public class komoran {
     @Test
     public void komoran(){
         Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
+<<<<<<< HEAD
         String s = "나에게는 아름다운 물건 들어왔습니다요.";
         KomoranResult komoranResult = komoran.analyze(s);
         log.info("result = {}", komoranResult.getPlainText());
@@ -43,4 +51,13 @@ public class komoran {
                                             .collect(Collectors.toMap(list::get, Function.identity(), (old, newv)->old));
         System.out.println(map);
     }
+=======
+        String s = "좋은 물건 들어왔습니다요.";
+        KomoranResult komoranResult = komoran.analyze(s);
+        log.info("result = {}", komoranResult.getPlainText());
+        List<Token> tokenList = komoranResult.getTokenList();
+        tokenList.stream().filter(t->t.getPos().equals(SYMBOL.NNP)||t.getPos().equals(SYMBOL.NNG)||t.getPos().equals(SYMBOL.NA)).forEach(System.out::println);
+
+    }
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 }

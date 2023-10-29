@@ -3,7 +3,10 @@ package ifTG.travelPlan.service.api;
 import ifTG.travelPlan.service.api.dto.*;
 import ifTG.travelPlan.service.api.dto.tourapi.TourApiResponseDto;
 import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
+<<<<<<< HEAD
 import ifTG.travelPlan.service.api.dto.tourapi.categorycode.CategoryCodeDto;
+=======
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 import ifTG.travelPlan.service.api.dto.tourapi.detailcommon.DetailCommonDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +24,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+<<<<<<< HEAD
 import java.util.Objects;
+=======
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +79,11 @@ public class TourApiImpl implements TourApi{
     }
 
     @Override
+<<<<<<< HEAD
     public CategoryCodeDto selectCategoryCode(ContentType contentTypeId, CatDto catDto){
+=======
+    public String selectCategoryCode(ContentType contentTypeId, CatDto catDto){
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
         String url = basedURL + selectCategoryCode;
         UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), 0)
                 .queryParam("contentTypeId", contentTypeId)
@@ -82,6 +92,7 @@ public class TourApiImpl implements TourApi{
                 .queryParam("cat3", catDto.getCat3())
                 .build(true);
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
+<<<<<<< HEAD
         //log.info("tour api url = {}", builder.toUriString());
 
         TourApiResponseDto<CategoryCodeDto> response = restTemplate.exchange(builder.toUri(),
@@ -90,6 +101,13 @@ public class TourApiImpl implements TourApi{
                 new ParameterizedTypeReference<TourApiResponseDto<CategoryCodeDto>>(){}).getBody();
 
         return Objects.requireNonNull(response).getResponse().getBody().getItems();
+=======
+        log.info("tour api url = {}", builder.toUriString());
+
+        ResponseEntity<String> response = restTemplate.exchange(builder.toUri(), HttpMethod.GET, entity, String.class);
+
+        return getBody(response);
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
     }
 
     /**
@@ -298,7 +316,11 @@ public class TourApiImpl implements TourApi{
     @Override
     public UriComponentsBuilder getUriComponentToTourApi(UriComponentsBuilder uriComponentsBuilder, int page){
         return uriComponentsBuilder
+<<<<<<< HEAD
                 .queryParam("numOfRows", 20)
+=======
+                .queryParam("numOfRows", 10)
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
                 .queryParam("pageNo", page)
                 .queryParam("MobileOS", "ETC")
                 .queryParam("MobileApp", "travelPlan")
