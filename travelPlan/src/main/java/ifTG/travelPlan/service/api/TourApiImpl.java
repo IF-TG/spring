@@ -298,7 +298,7 @@ public class TourApiImpl implements TourApi{
     @Override
     public UriComponentsBuilder getUriComponentToTourApi(UriComponentsBuilder uriComponentsBuilder, int page){
         return uriComponentsBuilder
-                .queryParam("numOfRows", 20)
+                .queryParam("numOfRows", 50)
                 .queryParam("pageNo", page)
                 .queryParam("MobileOS", "ETC")
                 .queryParam("MobileApp", "travelPlan")

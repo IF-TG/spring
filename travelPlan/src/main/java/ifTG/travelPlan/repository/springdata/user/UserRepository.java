@@ -65,4 +65,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.commentLikeList LEFT JOIN FETCH u.nestedCommentLikeList WHERE u.id = :id")
     User findWithCommentLikeAndNestedCommentLikeByUserId(Long id);
 
+    @Query("SELECT u.profileImgUrl FROM User u WHERE u.id = :userId")
+    String findProfileImgByUserId(Long userId);
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Long> {
-    @Query("SELECT sh FROM SearchHistory sh WHERE sh.user.id = :userId")
+    @Query("SELECT sh FROM SearchHistory sh WHERE sh.user.id = :userId ORDER BY sh.search_time DESC")
     Page<SearchHistory> findAllByUserId(Long userId, Pageable pageable);
 
     @Query("SELECT sh FROM SearchHistory sh Where sh.user.id = :userId AND sh.history = :history")

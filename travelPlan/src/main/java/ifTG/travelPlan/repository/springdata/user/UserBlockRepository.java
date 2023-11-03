@@ -8,6 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface UserBlockRepository extends JpaRepository<UserBlock, UserBlockId> {
-    @Query("SELECT ub FROM UserBlock ub WHERE ub.user.userId = :userId")
-    List<UserBlock> findAllByUserId(String userId);
+    @Query("SELECT ub FROM UserBlock ub JOIN FETCH ub.user u WHERE ub.user.id = :userId")
+    List<UserBlock> findAllWithUserByUserId(Long userId);
+
+    @Query("SELECT ub.blockedUser.id FROM UserBlock ub WHERE ub.user.id = :userId")
+    List<Long> findBlockedUserIdListByUserId(Long userId);
+
+    @Query("SELECT ub.user.id FROM UserBlock ub WHERE ub.blockedUser.id = :userId")
+    List<Long> findUserIdListByBlockedUserId(Long userId);
 }

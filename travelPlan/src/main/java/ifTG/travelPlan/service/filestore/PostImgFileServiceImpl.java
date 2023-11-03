@@ -25,11 +25,12 @@ import java.util.stream.Collectors;
 public class PostImgFileServiceImpl implements PostImgFileService {
     @Value("${path.post.path}")
     private String postPath;
-
     @Value("${thumbnail.path}")
     private String thumbnailPath;
     @Value("${IMG_SERVER_URL}")
     private String imgServerUrl;
+    @Value("${thumbnail.length}")
+    private Integer length;
 
     private final FileStore fileStore;
     private final PostImgRepository postImgRepository;
@@ -45,9 +46,9 @@ public class PostImgFileServiceImpl implements PostImgFileService {
 
     private String saveImgFileToFileStore(String postIdUri, ImgFile imgFile) {
         String savedFileName = fileStore.saveFileToBase64Decode(imgFile.getImg(), postIdUri, imgFile.getImageType().toString());
-
+        log.info("isthumbnail = {}", imgFile.isThumbnail());
         if(imgFile.isThumbnail()){
-            new Thread(()->fileStore.createThumbnailAndSaveFile(postIdUri, savedFileName, thumbnailPath)).start();
+            new Thread(()->fileStore.createThumbnailAndSaveFile(postIdUri, savedFileName, thumbnailPath, length)).start();
         }
         return savedFileName;
     }
@@ -175,10 +176,26 @@ public class PostImgFileServiceImpl implements PostImgFileService {
     }
 
     private String getPostPath(Long postId) {
-        return postPath + postId + "\\";
+        return postPath + postId + "/";
     }
+
+    @Override
     public String getPostThumbnailUrl(Long postId, String imageFileName){
-        return imgServerUrl + postId + thumbnailPath + imageFileName;
+        return imgServerUrl+getPostPath(postId)+thumbnailPath+imageFileName;
+    }
+    @Override
+    public List<String> getPostThumbnailUrlList(Long postId, List<String> imageFileNameList) {
+        return imageFileNameList.stream().map(image->getPostThumbnailUrl(postId, image)).toList();
+    }
+
+    @Override
+    public String getPostImageUrl(Long postId, String imageFileName){
+        return imgServerUrl + getPostPath(postId)+imageFileName;
+    }
+
+    @Override
+    public List<String> getPostImageListUrl(Long postId, List<String> imageFileNameList){
+        return imageFileNameList.stream().map(image-> getPostImageUrl(postId, image)).toList();
     }
 }
 

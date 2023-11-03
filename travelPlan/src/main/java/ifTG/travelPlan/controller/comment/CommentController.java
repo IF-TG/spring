@@ -20,7 +20,7 @@ public class CommentController {
     public CommentDtoWithUserInfo saveComment(@RequestBody RequestCreateCommentDto createCommentDto){
         return commentService.saveComment(createCommentDto);
     }
-    @GetMapping("/list")
+    @GetMapping
     public Result<List<CommentDtoWithUserInfo>> getCommentList(@RequestBody RequestCommentByPostDto requestCommentByPostDto){
         return new Result<>(commentService.getCommentListByPost(requestCommentByPostDto));
     }

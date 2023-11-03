@@ -1,6 +1,7 @@
 package ifTG.travelPlan.service.user;
 
 import ifTG.travelPlan.controller.dto.RequestSearchHistoryPageDto;
+import ifTG.travelPlan.controller.dto.SearchHistoryDto;
 import ifTG.travelPlan.domain.user.SearchHistory;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.repository.springdata.user.SearchHistoryRepository;
@@ -20,9 +21,9 @@ public class UserSearchServiceImpl implements UserSearchService{
     private final SearchHistoryRepository searchHistoryRepository;
 
     @Override
-    public List<String> findAllSearchHistoryByUser(RequestSearchHistoryPageDto dto) {
+    public List<SearchHistoryDto> findAllSearchHistoryByUser(RequestSearchHistoryPageDto dto) {
         return searchHistoryRepository.findAllByUserId(dto.getUserId(), dto.getPageable()).stream()
-                                      .map(SearchHistory::getHistory).toList();
+                                      .map(sh-> new SearchHistoryDto(sh.getHistory(), sh.getSearch_time())).toList();
     }
 
     @Override

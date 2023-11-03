@@ -69,7 +69,8 @@ public class Post {
 
     private LocalDate startDate;
     private LocalDate endDate;
-
+    private Double mapX;
+    private Double mapY;
 
     //양방향 매핑
     @BatchSize(size = 500)
@@ -95,13 +96,15 @@ public class Post {
     private List<PostScrap> postScrapList = new ArrayList<>();
 
     @Builder
-    public Post(String title, String content, User user, LocalDate startDate, LocalDate endDate) {
+    public Post(String title, String content, User user, LocalDate startDate, LocalDate endDate, Double mapX, Double mapY) {
         this.title = title;
         this.content = content;
         this.user = user;
         this.user.getPostList().add(this); // 1차 캐시 문제
         this.startDate = startDate;
         this.endDate = endDate;
+        this.mapX = mapX;
+        this.mapY = mapY;
     }
 
     public Post(Long id, String title, String content, User user, LocalDate startDate, LocalDate endDate) {
@@ -118,15 +121,13 @@ public class Post {
      * setter
      */
 
-    public void updatePost(String title, String content, LocalDate startDate, LocalDate endDate){
+    public void updatePost(String title, String content, LocalDate startDate, LocalDate endDate, Double mapX, Double mapY){
         this.title = title;
         this.content = content;
         this.startDate =startDate;
         this.endDate = endDate;
-    }
-
-    public void addPostViewByUser(User user){
-        postViewList.add(new PostView(new PostViewId(user.getId(), this.getId())));
+        this.mapX =mapX;
+        this.mapY = mapY;
     }
 
     public void addPostImgUri(PostImg postImg) {

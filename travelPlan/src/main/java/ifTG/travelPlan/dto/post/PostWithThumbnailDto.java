@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PostWithThumbnailDto {
-    private List<ImageToString> thumbnail;
+    private List<String> thumbnailUri;
     private PostDto post;
 
 }

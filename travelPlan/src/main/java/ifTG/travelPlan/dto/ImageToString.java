@@ -1,13 +1,12 @@
 package ifTG.travelPlan.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class ImageToString {
-    private final String img;
-    private final ImageType imageType;
+    private String img;
+    private ImageType imageType;
 }

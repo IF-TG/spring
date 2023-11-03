@@ -13,5 +13,6 @@ public interface PostConvertDto {
     List<PostDto> getPostDtoList(Page<Post> postList, List<Long> likedPostIdList);
     List<PostDto> getPostDtoList(List<Post> postList, List<Long> likedPostIdList);
     PostDto getPostDto(Post post, boolean isLiked);
-    List<PostWithThumbnailDto> getPostWithThumbnailDtoList(Page<Post> postList, Map<Long, List<ImageToString>> thumbnailMap, List<Long> likedPostListByUser);
+    List<PostWithThumbnailDto> getPostWithThumbnailDtoList(Page<Post> postList, List<Long> likedPostListByUser);
+    List<PostWithThumbnailDto> getPostDtoListIsAllLike(List<Post> postList);
 }

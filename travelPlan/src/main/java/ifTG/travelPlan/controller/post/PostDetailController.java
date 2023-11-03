@@ -1,7 +1,8 @@
 package ifTG.travelPlan.controller.post;
 
 import ifTG.travelPlan.controller.dto.RequestCommentAndImgsDto;
-import ifTG.travelPlan.dto.post.PostDetailsWithImagesAndCommentsDto;
+import ifTG.travelPlan.controller.dto.RequestCommentByPostDto;
+import ifTG.travelPlan.dto.post.PostDetailsWithIsScraped;
 import ifTG.travelPlan.service.post.PostDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostDetailController {
     private final PostDetailService postDetailService;
     @GetMapping
-    public PostDetailsWithImagesAndCommentsDto getPostDetail(@RequestBody RequestCommentAndImgsDto dto){
+    public PostDetailsWithIsScraped getPostDetail(@RequestBody RequestCommentByPostDto dto){
         return postDetailService.getPostDetail(dto);
     }
 }

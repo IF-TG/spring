@@ -1,6 +1,7 @@
 package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.PostDto;
+import ifTG.travelPlan.controller.dto.RequestAllUserLikeOrCommentPostDto;
 import ifTG.travelPlan.controller.dto.RequestPostListByUserIdDto;
 import ifTG.travelPlan.dto.post.*;
 
@@ -13,4 +14,6 @@ public interface PostService {
     Boolean deletePost(PostIdDto postIdDto);
     PostDto updatePost(PostUpdateDto postUpdateDto);
     List<PostDto> findByUserId(RequestPostListByUserIdDto userIdDto);
+
+    List<PostWithThumbnailDto> findCommentedOrLikedPostListByUserId(RequestAllUserLikeOrCommentPostDto dto);
 }

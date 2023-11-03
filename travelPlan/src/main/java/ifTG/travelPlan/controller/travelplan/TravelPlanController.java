@@ -8,30 +8,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/travelPlan")
 public class TravelPlanController {
     private final TravelPlanService travelPlanService;
 
-    @GetMapping
-    public Result<List<TravelPlanDto>> getTravelPlanListByUserId(RequestTravelPlanListDto requestTravelPlanListDto){
+    /*@GetMapping
+    public Result<List<TravelPlanDto>> getTravelPlanListByUserId(@RequestBody RequestTravelPlanListDto requestTravelPlanListDto){
         return new Result<>(travelPlanService.getTravelPlanByUserId(requestTravelPlanListDto));
     }
 
     @PostMapping
-    public TravelPlanDto saveTravelPlan(RequestTravelPlanDto requestTravelPlanDto){
+    public TravelPlanDto saveTravelPlan(@RequestBody RequestTravelPlanDto requestTravelPlanDto){
         return travelPlanService.saveTravelPlan(requestTravelPlanDto);
     }
 
     @PutMapping
-    public TravelPlanDto updateTravelPlan(RequestTravelPlanDto requestTravelPlanDto){
+    public TravelPlanDto updateTravelPlan(@RequestBody RequestTravelPlanDto requestTravelPlanDto){
         return travelPlanService.updateTravelPlan(requestTravelPlanDto);
     }
 
     @DeleteMapping
-    public Boolean deleteTravelPlan(TravelPlanIdDto travelPlanIdDto){
+    public Boolean deleteTravelPlan(@RequestBody TravelPlanIdDto travelPlanIdDto){
         return travelPlanService.deleteTravelPlan(travelPlanIdDto);
-    }
+    }*/
 
 }

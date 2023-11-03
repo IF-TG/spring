@@ -1,8 +1,5 @@
 package ifTG.travelPlan;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.travel.Destination;
 import ifTG.travelPlan.domain.travel.destinationdetail.*;
@@ -25,15 +22,11 @@ import ifTG.travelPlan.repository.springdata.travel.RestaurantRepository;
 import ifTG.travelPlan.repository.springdata.travel.SightSeeingRepository;
 import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
-import ifTG.travelPlan.service.api.NaverApi;
 import ifTG.travelPlan.service.api.TourApi;
 import ifTG.travelPlan.service.api.TourApiDetailIntro;
 import ifTG.travelPlan.service.api.dto.CatDto;
 import ifTG.travelPlan.service.api.dto.ContentType;
-import ifTG.travelPlan.service.api.dto.naver.NaverBlogApiDto;
-import ifTG.travelPlan.service.api.dto.tourapi.TourApiResponseDto;
 import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
-import ifTG.travelPlan.service.api.dto.tourapi.categorycode.CategoryCodeDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.culturalfacility.CulturalFacilityDetailIntroDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.culturalfacility.CulturalFacilityDetailIntroItem;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.event.EventDetailIntroDto;
@@ -46,7 +39,6 @@ import ifTG.travelPlan.service.api.dto.tourapi.detailintro.shopping.ShoppingDeta
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.shopping.ShoppingDetailIntroItem;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing.SightSeeingDetailIntroDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing.SightSeeingDetailIntroItem;
-import ifTG.travelPlan.service.crawling.NaverBlogCrawling;
 import ifTG.travelPlan.service.travelplan.TextRank;
 import ifTG.travelPlan.service.travelplan.Word2Vec;
 import jakarta.annotation.PostConstruct;
@@ -55,19 +47,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.C;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -87,11 +76,21 @@ public class PostConstructor {
     private final EventRepository eventRepository;
     private final RestaurantRepository restaurantRepository;
     private final TextRank textRank;
+    private final Word2Vec word2Vec;
+
+    private final ResourceLoader resourceLoader;
 
     @PostConstruct
     @Transactional
-    public void initData(){
-        eDestinationRepository.findAll().forEach(ed->log.info("{},{}", ed.getId(), ed.getKeywordList()));
+    public void initData() throws IOException {
+        /*addData();
+        List<Destination> destinationList = null;
+        for (int i  =1;i<10; i++) {
+            destinationList = saveDestinationList(i);
+            getSubDestination(destinationList);
+        }
+        word2Vec.initData();
+        saveElasticDestination(destinationList);*/
     }
 
     private void saveElasticDestination(List<Destination> destinationList) {
@@ -207,12 +206,12 @@ public class PostConstructor {
         });
     }
 
-    private List<Destination> getDestinations(int page) {
+    private List<Destination> saveDestinationList(int page) {
         List<Destination> destinationList = new ArrayList<>();
         AreaBasedSyncListDto areaBasedSyncListDto = tourApi.selectAreaBasedSynList(page);
         areaBasedSyncListDto.getItem().stream().filter(absi->
                 !(ContentType.Travel_Course==ContentType.getContentType(absi.getContenttypeid()).orElseThrow(()->new NoResultException("적합한 ContentTypeId를 찾을 수 없습니다."))
-                        ||ContentType.Accommodation.equals(ContentType.getContentType(absi.getContenttypeid()).orElseThrow(()->new NoResultException("적합한 ContentTypeId를 찾을 수 없습니다."))))
+                        ||ContentType.Accommodation==ContentType.getContentType(absi.getContenttypeid()).orElseThrow(()->new NoResultException("적합한 ContentTypeId를 찾을 수 없습니다.")))
         ).forEach(absi->
                 destinationList.add(Destination.builder()
                                                .tourApiContentId(Long.parseLong(absi.getContentid()))

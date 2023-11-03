@@ -1,10 +1,10 @@
 package ifTG.travelPlan.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestScrapFolderDto {
-    private final Long userId;
+    private Long userId;
 }

@@ -17,14 +17,16 @@ public class CommentDtoWithUserInfo {
     private final int LikeNum;
     private final String comment;
     private final boolean isDeleted;
+    private final boolean isBlocked;
     private List<NestedCommentDto> nestedCommentDtoList;
 
     @Builder
-    public CommentDtoWithUserInfo(Long commentId, String profileImgUri, String nickname, boolean isLiked, LocalDateTime createAt, int likeNum, String comment, List<NestedCommentDto> nestedCommentDtoList, boolean isDeleted) {
+    public CommentDtoWithUserInfo(Long commentId, String profileImgUri, String nickname, boolean isBlocked, boolean isLiked, LocalDateTime createAt, int likeNum, String comment, List<NestedCommentDto> nestedCommentDtoList, boolean isDeleted) {
         this.commentId = commentId;
         this.profileImgUri = profileImgUri;
         this.nickname = nickname;
         this.isLiked = isLiked;
+        this.isBlocked = isBlocked;
         this.createAt = createAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
         this.LikeNum = likeNum;
         this.comment = comment;

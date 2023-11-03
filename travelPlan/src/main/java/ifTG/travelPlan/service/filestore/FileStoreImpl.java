@@ -45,6 +45,8 @@ public class FileStoreImpl implements FileStore {
         return fileName.substring(fileName.lastIndexOf(".")+1);
     }
 
+
+
     @Override
     public String saveFile(byte[] file, String uri, String type) {
         String path = absoluteFilePath + uri;
@@ -57,12 +59,13 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
-    public void createThumbnailAndSaveFile(String savedFileUri, String fileName, String thumbnailUri) {
+    public void createThumbnailAndSaveFile(String savedFileUri, String fileName, String thumbnailUri, int length) {
+        log.info("thumbnail = {}", savedFileUri+fileName);
         File savedImgFile = new File(absoluteFilePath + savedFileUri + fileName);
         File thumbNailImgFile = new File(absoluteFilePath+savedFileUri+thumbnailUri + fileName);
         try {
             createParentFolder(thumbNailImgFile);
-            Thumbnailator.createThumbnail(savedImgFile, thumbNailImgFile, 200, 200);
+            Thumbnailator.createThumbnail(savedImgFile, thumbNailImgFile, length, length);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -84,8 +87,8 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
-    public void deleteFile(String s) {
-        File deleteFile = new File(absoluteFilePath+s);
+    public void deleteFile(String uri) {
+        File deleteFile = new File(absoluteFilePath+uri);
         if(deleteFile.delete()){
             log.info("{} file delete", deleteFile.toPath());
         }else{
@@ -129,7 +132,7 @@ public class FileStoreImpl implements FileStore {
                 log.info("path = {} , create folder", path);
             }
             else{
-                throw new IOException("create folder fail");
+                throw new IOException("create folder fail > " + path);
             }
         }
     }

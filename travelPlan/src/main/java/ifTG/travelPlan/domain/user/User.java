@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity @Getter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class User {
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
@@ -96,4 +98,11 @@ public class User {
         this.userAddress.addUser(this); //1차 캐시 문제 해결
     }
 
+    /**
+     * setter
+     */
+
+    public void updateProfileImgUrl(String url){
+        this.profileImgUrl = url;
+    }
 }

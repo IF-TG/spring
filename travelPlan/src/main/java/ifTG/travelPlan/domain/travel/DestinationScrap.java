@@ -24,6 +24,7 @@ public class DestinationScrap {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
+    @Column(nullable = false)
     private String folderName;
 
     public DestinationScrap updateFolderName(String folderName){

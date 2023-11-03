@@ -5,6 +5,7 @@ import ifTG.travelPlan.domain.travel.DestinationScrapId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -14,4 +15,8 @@ public interface DestinationScrapRepository extends JpaRepository<DestinationScr
     List<DestinationScrap> findAllWithDestinationByUserId(Long userId);
 
     Slice<DestinationScrap> findAllWithDestinationByFolderNameAndUserId(String folderName, Long userId, Pageable pageable);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE DestinationScrap ds SET ds.folderName = :newFolderName WHERE ds.folderName = :oldFolderName")
+    void updateFolderName(String oldFolderName, String newFolderName);
 }

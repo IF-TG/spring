@@ -7,6 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RequestLikeDto {
     private final Long userId;
-
     private final Long objectId;
 }

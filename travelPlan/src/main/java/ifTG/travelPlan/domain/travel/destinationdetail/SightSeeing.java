@@ -19,6 +19,8 @@ public class SightSeeing {
     @JoinColumn(name="destination_id", nullable = false)
     private Destination destination;
     private String capacity;
+
+    @Column(length = 500)
     private String experienceGuide;
     private String checkBabyStroller;
     private String restDate;

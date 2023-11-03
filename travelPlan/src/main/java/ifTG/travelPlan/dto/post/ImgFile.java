@@ -2,13 +2,13 @@ package ifTG.travelPlan.dto.post;
 
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.ImageType;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-
 public class ImgFile {
     private final ImageToString image;
-
     private final boolean isThumbnail;
 
     public ImgFile(String img, ImageType imageType, boolean isThumbnail) {

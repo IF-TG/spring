@@ -1,7 +1,9 @@
 package ifTG.travelPlan.controller.destination;
 
 import ifTG.travelPlan.controller.dto.RequestSearchDestinationDto;
+import ifTG.travelPlan.controller.dto.RequestSearchHistoryPageDto;
 import ifTG.travelPlan.controller.dto.Result;
+import ifTG.travelPlan.domain.user.SearchHistory;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.elasticsearch.dto.ResponseEDestinationDto;
 import ifTG.travelPlan.service.destination.DestinationService;
@@ -22,8 +24,8 @@ public class DestinationController {
     private final DestinationService destinationService;
 
     @GetMapping("/search")
-    public Result<List<ResponseEDestinationDto>> findAllByKeyword(@RequestBody RequestSearchDestinationDto dto){
-        return new Result<>(destinationService.findAllByKeyword(dto));
+    public Result<List<ResponseEDestinationDto>> findAllByKeyword(@RequestBody RequestSearchDestinationDto requestSearchDestinationDto){
+        return new Result<>(destinationService.findAllByKeyword(requestSearchDestinationDto));
     }
 
     /*@GetMapping()

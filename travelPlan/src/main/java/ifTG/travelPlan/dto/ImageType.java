@@ -3,8 +3,7 @@ package ifTG.travelPlan.dto;
 public enum ImageType {
     jpg("jpg"),
     jpeg("jpeg"),
-    wbep("wbep");
-
+    png("png");
     private final String value;
 
     ImageType(String value){

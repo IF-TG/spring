@@ -3,10 +3,14 @@ package ifTG.travelPlan.service.post;
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostCategory;
+import ifTG.travelPlan.domain.post.PostImg;
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.ImageType;
 import ifTG.travelPlan.dto.post.PostWithThumbnailDto;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
+import ifTG.travelPlan.service.filestore.PostImgFileService;
+import ifTG.travelPlan.service.user.UserProfileImgService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class PostConvertDtoImpl implements PostConvertDto{
+    private final PostImgFileService postImgFileService;
+    private final UserProfileImgService userProfileImgService;
     @Override
     public List<PostDto> getPostDtoList(Page<Post> postList, List<Long> likedPostIdList) {
         return postList.stream()
@@ -28,19 +35,29 @@ public class PostConvertDtoImpl implements PostConvertDto{
                        .toList();
     }
     @Override
-    public List<PostWithThumbnailDto> getPostWithThumbnailDtoList(Page<Post> postList, Map<Long, List<ImageToString>> thumbnailMap, List<Long> likedPostListByUser) {
+    public List<PostWithThumbnailDto> getPostWithThumbnailDtoList(Page<Post> postList, List<Long> likedPostListByUser) {
         return postList.stream()
-                .filter(
-                        post -> thumbnailMap.containsKey(post.getId())
-                )
                 .map(
-                        post -> {
-                            return PostWithThumbnailDto.builder()
-                                                .thumbnail(thumbnailMap.get(post.getId()))
+                        post -> PostWithThumbnailDto.builder()
+                                                .thumbnailUri(
+                                                    postImgFileService.getPostThumbnailUrlList(post.getId(), post.getPostImgList().stream().filter(PostImg::isThumbnail).map(PostImg::getFileName).toList())
+                                            )
                                                 .post(getPostDto(post, isLiked(likedPostListByUser, post)))
-                                    .build();
-                        }
+                                                .build()
                 ).toList();
+    }
+
+    @Override
+    public List<PostWithThumbnailDto> getPostDtoListIsAllLike(List<Post> postList) {
+        return postList.stream()
+                               .map(
+                                       post -> PostWithThumbnailDto.builder()
+                                                                   .thumbnailUri(
+                                                                           postImgFileService.getPostThumbnailUrlList(post.getId(), post.getPostImgList().stream().filter(PostImg::isThumbnail).map(PostImg::getFileName).toList())
+                                                                   )
+                                                                   .post(getPostDto(post, true))
+                                                                   .build()
+                               ).toList();
     }
 
     private List<ImageToString> getImageToStringDtoList(Map<String, ImageType> thumbNailWithImageType){
@@ -56,12 +73,12 @@ public class PostConvertDtoImpl implements PostConvertDto{
         List<String> companions = getPostCategoryFilterMainCategory(post, MainCategory.COMPANION);
         return PostDto.builder()
                       .postId(post.getId())
-                      .profileImgUri(post.getUser().getProfileImgUrl())
+                      .profileImgUri(userProfileImgService.getProfileImgUrl(post.getUser().getId(), post.getUser().getProfileImgUrl()))
                       .title(post.getTitle())
                       .nickname(post.getUser().getNickname())
                       .startDate(post.getStartDate())
                       .endDate(post.getEndDate())
-                      .postImgUri(post.getPostImgList())
+                      .postImgUri(postImgFileService.getPostImageListUrl(post.getId(), post.getPostImgList().stream().map(PostImg::getFileName).toList()))
                       .content(post.getContent())
                       .likeNum(post.getLikeNum())
                       .commentNum(post.getCommentNum())
@@ -71,6 +88,8 @@ public class PostConvertDtoImpl implements PostConvertDto{
                       .regions(regions)
                       .themes(themes)
                       .isLiked(isLiked)
+                      .mapX(post.getMapX())
+                      .mapY(post.getMapY())
                       .build();
     }
 

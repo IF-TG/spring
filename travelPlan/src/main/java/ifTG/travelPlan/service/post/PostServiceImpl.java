@@ -1,19 +1,20 @@
 package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.PostDto;
+import ifTG.travelPlan.controller.dto.RequestAllUserLikeOrCommentPostDto;
 import ifTG.travelPlan.controller.dto.RequestPostListByUserIdDto;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostCategory;
 import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.domain.user.UserBlock;
-import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.post.*;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
 import ifTG.travelPlan.repository.querydsl.QPostListRepository;
 import ifTG.travelPlan.repository.springdata.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.post.PostCategoryRepository;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
+import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,8 +25,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * 결합도 낮출것, 그러니까 클래스 좀 더 나누자 나중에
@@ -42,15 +43,21 @@ public class PostServiceImpl implements PostService{
     private final PostConvertDto postConvertDto;
     private final PostImgFileService postImgFileService;
     private final PostLikeRepository postLikeRepository;
+    private final UserBlockRepository userBlockRepository;
 
     @Override
     public List<PostWithThumbnailDto> findAllPostWithPostRequestDto(RequestPostListDto requestPostListDto){
         User user = userRepository.findByUserIdWithUserBlockAndPostLike(requestPostListDto.getUserId());
-        List<Long> blockedUserIdList = user.getUserBlockList().stream().map(UserBlock::getBlockedUserId).toList();
+        List<Long> allBlockUserList = getAllBlockUserList(user);
         List<Long> likedPostListByUser = user.getPostLikeList().stream().map(PostLike::getPostLikedId).toList();
-        Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(requestPostListDto, blockedUserIdList);
-        Map<Long, List<ImageToString>> thumbnailList = postImgFileService.getPostThumbnailListByPostList(postList.toList());
-        return postConvertDto.getPostWithThumbnailDtoList(postList, thumbnailList, likedPostListByUser);
+        Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(requestPostListDto, allBlockUserList);
+        return postConvertDto.getPostWithThumbnailDtoList(postList, likedPostListByUser);
+    }
+
+    private List<Long> getAllBlockUserList(User user) {
+        List<Long> blockedUserIdByUserList = user.getUserBlockList().stream().map(UserBlock::getBlockedUserId).toList();
+        List<Long> blockingUserList = userBlockRepository.findUserIdListByBlockedUserId(user.getId());
+        return Stream.concat(blockingUserList.stream(), blockedUserIdByUserList.stream()).distinct().toList();
     }
 
     @Override
@@ -87,6 +94,15 @@ public class PostServiceImpl implements PostService{
         return postConvertDto.getPostDtoList(post, likedPostIdList);
     }
 
+    @Override
+    public List<PostWithThumbnailDto> findCommentedOrLikedPostListByUserId(RequestAllUserLikeOrCommentPostDto dto) {
+        User user = userRepository.findByUserIdWithUserBlockAndPostLike(dto.getUserId());
+        List<Long> allBlockUserList = getAllBlockUserList(user);
+        Page<Post> postList = postRepository.findCommentedOrLikedPostListNotInBlockUserByUserId(dto.getUserId(), allBlockUserList, dto.getPageable());
+        List<Long> likedPostIdList = user.getPostLikeList().stream().map(p->p.getPostLikeId().getPostId()).toList();
+        return postConvertDto.getPostWithThumbnailDtoList(postList, likedPostIdList);
+    }
+
 
     private void deleteSubCategory(Long postId) {
         postCategoryRepository.deleteAllByPostId(postId);
@@ -100,7 +116,9 @@ public class PostServiceImpl implements PostService{
                 postDto.getTitle(),
                 postDto.getContent(),
                 postDto.getStartDate(),
-                postDto.getEndDate()
+                postDto.getEndDate(),
+                postDto.getMapX(),
+                postDto.getMapY()
         );
     }
 
@@ -121,6 +139,8 @@ public class PostServiceImpl implements PostService{
                    .startDate(postCreateDto.getStartDate())
                    .endDate(postCreateDto.getEndDate())
                    .user(user)
+                   .mapX(postCreateDto.getMapX())
+                   .mapY(postCreateDto.getMapY())
                    .build();
     }
 

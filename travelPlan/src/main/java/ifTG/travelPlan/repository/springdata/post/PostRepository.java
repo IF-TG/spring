@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -38,4 +39,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByIdWithUserAndPostImgAndPostCategory(Long postId);
 
 
+    @Query("SELECT p FROM Post p WHERE p.id NOT IN :blockUserList AND (p.id IN (SELECT c.post.id FROM Comment c WHERE c.user.id = :userId) OR p.id IN (SELECT pl.post.id FROM PostLike pl WHERE pl.user.id = :userId))")
+    Page<Post> findCommentedOrLikedPostListNotInBlockUserByUserId(Long userId, List<Long> blockUserList, Pageable pageable);
 }

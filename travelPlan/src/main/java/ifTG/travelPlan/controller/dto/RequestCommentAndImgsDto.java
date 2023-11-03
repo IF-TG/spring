@@ -7,11 +7,9 @@ import java.util.List;
 @Getter
 public class RequestCommentAndImgsDto {
     private final RequestCommentByPostDto requestCommentByPostDto;
-    private final List<String> imgUriList;
 
-    public RequestCommentAndImgsDto(Long postId, Long userId, int perPage, List<String> imgUriList) {
+    public RequestCommentAndImgsDto(Long postId, Long userId, int perPage) {
         this.requestCommentByPostDto = new RequestCommentByPostDto(0, perPage, postId, userId);
-        this.imgUriList = imgUriList;
     }
 
     public Long getUserId(){

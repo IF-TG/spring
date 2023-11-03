@@ -14,5 +14,5 @@ import java.util.Map;
 public class ScrapPostAndDestination {
     private final Long userId;
     private final List<DestinationDto> destinationList;
-    private final List<PostDto> postDtoList;
+    private final List<PostDto> postList;
 }

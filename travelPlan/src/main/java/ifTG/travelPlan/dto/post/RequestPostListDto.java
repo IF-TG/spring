@@ -21,7 +21,6 @@ public class RequestPostListDto {
     @Builder
     public RequestPostListDto(int page, int perPage, OrderMethod orderMethod, MainCategory mainCategory, String subCategory, Long userId) throws IllegalAccessException {
         isNullCategory(orderMethod, mainCategory);
-        log.info("request mainCategory={} subCategory={}", mainCategory, subCategory);
         this.pageable = PageRequest.of(page, perPage);
         this.orderMethod = orderMethod;
         this.mainCategory = mainCategory;

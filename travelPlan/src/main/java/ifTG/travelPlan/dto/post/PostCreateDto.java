@@ -30,18 +30,24 @@ public class PostCreateDto {
     private final List<Seasons> seasons = new ArrayList<>();
     private final List<Companions> companions;
     private final List<ImgFile> imgFileList;
+    private final Double mapX;
+    private final Double mapY;
     @Builder
-    public PostCreateDto(String title, String content, String startDate, String endDate, Long userId, List<Themes> themes, List<Regions> regions, List<Companions> companions, List<ImgFile> imgFileList) {
+    public PostCreateDto(String title, String content, String startDate, String endDate, Long userId,
+                         List<Themes> themes, List<Regions> regions, List<Companions> companions, List<ImgFile> imgFileList,
+                         Double mapX, Double mapY) {
         this.title = title;
         this.content = content;
         putDate(startDate, endDate);
         this.userId = userId;
-        this.themes = themes;
-        this.regions = regions;
-        this.companions = companions;
-        this.imgFileList = imgFileList;
+        this.themes = themes != null ? new ArrayList<>(themes) : new ArrayList<>();
+        this.regions = regions != null ? new ArrayList<>(regions) : new ArrayList<>();
+        this.companions = companions != null ? new ArrayList<>(companions) : new ArrayList<>();
+        this.imgFileList = imgFileList != null ? new ArrayList<>(imgFileList) : new ArrayList<>();
         boolean[] isSeason = getIsSeason();
         addSeasons(isSeason);
+        this.mapX = mapX;
+        this.mapY = mapY;
     }
     private void putDate(String startDate, String endDate) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");

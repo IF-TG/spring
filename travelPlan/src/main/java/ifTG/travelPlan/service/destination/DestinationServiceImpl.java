@@ -2,16 +2,20 @@ package ifTG.travelPlan.service.destination;
 
 import ifTG.travelPlan.controller.dto.RequestSearchDestinationDto;
 import ifTG.travelPlan.domain.travel.DestinationScrap;
+import ifTG.travelPlan.domain.user.SearchHistory;
+import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.elasticsearch.dto.ResponseEDestinationDto;
 import ifTG.travelPlan.elasticsearch.repository.EDestinationCustomRepository;
 import ifTG.travelPlan.repository.springdata.travel.DestinationScrapRepository;
+import ifTG.travelPlan.repository.springdata.user.SearchHistoryRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.api.ChatGPT;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.NotFoundException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,8 @@ public class DestinationServiceImpl implements DestinationService{
     private final EDestinationCustomRepository eDestinationCustomRepository;
     private final Map<String, RelatedKeyword> chatGptRelatedKeywordListMap = new HashMap<>();
     private final DestinationScrapRepository destinationScrapRepository;
+    private final SearchHistoryRepository searchHistoryRepository;
+    private final UserRepository userRepository;
     private final int fixedRate = 600000;
     private final int resizingSize = 1000;
     @Getter
@@ -53,6 +59,7 @@ public class DestinationServiceImpl implements DestinationService{
         List<EDestination> eDestinationList = response.getEDestinationList();
         List<Long> destinationScrapIdList = destinationScrapRepository.findAllWithDestinationByUserId(dto.getUserId())
                 .stream().map(ds->ds.getDestination().getId()).toList();
+        new Thread(()->saveSearchHistory(dto.getKeyword(), dto.getUserId())).start();
         return eDestinationList.stream().map(ed->ResponseEDestinationDto.builder()
                 .id(ed.getId())
                 .title(ed.getTitle())
@@ -64,6 +71,11 @@ public class DestinationServiceImpl implements DestinationService{
                 .isScraped(destinationScrapIdList.contains(ed.getId()))
                 .isGptRelated(response.isGptRelated)
                 .build()).toList();
+    }
+
+    private void saveSearchHistory(String keyword, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("not found user"));
+        searchHistoryRepository.save(new SearchHistory(user, keyword));
     }
 
     @Getter

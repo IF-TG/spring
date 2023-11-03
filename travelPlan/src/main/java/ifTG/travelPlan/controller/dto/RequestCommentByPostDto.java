@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 @Getter
 @Slf4j
 public class RequestCommentByPostDto {
-    private final Pageable pageable;
     private final Long postId;
     private final Long userId;
+    private final Pageable pageable;
 
     public RequestCommentByPostDto(int page, int perPage, Long postId, Long userId){
         log.info("commentdto = {},{},{},{}", page, perPage, postId, userId);

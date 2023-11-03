@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -22,10 +21,10 @@ public class Word2VecImpl implements Word2Vec{
     @Autowired
     public Word2VecImpl(Morpheme morpheme){
         this.morpheme = morpheme;
-        initData();
     }
 
 
+    @Override
     public void initData(){
         List<String> nounList = morpheme.findAllNounByDestination();
         int count = 0;
