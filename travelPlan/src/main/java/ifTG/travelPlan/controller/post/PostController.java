@@ -37,7 +37,7 @@ public class PostController {
         return new Result<>(postService.findByUserId(new RequestPostListByUserIdDto(page, perPage, userId)));
     }
 
-    @GetMapping("/allByUser")
+    @GetMapping("/liked-commented/{id}")
     public Result<List<PostWithThumbnailDto>> findCommentedOrLikedPostListByUserId(@RequestBody RequestAllUserLikeOrCommentPostDto dto){
         return new Result<>(postService.findCommentedOrLikedPostListByUserId(dto));
     }
