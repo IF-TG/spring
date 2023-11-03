@@ -1,6 +1,9 @@
 package ifTG.travelPlan.elasticsearch.domain;
 
+<<<<<<< HEAD
 import ifTG.travelPlan.dto.travel.enums.Category;
+=======
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +27,13 @@ public class EDestination {
     private List<String> keywordList;
     private String thumbnailUrl;
     private String info;
+<<<<<<< HEAD
     private String blindInfo;
     private String address;
     private Category category;
+=======
+    private Long likeNum;
+    private String blindInfo;
+    private String address;
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 }

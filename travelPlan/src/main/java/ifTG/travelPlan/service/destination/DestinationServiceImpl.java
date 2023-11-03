@@ -1,6 +1,7 @@
 package ifTG.travelPlan.service.destination;
 
 import ifTG.travelPlan.controller.dto.RequestSearchDestinationDto;
+<<<<<<< HEAD
 import ifTG.travelPlan.domain.travel.DestinationScrap;
 import ifTG.travelPlan.domain.user.SearchHistory;
 import ifTG.travelPlan.domain.user.User;
@@ -22,6 +23,16 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+=======
+import ifTG.travelPlan.elasticsearch.domain.EDestination;
+import ifTG.travelPlan.elasticsearch.repository.EDestinationCustomRepository;
+import ifTG.travelPlan.service.api.ChatGPT;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +40,7 @@ import java.util.*;
 public class DestinationServiceImpl implements DestinationService{
     private final ChatGPT chatGPT;
     private final EDestinationCustomRepository eDestinationCustomRepository;
+<<<<<<< HEAD
     private final Map<String, RelatedKeyword> chatGptRelatedKeywordListMap = new HashMap<>();
     private final DestinationScrapRepository destinationScrapRepository;
     private final SearchHistoryRepository searchHistoryRepository;
@@ -106,5 +118,12 @@ public class DestinationServiceImpl implements DestinationService{
         while(resizingSize<chatGptRelatedKeywordListMap.size()){
             chatGptRelatedKeywordListMap.remove(q.poll().getKeyword());
         }
+=======
+    @Override
+    public List<EDestination> findAllByKeyword(RequestSearchDestinationDto dto){
+        List<String> relatedKeywordList  = chatGPT.findRelatedKeywords(dto.getKeyword());
+        log.info("{}",relatedKeywordList.toString());
+        return eDestinationCustomRepository.findAllByUserKeywordAndGPTKeywordList(dto.getKeyword(), relatedKeywordList, dto.getPageable());
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
     }
 }

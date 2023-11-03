@@ -59,7 +59,11 @@ public class EDestinationCustomRepository {
                         .withQuery(query)
                         .withPageable(pageable)
                 .build();
+<<<<<<< HEAD
 
+=======
+//page 추가하기
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
         log.info("{}", nativeQuery.getQuery().toString());
 
         SearchHits<EDestination> response =  elasticsearchOperations.search(nativeQuery, EDestination.class);

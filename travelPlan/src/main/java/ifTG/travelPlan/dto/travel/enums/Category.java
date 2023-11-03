@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package ifTG.travelPlan.dto.travel.enums;
 
 import jakarta.persistence.Embeddable;
@@ -17,4 +18,7 @@ public class Category {
     private MiddleCategory middleCategory;
     @Enumerated(value = EnumType.STRING)
     private SmallCategory smallCategory;
+=======
+package ifTG.travelPlan.dto.travel.enums;public class Category {
+>>>>>>> 0459481086cd14d65c9d0552a61060c7de1850de
 }
