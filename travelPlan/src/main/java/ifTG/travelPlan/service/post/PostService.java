@@ -4,6 +4,7 @@ import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.controller.dto.RequestAllUserLikeOrCommentPostDto;
 import ifTG.travelPlan.controller.dto.RequestPostListByUserIdDto;
 import ifTG.travelPlan.dto.post.*;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface PostService {
 
     List<PostWithThumbnailDto> findAllPostWithPostRequestDto(RequestPostListDto requestPostListDto);
     PostDto savePost(PostCreateDto postCreateDto);
-    Boolean deletePost(PostIdDto postIdDto);
+    Boolean deletePost(Long postId);
     PostDto updatePost(PostUpdateDto postUpdateDto);
-    List<PostDto> findByUserId(RequestPostListByUserIdDto userIdDto);
+    List<PostDto> findByUserId(Long userId, Pageable pageable);
 
-    List<PostWithThumbnailDto> findCommentedOrLikedPostListByUserId(RequestAllUserLikeOrCommentPostDto dto);
+    List<PostWithThumbnailDto> findCommentedOrLikedPostListByUserId(Long userId, Pageable pageable);
 }

@@ -1,10 +1,7 @@
 package ifTG.travelPlan.domain.travel;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +10,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "travel_plan_destination")
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TravelPlanDestination {
     @EmbeddedId

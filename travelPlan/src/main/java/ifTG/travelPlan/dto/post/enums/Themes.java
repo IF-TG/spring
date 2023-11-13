@@ -1,5 +1,8 @@
 package ifTG.travelPlan.dto.post.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Themes {
     REST("휴식"),
     SHOPPING("쇼핑"),
@@ -15,5 +18,14 @@ public enum Themes {
 
     public String getValue(){
         return value;
+    }
+
+    public static String getInstance(String theme){
+        for (Themes t : Themes.values()){
+            if (t.toString().equals(theme)){
+                return t.getValue();
+            }
+        }
+        return null;
     }
 }

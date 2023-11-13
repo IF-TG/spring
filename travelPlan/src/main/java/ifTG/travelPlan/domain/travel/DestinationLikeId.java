@@ -14,4 +14,9 @@ public class DestinationLikeId implements Serializable {
 
     @Column(name = "destination_id")
     private Long destinationId;
+
+    public DestinationLikeId(Long destinationId, Long userId) {
+        this.userId = userId;
+        this.destinationId = destinationId;
+    }
 }

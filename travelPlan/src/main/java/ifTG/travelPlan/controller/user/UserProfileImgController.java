@@ -1,8 +1,8 @@
 package ifTG.travelPlan.controller.user;
 
+import ifTG.travelPlan.controller.dto.ProfileImgDto;
 import ifTG.travelPlan.service.user.UserProfileImgService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,13 +13,13 @@ public class UserProfileImgController {
     private final UserProfileImgService userProfileImgService;
 
     @PostMapping("/upload")
-    public Boolean saveProfileImg(@RequestParam("profile")MultipartFile file,
+    public ProfileImgDto saveProfileImg(@RequestParam("profile")MultipartFile file,
                                   @RequestParam("userId")Long userId){
         return userProfileImgService.saveProfileImg(file, userId);
     }
 
     @PutMapping("/upload")
-    public Boolean updateProfileImg(@RequestParam("profile")MultipartFile file,
+    public ProfileImgDto updateProfileImg(@RequestParam("profile")MultipartFile file,
                                     @RequestParam("userId")Long userId){
         return userProfileImgService.updateProfileImg(file, userId);
     }

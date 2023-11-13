@@ -22,6 +22,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -88,17 +89,20 @@ public class PostServiceImpl implements PostService{
 
 
     @Override
-    public List<PostDto> findByUserId(RequestPostListByUserIdDto userIdDto) {
-        Page<Post> post = postRepository.findAllWithUserByUserId(userIdDto.getUserId(), userIdDto.getPageable());
-        List<Long> likedPostIdList = postLikeRepository.findPostIdByUserId(userIdDto.getUserId());
+    public List<PostDto> findByUserId(Long userId, Pageable pageable) {
+        Page<Post> post = postRepository.findAllWithUserByUserId(userId, pageable);
+        List<Long> likedPostIdList = postLikeRepository.findPostIdByUserId(userId);
         return postConvertDto.getPostDtoList(post, likedPostIdList);
     }
 
     @Override
-    public List<PostWithThumbnailDto> findCommentedOrLikedPostListByUserId(RequestAllUserLikeOrCommentPostDto dto) {
-        User user = userRepository.findByUserIdWithUserBlockAndPostLike(dto.getUserId());
+    public List<PostWithThumbnailDto> findCommentedOrLikedPostListByUserId(Long userId, Pageable pageable) {
+        User user = userRepository.findByUserIdWithUserBlockAndPostLike(userId);
         List<Long> allBlockUserList = getAllBlockUserList(user);
-        Page<Post> postList = postRepository.findCommentedOrLikedPostListNotInBlockUserByUserId(dto.getUserId(), allBlockUserList, dto.getPageable());
+        Page<Post> postList;
+        postList = allBlockUserList.size()==0?
+                postRepository.findCommentedOrLikedPostListByUserId(userId, pageable):
+                postRepository.findCommentedOrLikedPostListNotInBlockUserByUserId(userId, allBlockUserList, pageable);
         List<Long> likedPostIdList = user.getPostLikeList().stream().map(p->p.getPostLikeId().getPostId()).toList();
         return postConvertDto.getPostWithThumbnailDtoList(postList, likedPostIdList);
     }
@@ -123,9 +127,9 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Boolean deletePost(PostIdDto postIdDto) {
-        postImgFileService.deleteAllById(postIdDto.getPostId());
-        postRepository.deleteById(postIdDto.getPostId());
+    public Boolean deletePost(Long postId) {
+        postImgFileService.deleteAllById(postId);
+        postRepository.deleteById(postId);
         return true;
     }
 

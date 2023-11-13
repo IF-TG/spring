@@ -7,6 +7,7 @@ import ifTG.travelPlan.dto.post.enums.OrderMethod;
 import ifTG.travelPlan.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,28 +19,20 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
-    @GetMapping("/list")
-    public Result<List<PostWithThumbnailDto>> getPostListWithCategory(
-            @RequestParam int page,
-            @RequestParam int perPage,
-            @RequestParam OrderMethod orderMethod,
-            @RequestParam MainCategory mainCategory,
-            @RequestParam String subCategory,
-            @RequestParam Long userId) throws IllegalAccessException {
-        return new Result<>(postService.findAllPostWithPostRequestDto(new RequestPostListDto(page, perPage, orderMethod, mainCategory, subCategory, userId)));
-    }
-
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     public Result<List<PostDto>> getPostByUserId(
-            @PathVariable("id") Long userId,
-            @RequestParam int page,
-            @RequestParam int perPage){
-        return new Result<>(postService.findByUserId(new RequestPostListByUserIdDto(page, perPage, userId)));
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage,
+            @PathVariable Long userId){
+        return new Result<>(postService.findByUserId(userId, PageRequest.of(page,perPage)));
     }
 
-    @GetMapping("/liked-commented/{id}")
-    public Result<List<PostWithThumbnailDto>> findCommentedOrLikedPostListByUserId(@RequestBody RequestAllUserLikeOrCommentPostDto dto){
-        return new Result<>(postService.findCommentedOrLikedPostListByUserId(dto));
+    @GetMapping("/likedCommented/{userId}")
+    public Result<List<PostWithThumbnailDto>> findCommentedOrLikedPostListByUserId(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage){
+        return new Result<>(postService.findCommentedOrLikedPostListByUserId(userId, PageRequest.of(page, perPage)));
     }
 
     @PostMapping()
@@ -48,8 +41,8 @@ public class PostController {
     }
 
     @DeleteMapping()
-    public Boolean deletePost(@RequestBody PostIdDto postIdDto){
-        return postService.deletePost(postIdDto);
+    public Boolean deletePost(@RequestParam Long postId){
+        return postService.deletePost(postId);
     }
 
     @PutMapping()

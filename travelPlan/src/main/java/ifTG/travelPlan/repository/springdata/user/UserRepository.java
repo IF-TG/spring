@@ -2,16 +2,19 @@ package ifTG.travelPlan.repository.springdata.user;
 
 import ifTG.travelPlan.domain.user.Sex;
 import ifTG.travelPlan.domain.user.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -66,5 +69,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findWithCommentLikeAndNestedCommentLikeByUserId(Long id);
 
     @Query("SELECT u.profileImgUrl FROM User u WHERE u.id = :userId")
-    String findProfileImgByUserId(Long userId);
+    Optional<String> findProfileImgByUserId(Long userId);
+
+    Boolean existsByNickname(String nickname);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE users SET nickname = :nickname WHERE id = :userId", nativeQuery = true)
+    void updateNickname(Long userId, String nickname);
 }

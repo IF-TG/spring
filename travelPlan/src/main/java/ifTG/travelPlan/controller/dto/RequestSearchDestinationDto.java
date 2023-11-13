@@ -7,11 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @Getter
-@NoArgsConstructor
 public class RequestSearchDestinationDto {
-    @NotNull
     private Long userId;
-    @NotNull
     private String keyword;
     private Pageable pageable;
 

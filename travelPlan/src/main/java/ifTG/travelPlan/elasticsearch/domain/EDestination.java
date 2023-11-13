@@ -3,9 +3,11 @@ package ifTG.travelPlan.elasticsearch.domain;
 
 import ifTG.travelPlan.dto.travel.enums.Category;
 
+import ifTG.travelPlan.service.api.dto.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Mapping;
@@ -18,6 +20,7 @@ import java.util.List;
 @Mapping(mappingPath = "elastic/destination-mapping.json")
 @Setting(settingPath = "elastic/destination-setting.json")
 @AllArgsConstructor
+@ToString
 @Builder
 public class EDestination {
     @Id
@@ -29,4 +32,5 @@ public class EDestination {
     private String blindInfo;
     private String address;
     private Category category;
+    private ContentType contentType;
 }

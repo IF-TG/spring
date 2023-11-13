@@ -10,7 +10,7 @@ import ifTG.travelPlan.repository.springdata.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.PostScrapRepository;
 import ifTG.travelPlan.repository.springdata.post.PostImgRepository;
 import ifTG.travelPlan.repository.springdata.travel.DestinationScrapRepository;
-import ifTG.travelPlan.service.destination.DestinationCovertDto;
+import ifTG.travelPlan.service.destination.DestinationConvertDto;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
 import ifTG.travelPlan.service.post.PostConvertDto;
 import jakarta.transaction.Transactional;
@@ -43,12 +43,12 @@ public class UserScrapServiceImpl implements UserScrapService {
     private final PostImgFileService postImgFileService;
     private final PostConvertDto postConvertDto;
     private final PostLikeRepository postLikeRepository;
-    private final DestinationCovertDto destinationCovertDto;
-    public List<UserScrapFolderDto> findAllScrapFolderByUser(RequestScrapFolderDto dto) {
-        List<PostScrap> postScrapList = postScrapRepository.findAllByUserId(dto.getUserId());
-        List<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllWithDestinationByUserId(dto.getUserId());
+    private final DestinationConvertDto destinationConvertDto;
 
-
+    @Override
+    public List<UserScrapFolderDto> findAllScrapFolderByUser(Long userId) {
+        List<PostScrap> postScrapList = postScrapRepository.findAllByUserId(userId);
+        List<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllWithDestinationByUserId(userId);
         Map<String, CountAndThumbnail> scrapFolder = new HashMap<>();
 
         destinationScrapList.forEach(ds->{
@@ -87,7 +87,7 @@ public class UserScrapServiceImpl implements UserScrapService {
     @Override
     public List<UserScrapFolderDto> renameScrapFolder(RequestRenameScrapFolder dto) {
         destinationScrapRepository.updateFolderName(dto.getOldFolderName(), dto.getNewFolderName());
-        return findAllScrapFolderByUser(new RequestScrapFolderDto(dto.getUserId()));
+        return findAllScrapFolderByUser(dto.getUserId());
     }
 
 

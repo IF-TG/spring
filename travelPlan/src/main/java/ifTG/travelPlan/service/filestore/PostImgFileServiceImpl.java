@@ -7,15 +7,16 @@ import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.ImageType;
 import ifTG.travelPlan.dto.post.ImgFile;
 import ifTG.travelPlan.repository.springdata.post.PostImgRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -40,7 +41,7 @@ public class PostImgFileServiceImpl implements PostImgFileService {
         String postIdUri = getPostPath(post.getId());
         imgFiles.forEach(imgFile -> {
             String savedFileName = saveImgFileToFileStore(postIdUri, imgFile);
-            postImgRepository.save(new PostImg(savedFileName, post, imgFile.isThumbnail()));
+            postImgRepository.save(new PostImg(savedFileName, post, imgFile.isThumbnail(), imgFile.getSort()));
         });
     }
 
@@ -53,27 +54,46 @@ public class PostImgFileServiceImpl implements PostImgFileService {
         return savedFileName;
     }
 
+    @Getter
+    @AllArgsConstructor
+    private static class ImgFileName{
+        private String fileName;
+        private Integer sort;
+        private Boolean isThumbnail;
+    }
     @Override
     public void updateImgFile(List<ImgFile> imgFileList, Post post) {
+        Map<String, PostImg> fileNamePostImgMap = post.getPostImgList().stream().collect(Collectors.toMap(PostImg::getFileName, pi->pi));
+
         String path = getPostPath(post.getId());
-        List<String> fileNameList = post.getPostImgList().stream().map(PostImg::getFileName).toList();
 
-        Map<String, Boolean> isThumbnailMap = getFileNameAndIsThumbnailMap(post);
-        Map<byte[], String> hashBySavedFileMap = getHashBySavedFileMap(path, fileNameList);
+        Map<byte[], ImgFileName> hashBySavedFileMap = getHashBySavedFileMap(path, post);
         Map<byte[], ImgFile> hashByUpdateFileMap = getHashByUpdateFileMap(imgFileList);
-        /**
-         *java.util.ConcurrentModificationException 문제 (해결)
-         */
 
-        HashSet<byte[]> hashByUpdateFileSet = new HashSet<>(hashByUpdateFileMap.keySet());
-        HashSet<byte[]> hashBySavedFileSet = new HashSet<>(hashBySavedFileMap.keySet());
-        retainAllHashByUpdateFileMap(hashByUpdateFileMap, hashByUpdateFileSet, hashBySavedFileSet);
+        /**
+         *java.util.ConcurrentModificationException 문제
+         */
+        Set<byte[]> hashBySavedFileSet = new HashSet<>(hashBySavedFileMap.keySet());
+
+        hashByUpdateFileMap.keySet().removeIf(updateFileHash -> {
+            for (byte[] savedFileHash : hashBySavedFileSet) {
+                if (Arrays.equals(updateFileHash, savedFileHash)) {
+                    if (hashBySavedFileMap.get(savedFileHash).getSort() != hashByUpdateFileMap.get(updateFileHash).getSort()) {
+                        fileNamePostImgMap.get(hashBySavedFileMap.get(savedFileHash).getFileName())
+                                          .changeSort(hashByUpdateFileMap.get(updateFileHash).getSort());
+                    }
+                    hashBySavedFileSet.remove(savedFileHash);
+                    return true;
+                }
+            }
+            return false;
+        });
 
         for(byte[] hash : hashBySavedFileSet){
-            String postImgFileName = hashBySavedFileMap.get(hash);
-            post.removePostImgById(postImgFileName);
+            String postImgFileName = hashBySavedFileMap.get(hash).getFileName();
+            post.removePostImgByFileName(postImgFileName);
             fileStore.deleteFile(path + postImgFileName);
-            if(isThumbnailMap.get(postImgFileName)){
+            if(hashBySavedFileMap.get(hash).isThumbnail){
                 fileStore.deleteFile(path + thumbnailPath + postImgFileName);
             }
         }
@@ -81,12 +101,15 @@ public class PostImgFileServiceImpl implements PostImgFileService {
         saveImgFile(hashByUpdateFileMap.values().stream().toList(), post);
     }
 
-    private static void retainAllHashByUpdateFileMap(Map<byte[], ImgFile> hashByUpdateFileMap, HashSet<byte[]> hashByUpdateFileSet, HashSet<byte[]> hashBySavedFileSet) {
-        hashByUpdateFileSet.retainAll(hashBySavedFileSet);
-        for(byte[] hash : hashByUpdateFileSet){
-            hashByUpdateFileMap.remove(hash);
-        }
+    private Map<String, Integer> getFileNameAndSortMap(Post post) {
+        return post.getPostImgList().stream().collect(
+                Collectors.toMap(
+                        PostImg::getFileName,
+                        PostImg::getSort
+                )
+        );
     }
+
 
     private Map<byte[], ImgFile> getHashByUpdateFileMap(List<ImgFile> imgFileList) {
         return imgFileList.stream().collect(
@@ -97,11 +120,11 @@ public class PostImgFileServiceImpl implements PostImgFileService {
         );
     }
 
-    private Map<byte[], String> getHashBySavedFileMap(String path, List<String> fileNameList) {
-        return fileNameList.stream().collect(
+    private Map<byte[], ImgFileName> getHashBySavedFileMap(String path, Post post) {
+        return post.getPostImgList().stream().collect(
                 Collectors.toMap(
-                        fileName->fileStore.getHash(path + fileName),
-                        fileName->fileName
+                        pi->fileStore.getHash(path + pi.getFileName()),
+                        pi-> new ImgFileName(pi.getFileName(), pi.getSort(), pi.isThumbnail())
                 )
         );
     }

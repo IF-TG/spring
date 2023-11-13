@@ -39,8 +39,8 @@ public class UserBlockServiceImpl implements UserBlockService{
     }
 
     @Override
-    public List<NicknameAndThumbnail> getAllBlockedUserListByUser(RequestGetAllBlockedUserByUser dto) {
-        List<UserBlock> userBlockList = userBlockRepository.findAllWithUserByUserId(dto.getUserId());
+    public List<NicknameAndThumbnail> getAllBlockedUserListByUser(Long userId) {
+        List<UserBlock> userBlockList = userBlockRepository.findAllWithUserByUserId(userId);
         return userBlockList.stream().map(ub->new NicknameAndThumbnail(ub.getUser().getNickname(),
                 userProfileImgService.getProfileImgUrl(ub.getUser().getId(),ub.getUser().getProfileImgUrl()))).toList();
     }

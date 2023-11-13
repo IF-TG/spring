@@ -22,8 +22,8 @@ public class UserScrapController {
     private final UserScrapService userScrapService;
 
     @GetMapping
-    public Result<List<UserScrapFolderDto>> findAllScrapByUser(@RequestBody RequestScrapFolderDto dto){
-        return new Result<>(userScrapService.findAllScrapFolderByUser(dto));
+    public Result<List<UserScrapFolderDto>> findAllScrapByUser(@RequestParam Long userId){
+        return new Result<>(userScrapService.findAllScrapFolderByUser(userId));
     }
 
     @PutMapping

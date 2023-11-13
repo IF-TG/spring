@@ -1,11 +1,14 @@
 package ifTG.travelPlan.elasticsearch.repository;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.*;
+import co.elastic.clients.elasticsearch.indices.Queries;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.erhlc.NativeSearchQuery;
+import org.springframework.data.elasticsearch.client.erhlc.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -23,18 +26,18 @@ public class EDestinationCustomRepository {
     private final ElasticsearchOperations elasticsearchOperations;
 
     public List<EDestination> findAllByUserKeywordAndGPTKeywordList(String userKeyword, List<String> gptKeywordList, Pageable pageable){
-
         Query multiMatchQuery = NativeQuery.builder()
                 .withQuery(
                         q-> q.multiMatch(MultiMatchQuery.of(builder->
                                 builder
                                         .query(userKeyword)
-                                        .fields("title^2", "info", "blind_info")
+                                        .fields("title^2", "info", "blind_info", "address")
                                         .boost(1.5f)
                                         .operator(Operator.Or)
                                         .type(TextQueryType.MostFields)
                         ))
                 ).getQuery();
+
 
         List<Query> keywordMatchQueryList = new ArrayList<>();
         gptKeywordList.forEach(

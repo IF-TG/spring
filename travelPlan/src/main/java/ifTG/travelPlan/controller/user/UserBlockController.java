@@ -23,7 +23,7 @@ public class UserBlockController {
     }
 
     @GetMapping("/list")
-    public Result<List<NicknameAndThumbnail>> getBlockedUserListByUser(@RequestBody RequestGetAllBlockedUserByUser dto){
-        return new Result<>(userBlockService.getAllBlockedUserListByUser(dto));
+    public Result<List<NicknameAndThumbnail>> getBlockedUserListByUser(@RequestParam Long userId){
+        return new Result<>(userBlockService.getAllBlockedUserListByUser(userId));
     }
 }

@@ -6,10 +6,8 @@ import ifTG.travelPlan.dto.post.PostDetailsWithIsScraped;
 import ifTG.travelPlan.service.post.PostDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -18,7 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostDetailController {
     private final PostDetailService postDetailService;
     @GetMapping
-    public PostDetailsWithIsScraped getPostDetail(@RequestBody RequestCommentByPostDto dto){
-        return postDetailService.getPostDetail(dto);
+    public PostDetailsWithIsScraped getPostDetail(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage,
+            @RequestParam Long postId,
+            @RequestParam Long userId){
+        return postDetailService.getPostDetail(postId, userId, PageRequest.of(page,perPage));
     }
 }

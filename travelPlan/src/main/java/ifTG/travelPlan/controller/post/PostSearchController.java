@@ -5,10 +5,7 @@ import ifTG.travelPlan.controller.dto.RequestSearchPostDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.service.post.PostSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +16,14 @@ public class PostSearchController {
     private final PostSearchService postSearchService;
 
     @GetMapping
-    public Result<List<PostDto>> findAllLikeKeyword(@RequestBody RequestSearchPostDto requestSearchPostDto){
-        return new Result<>(postSearchService.findAllLikeKeyword(requestSearchPostDto));
+    public Result<List<PostDto>> findAllLikeKeyword(
+            @RequestParam String keyword,
+            @RequestParam Long userId,
+            @RequestParam(defaultValue = "true") boolean isTitle,
+            @RequestParam(defaultValue = "true") boolean isContent,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage){
+        return new Result<>(postSearchService.findAllLikeKeyword(new RequestSearchPostDto(keyword, userId, isTitle, isContent, page, perPage)));
     }
 
 }

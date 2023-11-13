@@ -11,25 +11,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/destinationRoute")
 @RequiredArgsConstructor
 public class TravelPlanDestinationController {
     private final TravelPlanDestinationService travelPlanDestinationService;
 
     @GetMapping
-    public Result<List<TravelPlanDestinationDto>> getDestinationRouteByTravelPlanId(@RequestBody TravelPlanIdDto travelPlanIdDto){
-        return new Result<>(travelPlanDestinationService.getDestinationRouteByTravelPlanId(travelPlanIdDto));
+    public Result<List<TravelPlanDestinationDto>> getDestinationRouteByTravelPlanId(@RequestParam Long travelPlanId){
+        return new Result<>(travelPlanDestinationService.getDestinationRouteByTravelPlanId(travelPlanId));
     }
 
     @PostMapping
-    public List<TravelPlanDestinationDto> addDestinationToTravelPlan(@RequestBody DestinationRouteListWithTravelPlanIdDto dto){
-        return travelPlanDestinationService.addDestinationToTravelPlan(dto);
+    public Result<List<TravelPlanDestinationDto>> addDestinationToTravelPlan(@RequestBody DestinationRouteListWithTravelPlanIdDto dto){
+        return new Result<>(travelPlanDestinationService.addDestinationToTravelPlan(dto));
     }
 
     @PutMapping
-    public List<TravelPlanDestinationDto> updateDestinationToTravelPlanById(@RequestBody DestinationRouteListWithTravelPlanIdDto dto){
-        return travelPlanDestinationService.updateDestinationToTravelPlan(dto);
+    public Result<List<TravelPlanDestinationDto>> updateDestinationToTravelPlanById(@RequestBody DestinationRouteListWithTravelPlanIdDto dto){
+        return new Result<>(travelPlanDestinationService.updateDestinationToTravelPlan(dto));
     }
 
 }

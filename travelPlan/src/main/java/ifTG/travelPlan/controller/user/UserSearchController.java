@@ -5,10 +5,8 @@ import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.controller.dto.SearchHistoryDto;
 import ifTG.travelPlan.service.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,7 +16,10 @@ import java.util.List;
 public class    UserSearchController {
     private final UserSearchService userSearchService;
     @GetMapping
-    public Result<List<SearchHistoryDto>> findAllSearchHistoryByUser(@RequestBody RequestSearchHistoryPageDto requestSearchHistoryPageDto){
-        return new Result<>(userSearchService.findAllSearchHistoryByUser(requestSearchHistoryPageDto));
+    public Result<List<SearchHistoryDto>> findAllSearchHistoryByUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage,
+            @RequestParam Long userId){
+        return new Result<>(userSearchService.findAllSearchHistoryByUser(userId, PageRequest.of(page, perPage)));
     }
 }

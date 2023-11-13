@@ -2,7 +2,7 @@ package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.controller.dto.RequestScrapDto;
-import ifTG.travelPlan.controller.dto.RequestScrapDetail;
+import ifTG.travelPlan.controller.dto.RequestUpdatePostScrapDto;
 import ifTG.travelPlan.domain.post.PostScrap;
 import ifTG.travelPlan.domain.post.PostScrapId;
 import ifTG.travelPlan.dto.ScrapDto;
@@ -11,6 +11,7 @@ import ifTG.travelPlan.repository.springdata.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.PostScrapRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
@@ -40,20 +41,21 @@ public class PostScrapServiceImpl implements PostScrapService{
     }
 
     @Override
-    public ScrapDto updateFolderName(RequestScrapDto dto) {
-        PostScrapId postScrapId = new PostScrapId(dto.getObjectId(), dto.getUserId());
-        PostScrap postScrap = postScrapRepository.findById(postScrapId).orElseThrow(()->new NullPointerException("해당 PostScrap 를 찾지 못했습니다."));
-        postScrapRepository.save(postScrap.updateFolderName(dto.getFolderName()));
-        return new ScrapDto(
-                postScrap.getPost().getId(),
-                postScrap.getUser().getId(),
-                postScrap.getFolderName());
+    public List<ScrapDto> updateFolderName(RequestUpdatePostScrapDto dto) {
+        List<PostScrapId> postScrapIdList = dto.getObjectIdList().stream().map(d->new PostScrapId(d, dto.getUserId())).toList();
+        List<PostScrap> postScrapList = postScrapRepository.findAllById(postScrapIdList);
+        postScrapList.forEach(ps->ps.updateFolderName(dto.getFolderName()));
+        postScrapRepository.saveAll(postScrapList);
+        return postScrapList.stream().map(ps->new ScrapDto(
+                ps.getPost().getId(),
+                ps.getUser().getId(),
+                ps.getFolderName())).toList();
     }
 
     @Override
-    public List<PostDto> findAllPostScrapsByScrapFolderAndUserId(RequestScrapDetail dto) {
-        Slice<PostScrap> postScrapList = postScrapRepository.findAllWithPostByFolderNameAndUserId(dto.getFolderName(), dto.getUserId(), dto.getPageable());
-        List<Long> likedPostList = postLikeRepository.findPostIdByUserId(dto.getUserId());
+    public List<PostDto> findAllPostScrapsByScrapFolderAndUserId(String folderName, Long userId, Pageable pageable) {
+        Slice<PostScrap> postScrapList = postScrapRepository.findAllWithPostByFolderNameAndUserId(folderName, userId, pageable);
+        List<Long> likedPostList = postLikeRepository.findPostIdByUserId(userId);
         return postConvertDto.getPostDtoList(postScrapList.stream().map(PostScrap::getPost).toList(), likedPostList);
     }
 }

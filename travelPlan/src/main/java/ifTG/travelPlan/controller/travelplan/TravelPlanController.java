@@ -3,7 +3,6 @@ package ifTG.travelPlan.controller.travelplan;
 import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.service.travelplan.TravelPlanService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +13,9 @@ import java.util.List;
 public class TravelPlanController {
     private final TravelPlanService travelPlanService;
 
-    /*@GetMapping
-    public Result<List<TravelPlanDto>> getTravelPlanListByUserId(@RequestBody RequestTravelPlanListDto requestTravelPlanListDto){
-        return new Result<>(travelPlanService.getTravelPlanByUserId(requestTravelPlanListDto));
+    @GetMapping
+    public Result<List<TravelPlanDto>> getTravelPlanListByUserId(@RequestParam Long userId){
+        return new Result<>(travelPlanService.getTravelPlanByUserId(userId));
     }
 
     @PostMapping
@@ -24,14 +23,14 @@ public class TravelPlanController {
         return travelPlanService.saveTravelPlan(requestTravelPlanDto);
     }
 
-    @PutMapping
-    public TravelPlanDto updateTravelPlan(@RequestBody RequestTravelPlanDto requestTravelPlanDto){
-        return travelPlanService.updateTravelPlan(requestTravelPlanDto);
+    @PutMapping("/{id}")
+    public TravelPlanDto updateTravelPlan(@PathVariable(name = "id") Long travelPlanId, @RequestBody RequestTravelPlanDto requestTravelPlanDto){
+        return travelPlanService.updateTravelPlan(travelPlanId, requestTravelPlanDto);
     }
 
     @DeleteMapping
-    public Boolean deleteTravelPlan(@RequestBody TravelPlanIdDto travelPlanIdDto){
-        return travelPlanService.deleteTravelPlan(travelPlanIdDto);
-    }*/
+    public Boolean deleteTravelPlan(@RequestParam Long travelPlanId){
+        return travelPlanService.deleteTravelPlan(travelPlanId);
+    }
 
 }

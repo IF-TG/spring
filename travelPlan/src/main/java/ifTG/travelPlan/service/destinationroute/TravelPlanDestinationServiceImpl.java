@@ -1,18 +1,19 @@
 package ifTG.travelPlan.service.destinationroute;
 
 import ifTG.travelPlan.controller.dto.DestinationRouteListWithTravelPlanIdDto;
-import ifTG.travelPlan.controller.dto.TravelPlanIdDto;
-import ifTG.travelPlan.domain.travel.Destination;
+import ifTG.travelPlan.controller.dto.TravelPlanDestinationIdDto;
 import ifTG.travelPlan.domain.travel.TravelPlanDestination;
-import ifTG.travelPlan.dto.travel.DestinationDto;
+import ifTG.travelPlan.dto.travel.DataType;
 import ifTG.travelPlan.dto.travel.TravelPlanDestinationDto;
 import ifTG.travelPlan.repository.jdbc.JdbcDestinationRouteRepository;
 import ifTG.travelPlan.repository.springdata.travel.TravelPlanDestinationRepository;
+import ifTG.travelPlan.service.destination.DestinationConvertDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,20 +24,24 @@ import java.util.stream.Collectors;
 public class TravelPlanDestinationServiceImpl implements TravelPlanDestinationService {
     private final TravelPlanDestinationRepository travelPlanDestinationRepository;
     private final JdbcDestinationRouteRepository jdbcDestinationRouteRepository;
-
+    private final DestinationConvertDto destinationConvertDto;
     @Override
-    public List<TravelPlanDestinationDto> getDestinationRouteByTravelPlanId(TravelPlanIdDto travelPlanId) {
+    public List<TravelPlanDestinationDto> getDestinationRouteByTravelPlanId(Long travelPlanId) {
         List<TravelPlanDestination> travelPlanDestinationList =
-                travelPlanDestinationRepository.findWithTravelPlanAndDestinationRouteByTravelPlanId(travelPlanId.getTravelPlanId());
-        return travelPlanDestinationList.stream().map(TravelPlanDestinationServiceImpl::getDestinationRouteDtoByDestinationDto).toList();
+                travelPlanDestinationRepository.findWithTravelPlanAndDestinationRouteByTravelPlanId(travelPlanId);
+        return travelPlanDestinationList.stream().map(this::getDestinationRouteDtoByDestinationDto).toList();
     }
 
     @Override
     public List<TravelPlanDestinationDto> addDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto) {
-        Map<Long, LocalDateTime> destinationIdAndEtaMap = getDestinationIdAndEtaMap(dto.getData());
-        List<TravelPlanDestination> travelPlanDestinationList = getTravelPlanDestinationListByMap(dto.getTravelPlanId(), destinationIdAndEtaMap);
+        System.out.println("TravelPlanDestinationServiceImpl.addDestinationToTravelPlan");
+        List<TravelPlanDestination> travelPlanDestinationList = dto.getTravelPlan().stream().filter(d->d.getData().containsKey(DataType.DESTINATION))
+                                                                   .map(d->TravelPlanDestination.builder()
+                .travelPlanId(dto.getTravelPlanId())
+                .destinationId(d.getData().get(DataType.DESTINATION))
+                .eta(d.getEta())
+                .build()).toList();
         jdbcDestinationRouteRepository.insertTravelPlanDestination(travelPlanDestinationList);
-
         return getDestinationRouteDtoListByTravelPlanId(dto.getTravelPlanId());
     }
 
@@ -53,20 +58,26 @@ public class TravelPlanDestinationServiceImpl implements TravelPlanDestinationSe
     @Override
     public List<TravelPlanDestinationDto> updateDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto) {
         List<TravelPlanDestination> travelPlanDestinationList = travelPlanDestinationRepository.findAllByTravelPlanId(dto.getTravelPlanId());
-        Map<Long, LocalDateTime> destinationIdAndEtaMap = getDestinationIdAndEtaMap(dto.getData());
-
-        travelPlanDestinationList.removeIf(travelPlanDestination -> !destinationIdAndEtaMap.containsKey(travelPlanDestination.getId().getDestinationId()));
+        List<TravelPlanDestination> deleteTravelPlanDestinationList = new ArrayList<>();
+        Map<Long, LocalDateTime> destinationIdAndEtaMap = getDestinationIdAndEtaMap(dto.getTravelPlan());
+        travelPlanDestinationList.removeIf(travelPlanDestination -> {
+            if (!destinationIdAndEtaMap.containsKey(travelPlanDestination.getId().getDestinationId())) {
+                deleteTravelPlanDestinationList.add(travelPlanDestination);
+                return true;
+            }else return false;
+        });
         travelPlanDestinationList.forEach(
                 tpd->{
                     LocalDateTime updateEta = destinationIdAndEtaMap.get(tpd.getId().getDestinationId());
                     if(tpd.getEta().equals(updateEta)){
+                        destinationIdAndEtaMap.remove(tpd.getId().getDestinationId());
+                    }else{
                         tpd.updateTravelPlanDestination(updateEta);
                         destinationIdAndEtaMap.remove(tpd.getId().getDestinationId());
                     }
                 }
         );
-        travelPlanDestinationRepository.saveAll(travelPlanDestinationList);
-
+        travelPlanDestinationRepository.deleteAllInBatch(deleteTravelPlanDestinationList);
         List<TravelPlanDestination> insertTravelPlanDestinationList = getTravelPlanDestinationListByMap(dto.getTravelPlanId(), destinationIdAndEtaMap);
         jdbcDestinationRouteRepository.insertTravelPlanDestination(insertTravelPlanDestinationList);
 
@@ -75,36 +86,27 @@ public class TravelPlanDestinationServiceImpl implements TravelPlanDestinationSe
 
     private List<TravelPlanDestinationDto> getDestinationRouteDtoListByTravelPlanId(Long travelPlanId) {
         return getWithTravelPlanAndDestinationRouteByTravelPlanId(travelPlanId)
-                .stream().map(TravelPlanDestinationServiceImpl::getDestinationRouteDtoByDestinationDto).toList();
+                .stream().map(this::getDestinationRouteDtoByDestinationDto).toList();
     }
 
     private List<TravelPlanDestination> getWithTravelPlanAndDestinationRouteByTravelPlanId(Long travelPlanId) {
         return travelPlanDestinationRepository.findWithTravelPlanAndDestinationRouteByTravelPlanId(travelPlanId);
     }
-    private static TravelPlanDestinationDto getDestinationRouteDtoByDestinationDto(TravelPlanDestination travelPlanDestination) {
+    private TravelPlanDestinationDto getDestinationRouteDtoByDestinationDto(TravelPlanDestination travelPlanDestination) {
         TravelPlanDestinationDto dto = new TravelPlanDestinationDto();
         dto.addDestinationDto(
-                getDestinationDto(travelPlanDestination.getDestination()),
+                destinationConvertDto.getDestinationDto(travelPlanDestination.getDestination(), false),
                 travelPlanDestination.getEta()
         );
         return dto;
     }
 
-    private static DestinationDto getDestinationDto(Destination destination) {
-        return DestinationDto.builder()
-                .id(destination.getId())
-                /*.name(destination.getDestinationName())
-                .likes(destination.getLikes())
-                .address(destination.getLocation())*/
-                .build();
+    private Map<Long, LocalDateTime> getDestinationIdAndEtaMap(List<TravelPlanDestinationIdDto> travelPlanDestinationIdoDtoList) {
+        return travelPlanDestinationIdoDtoList.stream().filter(d->d.getData().containsKey(DataType.DESTINATION))
+                                           .collect(Collectors.toMap(d-> d.getData().get(DataType.DESTINATION), TravelPlanDestinationIdDto::getEta));
     }
 
-    private static Map<Long, LocalDateTime> getDestinationIdAndEtaMap(List<TravelPlanDestinationDto> travelPlanDestinationDtoList) {
-        return travelPlanDestinationDtoList.stream().filter(d->d.getDestination()!=null)
-                                           .collect(Collectors.toMap(d-> d.getDestination().getId(), TravelPlanDestinationDto::getEta));
-    }
-
-    private static List<TravelPlanDestination> getTravelPlanDestinationListByMap(Long travelPlanId, Map<Long, LocalDateTime> destinationIdAndEtaMap) {
+    private List<TravelPlanDestination> getTravelPlanDestinationListByMap(Long travelPlanId, Map<Long, LocalDateTime> destinationIdAndEtaMap) {
         return destinationIdAndEtaMap.keySet().stream()
                                      .map(
                                              d -> TravelPlanDestination.builder()

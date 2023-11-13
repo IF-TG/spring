@@ -1,13 +1,14 @@
 package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.PostDto;
+import ifTG.travelPlan.controller.dto.PostImgDto;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostCategory;
 import ifTG.travelPlan.domain.post.PostImg;
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.ImageType;
 import ifTG.travelPlan.dto.post.PostWithThumbnailDto;
-import ifTG.travelPlan.dto.post.enums.MainCategory;
+import ifTG.travelPlan.dto.post.enums.*;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
 import ifTG.travelPlan.service.user.UserProfileImgService;
 import lombok.RequiredArgsConstructor;
@@ -78,7 +79,7 @@ public class PostConvertDtoImpl implements PostConvertDto{
                       .nickname(post.getUser().getNickname())
                       .startDate(post.getStartDate())
                       .endDate(post.getEndDate())
-                      .postImgUri(postImgFileService.getPostImageListUrl(post.getId(), post.getPostImgList().stream().map(PostImg::getFileName).toList()))
+                      .postImgUri(post.getPostImgList().stream().map(pi->new PostImgDto(postImgFileService.getPostImageUrl(post.getId(), pi.getFileName()), pi.getSort())).toList())
                       .content(post.getContent())
                       .likeNum(post.getLikeNum())
                       .commentNum(post.getCommentNum())
@@ -96,7 +97,23 @@ public class PostConvertDtoImpl implements PostConvertDto{
 
 
     private static List<String> getPostCategoryFilterMainCategory(Post post, MainCategory mainCategory) {
-        return post.getPostCategoryList().stream().filter(postCategory -> postCategory.getMainCategory().equals(mainCategory)).map(PostCategory::getSubCategory).toList();
+        return post.getPostCategoryList().stream().filter(pc->pc.getMainCategory().equals(mainCategory)).map(pc->{
+            switch (mainCategory){
+                case SEASON -> {
+                    return Seasons.getInstance(pc.getSubCategory());
+                }
+                case REGION -> {
+                    return Regions.getInstance(pc.getSubCategory());
+                }
+                case THEME -> {
+                    return Themes.getInstance(pc.getSubCategory());
+                }
+                case COMPANION -> {
+                    return Companions.getInstance(pc.getSubCategory());
+                }
+            }
+            return null;
+        }).toList();
     }
 
     private static boolean isLiked(List<Long> likedPostIdListByUser, Post p) {

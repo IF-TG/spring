@@ -1,14 +1,12 @@
 package ifTG.travelPlan.controller.post;
 
-import ifTG.travelPlan.controller.dto.PostDto;
-import ifTG.travelPlan.controller.dto.RequestScrapDto;
-import ifTG.travelPlan.controller.dto.Result;
-import ifTG.travelPlan.controller.dto.RequestScrapDetail;
+import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.dto.ScrapDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.service.post.PostScrapService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +24,15 @@ public class PostScrapController {
     }
 
     @PutMapping
-    public ScrapDto updateFolderName(@RequestBody RequestScrapDto dto) {
+    public List<ScrapDto> updateFolderName(@RequestBody RequestUpdatePostScrapDto dto) {
         return postScrapService.updateFolderName(dto);
     }
     @GetMapping("/detail")
-    public Result<List<PostDto>> findAllPostScrapsByScrapFolderAndUserId(@RequestBody RequestScrapDetail dto){
-        return new Result<>(postScrapService.findAllPostScrapsByScrapFolderAndUserId(dto));
+    public Result<List<PostDto>> findAllPostScrapsByScrapFolderAndUserId(
+            @RequestParam String folderName,
+            @RequestParam Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage){
+        return new Result<>(postScrapService.findAllPostScrapsByScrapFolderAndUserId(folderName, userId, PageRequest.of(page,perPage)));
     }
 }

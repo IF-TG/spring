@@ -1,9 +1,7 @@
 package ifTG.travelPlan.service.travelplan;
 
 import ifTG.travelPlan.controller.dto.RequestTravelPlanDto;
-import ifTG.travelPlan.controller.dto.RequestTravelPlanListDto;
 import ifTG.travelPlan.controller.dto.TravelPlanDto;
-import ifTG.travelPlan.controller.dto.TravelPlanIdDto;
 import ifTG.travelPlan.domain.travel.TravelPlan;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.repository.springdata.travel.TravelPlanRepository;
@@ -34,22 +32,22 @@ public class TravelPlanServiceImpl implements TravelPlanService{
     }
 
     @Override
-    public TravelPlanDto updateTravelPlan(RequestTravelPlanDto requestTravelPlanDto) {
-        TravelPlan travelPlan = travelPlanRepository.findById(requestTravelPlanDto.getUserId()).orElseThrow(EntityNotFoundException::new);
+    public TravelPlanDto updateTravelPlan(Long travelPlanId, RequestTravelPlanDto requestTravelPlanDto) {
+        TravelPlan travelPlan = travelPlanRepository.findById(travelPlanId).orElseThrow(EntityNotFoundException::new);
         travelPlan.updateTravelPlan(requestTravelPlanDto.getTitle());
 
         return new TravelPlanDto(travelPlan.getId(), travelPlan.getTitle());
     }
 
     @Override
-    public Boolean deleteTravelPlan(TravelPlanIdDto travelPlanIdDto) {
-        travelPlanRepository.deleteById(travelPlanIdDto.getTravelPlanId());
+    public Boolean deleteTravelPlan(Long travelPlanId) {
+        travelPlanRepository.deleteById(travelPlanId);
         return true;
     }
 
     @Override
-    public List<TravelPlanDto> getTravelPlanByUserId(RequestTravelPlanListDto requestTravelPlanListDto) {
-        List<TravelPlan> travelPlanList = travelPlanRepository.findAllByUserId(requestTravelPlanListDto.getUserId());
+    public List<TravelPlanDto> getTravelPlanByUserId(Long userId) {
+        List<TravelPlan> travelPlanList = travelPlanRepository.findAllByUserId(userId);
 
         return travelPlanList.stream().map(
                 travelPlan ->

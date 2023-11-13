@@ -15,6 +15,15 @@ public enum Companions {
         this.value = s;
     }
 
+    public static String getInstance(String subCategory) {
+        for (Companions c: Companions.values()){
+            if (c.toString().equals(subCategory)){
+                return c.getValue();
+            }
+        }
+        return null;
+    }
+
     public String getValue(){
         return value;
     }

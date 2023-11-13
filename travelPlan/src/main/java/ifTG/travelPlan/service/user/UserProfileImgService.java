@@ -1,11 +1,11 @@
 package ifTG.travelPlan.service.user;
 
 
-import ifTG.travelPlan.controller.user.ProfileImgDto;
+import ifTG.travelPlan.controller.dto.ProfileImgDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserProfileImgService {
-    Boolean saveProfileImg(MultipartFile file, Long userId);
+    ProfileImgDto saveProfileImg(MultipartFile file, Long userId);
 
     String getOriginalProfileImgUrl(Long userId, String fileName);
     ProfileImgDto getOriginalProfileImgUrl(Long userId);
@@ -14,5 +14,5 @@ public interface UserProfileImgService {
 
     Boolean deleteProfileImg(Long userId);
 
-    Boolean updateProfileImg(MultipartFile file, Long userId);
+    ProfileImgDto updateProfileImg(MultipartFile file, Long userId);
 }

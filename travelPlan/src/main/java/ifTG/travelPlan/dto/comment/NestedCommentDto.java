@@ -21,7 +21,7 @@ public class NestedCommentDto {
         this.nestedCommentId = nestedCommentId;
         this.profileImgUri = profileImgUri;
         this.nickname = nickname;
-        this.crateAt = createAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
+        this.crateAt = createAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         this.comment = comment;
         this.isLiked = isLiked;
         this.likeNum = likeNum;

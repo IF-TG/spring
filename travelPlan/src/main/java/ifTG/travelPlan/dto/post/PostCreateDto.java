@@ -4,8 +4,10 @@ import ifTG.travelPlan.dto.post.enums.Companions;
 import ifTG.travelPlan.dto.post.enums.Regions;
 import ifTG.travelPlan.dto.post.enums.Seasons;
 import ifTG.travelPlan.dto.post.enums.Themes;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;

@@ -13,5 +13,5 @@ public interface UserBlockService {
 
     ToggleDto toggleBlockUser(RequestBlockUserDto dto);
 
-    List<NicknameAndThumbnail> getAllBlockedUserListByUser(RequestGetAllBlockedUserByUser dto);
+    List<NicknameAndThumbnail> getAllBlockedUserListByUser(Long userId);
 }

@@ -1,5 +1,7 @@
 package ifTG.travelPlan.dto.post.enums;
 
+import org.springframework.ui.context.Theme;
+
 public enum Regions {
     SEOUL("서울"),
     GYEONGGI("경기"),
@@ -23,6 +25,15 @@ public enum Regions {
 
     Regions(String value) {
         this.value = value;
+    }
+
+    public static String getInstance(String regions) {
+        for (Regions r : Regions.values()){
+            if (r.toString().equals(regions)){
+                return r.getValue();
+            }
+        }
+        return null;
     }
 
     public String getValue() {

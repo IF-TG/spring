@@ -18,7 +18,7 @@ public class CommentDtoWithUserInfo {
     private final String comment;
     private final boolean isDeleted;
     private final boolean isBlocked;
-    private List<NestedCommentDto> nestedCommentDtoList;
+    private final List<NestedCommentDto> nestedCommentDtoList;
 
     @Builder
     public CommentDtoWithUserInfo(Long commentId, String profileImgUri, String nickname, boolean isBlocked, boolean isLiked, LocalDateTime createAt, int likeNum, String comment, List<NestedCommentDto> nestedCommentDtoList, boolean isDeleted) {
@@ -27,15 +27,10 @@ public class CommentDtoWithUserInfo {
         this.nickname = nickname;
         this.isLiked = isLiked;
         this.isBlocked = isBlocked;
-        this.createAt = createAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
+        this.createAt = createAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         this.LikeNum = likeNum;
         this.comment = comment;
         this.nestedCommentDtoList = nestedCommentDtoList;
         this.isDeleted = isDeleted;
-    }
-
-
-    public void setNestedComment(List<NestedCommentDto> nestedCommentList){
-        this.nestedCommentDtoList = nestedCommentList;
     }
 }

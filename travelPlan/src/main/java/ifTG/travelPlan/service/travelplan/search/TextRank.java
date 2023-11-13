@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan;
+package ifTG.travelPlan.service.travelplan.search;
 
 import java.util.List;
 

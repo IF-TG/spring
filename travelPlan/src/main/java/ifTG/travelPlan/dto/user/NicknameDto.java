@@ -1,11 +1,11 @@
-package ifTG.travelPlan.controller.user;
+package ifTG.travelPlan.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ProfileImgDto {
-    private String imageUrl;
+public class NicknameDto {
+    private String username;
     private Long userId;
 }

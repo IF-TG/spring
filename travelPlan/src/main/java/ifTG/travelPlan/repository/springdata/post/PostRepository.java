@@ -39,6 +39,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByIdWithUserAndPostImgAndPostCategory(Long postId);
 
 
-    @Query("SELECT p FROM Post p WHERE p.id NOT IN :blockUserList AND (p.id IN (SELECT c.post.id FROM Comment c WHERE c.user.id = :userId) OR p.id IN (SELECT pl.post.id FROM PostLike pl WHERE pl.user.id = :userId))")
+    @Query(value = "SELECT DISTINCT p FROM Post p JOIN FETCH p.user WHERE p.user.id NOT IN :blockUserList AND (p.id IN (SELECT c.post.id FROM Comment c WHERE c.user.id = :userId) OR p.id IN (SELECT pl.post.id FROM PostLike pl WHERE pl.user.id = :userId))",
+        countQuery = "SELECT COUNT(DISTINCT p) FROM Post p WHERE p.user.id NOT IN :blockUserList AND (p.id IN (SELECT c.post.id FROM Comment c WHERE c.user.id = :userId) OR p.id IN (SELECT pl.post.id FROM PostLike pl WHERE pl.user.id = :userId))")
     Page<Post> findCommentedOrLikedPostListNotInBlockUserByUserId(Long userId, List<Long> blockUserList, Pageable pageable);
+    @Query(value = "SELECT DISTINCT p FROM Post p JOIN FETCH p.user WHERE p.id IN (SELECT c.post.id FROM Comment c WHERE c.user.id = :userId) OR p.id IN (SELECT pl.post.id FROM PostLike pl WHERE pl.user.id = :userId)",
+        countQuery = "SELECT COUNT(DISTINCT p) FROM Post p WHERE p.id IN (SELECT c.post.id FROM Comment c WHERE c.user.id = :userId) OR p.id IN (SELECT pl.post.id FROM PostLike pl WHERE pl.user.id = :userId)")
+    Page<Post> findCommentedOrLikedPostListByUserId(Long userId, Pageable pageable);
 }

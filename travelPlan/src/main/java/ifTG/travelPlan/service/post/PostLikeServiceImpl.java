@@ -10,6 +10,7 @@ import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.repository.springdata.PostLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +30,8 @@ public class PostLikeServiceImpl implements PostLikeService{
     }
 
     @Override
-    public List<PostWithThumbnailDto> findAllPostLikeWithPostByUser(RequestPostListByUserIdDto dto) {
-        Page<PostLike> postLikeList = postLikeRepository.findAllWithPostByUserId(dto.getPageable(), dto.getUserId());
+    public List<PostWithThumbnailDto> findAllPostLikeWithPostByUser(Long userId, Pageable pageable) {
+        Page<PostLike> postLikeList = postLikeRepository.findAllWithPostByUserId(pageable, userId);
         return postConvertDto.getPostDtoListIsAllLike(postLikeList.stream().map(PostLike::getPost).toList());
     }
 }

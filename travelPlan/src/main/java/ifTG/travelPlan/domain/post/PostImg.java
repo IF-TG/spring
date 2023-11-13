@@ -26,6 +26,8 @@ public class PostImg {
     @Column(nullable = false)
     private String fileName;
 
+    private int sort;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
@@ -33,11 +35,15 @@ public class PostImg {
     @Column(columnDefinition = "boolean default false")
     private boolean isThumbnail;
 
-
-    public PostImg(String fileName, Post post, boolean isThumbnail) {
+    public PostImg(String fileName, Post post, boolean isThumbnail, int sort) {
         this.fileName = fileName;
         this.post = post;
         this.isThumbnail = isThumbnail;
         post.addPostImgUri(this);
+        this.sort = sort;
+    }
+
+    public void changeSort(int sort) {
+        this.sort = sort;
     }
 }

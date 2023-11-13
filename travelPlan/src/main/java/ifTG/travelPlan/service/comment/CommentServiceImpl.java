@@ -19,6 +19,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -37,8 +38,15 @@ public class CommentServiceImpl implements CommentService{
     private final UserProfileImgService userProfileImgService;
 
     @Override
-    public List<CommentDtoWithUserInfo> getCommentListByPost(RequestCommentByPostDto requestCommentByPostDto) {
-        return getCommentList(requestCommentByPostDto);
+    public List<CommentDtoWithUserInfo> getCommentListByPost(Long postId, Long userId, Pageable pageable) {
+        User user = getUserWithCommentLikesAndNestedCommentLikes(userId);
+        Page<Comment> commentList = commentRepository.findAllWithNestedCommentWithUserByPostId(pageable, postId);
+        List<Long> blockedUserIdList = userBlockRepository.findBlockedUserIdListByUserId(userId);
+
+        List<Long> likedCommentIdListByUser = user.getCommentLikeList().stream().map(commentLike -> commentLike.getComment().getId()).toList();
+        List<Long> likedNestedCommentIdListByUser = user.getNestedCommentLikeList().stream().map(nestedCommentLike -> nestedCommentLike.getNestedComment().getId()).toList();
+
+        return getCommentDtoList(commentList, likedCommentIdListByUser, likedNestedCommentIdListByUser, blockedUserIdList);
     }
 
     @Override
@@ -55,8 +63,8 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Boolean deleteComment(CommentIdDto commentIdDto) {
-        Comment comment = commentRepository.findWithNestedCommentById(commentIdDto.getCommentId()).orElseThrow(EntityNotFoundException::new);
+    public Boolean deleteComment(Long commentId) {
+        Comment comment = commentRepository.findWithNestedCommentById(commentId).orElseThrow(EntityNotFoundException::new);
         if(comment.getNestedCommentList().isEmpty()){
             commentRepository.delete(comment);
         }else{
@@ -92,9 +100,9 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Boolean deleteNestedComment(NestedCommentIdDto nestedCommentIdDto) {
-        nestedCommentRepository.deleteById(nestedCommentIdDto.getNestedCommentId());
-        commentRepository.deleteCommentWithSoftDeletedNestedComments(nestedCommentIdDto.getNestedCommentId());
+    public Boolean deleteNestedComment(Long nestedCommentId) {
+        nestedCommentRepository.deleteById(nestedCommentId);
+        commentRepository.deleteCommentWithSoftDeletedNestedComments(nestedCommentId);
 
         return true;
     }
@@ -134,18 +142,6 @@ public class CommentServiceImpl implements CommentService{
         return postRepository.findById(postId).orElseThrow(EntityNotFoundException::new);
     }
 
-
-    public List<CommentDtoWithUserInfo> getCommentList(RequestCommentByPostDto dto){
-        Long postId = dto.getPostId();
-        User user = getUserWithCommentLikesAndNestedCommentLikes(dto.getUserId());
-        Page<Comment> commentList = commentRepository.findAllWithNestedCommentWithUserByPostId(dto.getPageable(), postId);
-        List<Long> blockedUserIdList = userBlockRepository.findBlockedUserIdListByUserId(dto.getUserId());
-
-        List<Long> likedCommentIdListByUser = user.getCommentLikeList().stream().map(commentLike -> commentLike.getComment().getId()).toList();
-        List<Long> likedNestedCommentIdListByUser = user.getNestedCommentLikeList().stream().map(nestedCommentLike -> nestedCommentLike.getNestedComment().getId()).toList();
-
-        return getCommentDtoList(commentList, likedCommentIdListByUser, likedNestedCommentIdListByUser, blockedUserIdList);
-    }
     private User getUserWithCommentLikesAndNestedCommentLikes(Long userId) {
         return userRepository.findWithCommentLikeAndNestedCommentLikeByUserId(userId);
     }

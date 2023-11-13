@@ -1,13 +1,17 @@
 package ifTG.travelPlan.controller.dto;
 
-import ifTG.travelPlan.dto.travel.TravelPlanDestinationDto;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DestinationRouteListWithTravelPlanIdDto {
     private Long travelPlanId;
-    private final List<TravelPlanDestinationDto> data = new ArrayList<>();
+    private final List<TravelPlanDestinationIdDto> travelPlan = new ArrayList<>();
 }

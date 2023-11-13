@@ -12,6 +12,7 @@ import ifTG.travelPlan.repository.springdata.travel.DestinationScrapRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ import java.util.Optional;
 @Transactional
 public class DestinationScrapServiceImpl implements DestinationScrapService{
     private final DestinationScrapRepository destinationScrapRepository;
-    private final DestinationCovertDto destinationCovertDto;
+    private final DestinationConvertDto destinationConvertDto;
 
     @Override
     public ToggleDto toggleDestinationScrap(RequestScrapDto dto) {
@@ -44,6 +45,7 @@ public class DestinationScrapServiceImpl implements DestinationScrapService{
     public List<ScrapDto> updateDestinationScrap(RequestUpdateDestinationScrapDto dto) {
         List<DestinationScrapId> destinationScrapIdList = dto.getObjectIdList().stream().map(d->new DestinationScrapId(d, dto.getUserId())).toList();
         List<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllById(destinationScrapIdList);
+        System.out.println("destinationScrapIdList.size() = " + destinationScrapIdList.size());
         destinationScrapList.forEach(d->d.updateFolderName(dto.getFolderName()));
         destinationScrapList = destinationScrapRepository.saveAll(destinationScrapList);
         return destinationScrapList.stream().map(d-> new ScrapDto(
@@ -53,9 +55,9 @@ public class DestinationScrapServiceImpl implements DestinationScrapService{
     }
 
     @Override
-    public List<DestinationDto> findAllDestinationScrapsByScrapFolderAndUserId(RequestScrapDetail dto) {
-        Slice<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllWithDestinationByFolderNameAndUserId(dto.getFolderName(), dto.getUserId(), dto.getPageable());
-        return destinationCovertDto.getDestinationDtoListByScrap(destinationScrapList.stream().map(DestinationScrap::getDestination).toList());
+    public List<DestinationDto> findAllDestinationScrapsByScrapFolderAndUserId(String folderName, Long userId, Pageable pageable) {
+        Slice<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllWithDestinationByFolderNameAndUserId(folderName, userId, pageable);
+        return destinationConvertDto.getDestinationDtoListByScrap(destinationScrapList.stream().map(DestinationScrap::getDestination).toList());
     }
 
 }

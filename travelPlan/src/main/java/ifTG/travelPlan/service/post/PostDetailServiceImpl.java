@@ -10,6 +10,7 @@ import ifTG.travelPlan.service.comment.CommentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +25,10 @@ public class PostDetailServiceImpl implements PostDetailService{
     private final PostScrapRepository postScrapRepository;
 
     @Override
-    public PostDetailsWithIsScraped getPostDetail(RequestCommentByPostDto dto) {
-        postViewService.addPostViewByPostIdAndUserId(dto.getPostId(), dto.getUserId());
-        boolean isScraped = postScrapRepository.existsById(new PostScrapId(dto.getPostId(), dto.getUserId()));
-        List<CommentDtoWithUserInfo> commentDtoWithUserInfoList = commentService.getCommentListByPost(dto);
+    public PostDetailsWithIsScraped getPostDetail(Long postId, Long userId, Pageable pageable) {
+        postViewService.addPostViewByPostIdAndUserId(postId, userId);
+        boolean isScraped = postScrapRepository.existsById(new PostScrapId(postId, userId));
+        List<CommentDtoWithUserInfo> commentDtoWithUserInfoList = commentService.getCommentListByPost(postId, userId, pageable);
         return new PostDetailsWithIsScraped(commentDtoWithUserInfoList, isScraped);
     }
 }

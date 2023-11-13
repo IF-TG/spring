@@ -8,6 +8,7 @@ import ifTG.travelPlan.repository.springdata.user.SearchHistoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class UserSearchServiceImpl implements UserSearchService{
     private final SearchHistoryRepository searchHistoryRepository;
 
     @Override
-    public List<SearchHistoryDto> findAllSearchHistoryByUser(RequestSearchHistoryPageDto dto) {
-        return searchHistoryRepository.findAllByUserId(dto.getUserId(), dto.getPageable()).stream()
+    public List<SearchHistoryDto> findAllSearchHistoryByUser(Long userId, Pageable pageable) {
+        return searchHistoryRepository.findAllByUserId(userId, pageable).stream()
                                       .map(sh-> new SearchHistoryDto(sh.getHistory(), sh.getSearch_time())).toList();
     }
 

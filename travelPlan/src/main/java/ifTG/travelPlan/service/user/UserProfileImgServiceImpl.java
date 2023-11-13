@@ -1,6 +1,6 @@
 package ifTG.travelPlan.service.user;
 
-import ifTG.travelPlan.controller.user.ProfileImgDto;
+import ifTG.travelPlan.controller.dto.ProfileImgDto;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.filestore.FileStore;
@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -32,22 +33,22 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
     private String imgServerUrl;
 
     @Override
-    public Boolean saveProfileImg(MultipartFile file, Long userId) {
+    public ProfileImgDto saveProfileImg(MultipartFile file, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("not found userid"));
         return saveProfileImgByUser(file, user);
     }
 
-    private Boolean saveProfileImgByUser(MultipartFile file, User user) {
+    private ProfileImgDto saveProfileImgByUser(MultipartFile file, User user) {
         String uri = getProfileUri(user.getId());
         try{
             String extension = fileStore.getExtension(file.getOriginalFilename());
             String savedFileName = fileStore.saveFile(file.getBytes(), uri, extension);
             fileStore.createThumbnailAndSaveFile(uri, savedFileName, thumbnailPath, length);
             user.updateProfileImgUrl(savedFileName);
-            return true;
+            return new ProfileImgDto(getProfileImgUrl(user.getId(), savedFileName), user.getId());
         }catch(IOException e){
             e.printStackTrace();
-            return false;
+            return new ProfileImgDto(null, user.getId());
         }
     }
 
@@ -62,9 +63,14 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
 
     @Override
     public ProfileImgDto getOriginalProfileImgUrl(Long userId) {
-        String profileImgByUserId = userRepository.findProfileImgByUserId(userId);
-        String originalProfileImgUrl = getOriginalProfileImgUrl(userId, profileImgByUserId);
-        return new ProfileImgDto(originalProfileImgUrl, userId);
+        Optional<String> profileImgByUserId = userRepository.findProfileImgByUserId(userId);
+        if (profileImgByUserId.isPresent()){
+            String originalProfileImgUrl = getOriginalProfileImgUrl(userId, profileImgByUserId.get());
+            return new ProfileImgDto(originalProfileImgUrl, userId);
+        }else{
+            return new ProfileImgDto(null, userId);
+        }
+
     }
 
     @Override
@@ -88,23 +94,22 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
     }
 
     @Override
-    public Boolean updateProfileImg(MultipartFile file, Long userId) {
+    public ProfileImgDto updateProfileImg(MultipartFile file, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("not found userId"));
-        if (user.getProfileImgUrl()==null)saveProfileImgByUser(file,user);
+        if (user.getProfileImgUrl()==null)return saveProfileImgByUser(file,user);
         else{
             try{
                 byte[] inputFilePath = fileStore.getHash(file.getBytes());
                 byte[] fileHash = fileStore.getHash(getProfileUri(userId) + thumbnailPath + user.getProfileImgUrl());
-                if (Arrays.equals(inputFilePath, fileHash))return true;
+                if (Arrays.equals(inputFilePath, fileHash))return new ProfileImgDto(getProfileImgUrl(userId, user.getProfileImgUrl()), userId);
                 else{
                     deleteProfileImgByUser(user);
-                    saveProfileImgByUser(file, user);
+                    return saveProfileImgByUser(file, user);
                 }
             }catch(IOException e){
                 e.printStackTrace();
-                return false;
+                return null;
             }
         }
-        return true;
     }
 }

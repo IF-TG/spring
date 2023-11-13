@@ -6,6 +6,8 @@ import ifTG.travelPlan.dto.comment.CommentUpdateDto;
 import ifTG.travelPlan.dto.comment.NestedCommentDto;
 import ifTG.travelPlan.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +23,17 @@ public class CommentController {
         return commentService.saveComment(createCommentDto);
     }
     @GetMapping
-    public Result<List<CommentDtoWithUserInfo>> getCommentList(@RequestBody RequestCommentByPostDto requestCommentByPostDto){
-        return new Result<>(commentService.getCommentListByPost(requestCommentByPostDto));
+    public Result<List<CommentDtoWithUserInfo>> getCommentList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage,
+            @RequestParam Long postId,
+            @RequestParam Long userId){
+        return new Result<>(commentService.getCommentListByPost(postId, userId, PageRequest.of(page,perPage)));
     }
 
     @DeleteMapping
-    public Boolean deleteComment(@RequestBody CommentIdDto commentIdDto){
-        return commentService.deleteComment(commentIdDto);
+    public Boolean deleteComment(@RequestParam Long commentId){
+        return commentService.deleteComment(commentId);
     }
 
     @PutMapping
@@ -41,8 +47,8 @@ public class CommentController {
     }
 
     @DeleteMapping("/nestedComment")
-    public Boolean deleteNestedComment(@RequestBody NestedCommentIdDto nestedCommentIdDto){
-        return commentService.deleteNestedComment(nestedCommentIdDto);
+    public Boolean deleteNestedComment(@RequestParam Long nestedCommentId){
+        return commentService.deleteNestedComment(nestedCommentId);
     }
     @PutMapping("/nestedComment")
     public NestedUpdateCommentDto updateNestedComment(@RequestBody RequestUpdateNestedCommentDto requestUpdateNestedCommentDto){

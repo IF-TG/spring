@@ -10,10 +10,12 @@ import java.util.List;
 @ToString
 public enum LargeCategory {
     A01("자연"),
-    A02("인문"),
+    A02("인문(문화/예술/역사)"),
     A03("레포츠"),
     A04("쇼핑"),
-    A05("음식");
+    A05("음식"),
+    B02("숙박"),
+    C01("추천코스");
 
     private final String value;
     LargeCategory(String value){

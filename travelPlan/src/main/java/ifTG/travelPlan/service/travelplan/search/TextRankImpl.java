@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan;
+package ifTG.travelPlan.service.travelplan.search;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,10 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class TextRankImpl implements TextRank{
     private final Morpheme morpheme;
-    private final Word2Vec word2Vec;
+    private final TextRankWeight textRankWeight;
     private final int windowSize = 2;
+
+
     @Override
     public List<String> textRank(String text){
         List<String> noneByText = new ArrayList<>(morpheme.getNounByString(text));
@@ -42,9 +44,8 @@ public class TextRankImpl implements TextRank{
             for (int j = startWindow; j<endWindow; j++){
                 if (j == windowIdx)continue;
                 String linkedWord = noneByText.get(j);
-                double weight = word2Vec.getScore(standWord, linkedWord);
-                link[wordIdxMap.get(standWord)][wordIdxMap.get(linkedWord)] += 1;
-                link[wordIdxMap.get(linkedWord)][wordIdxMap.get(standWord)] += 1;
+                link[wordIdxMap.get(standWord)][wordIdxMap.get(linkedWord)] = 1;
+                link[wordIdxMap.get(linkedWord)][wordIdxMap.get(standWord)] = 1;
             }
         }
 
@@ -54,7 +55,7 @@ public class TextRankImpl implements TextRank{
                 int idxB = j;
                 String s1 = wordIdxMap.keySet().stream().filter(k->wordIdxMap.get(k)==idxA).findFirst().get();
                 String s2 = wordIdxMap.keySet().stream().filter(k->wordIdxMap.get(k)==idxB).findFirst().get();
-                link[i][j] *= word2Vec.getScore(s1, s2);
+                link[i][j] *= textRankWeight.getScore(s1, s2);
             }
         }
 

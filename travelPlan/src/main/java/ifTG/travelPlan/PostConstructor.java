@@ -24,11 +24,9 @@ import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.api.TourApi;
 import ifTG.travelPlan.service.api.TourApiDetailIntro;
-import ifTG.travelPlan.service.api.dto.CatDto;
 
 import ifTG.travelPlan.service.api.dto.ContentType;
 import ifTG.travelPlan.service.api.dto.tourapi.areabasedsync.AreaBasedSyncListDto;
-import ifTG.travelPlan.service.api.dto.tourapi.categorycode.CategoryCodeDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.culturalfacility.CulturalFacilityDetailIntroDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.culturalfacility.CulturalFacilityDetailIntroItem;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.event.EventDetailIntroDto;
@@ -41,16 +39,14 @@ import ifTG.travelPlan.service.api.dto.tourapi.detailintro.shopping.ShoppingDeta
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.shopping.ShoppingDetailIntroItem;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing.SightSeeingDetailIntroDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing.SightSeeingDetailIntroItem;
-import ifTG.travelPlan.service.travelplan.TextRank;
-import ifTG.travelPlan.service.travelplan.Word2Vec;
+import ifTG.travelPlan.service.travelplan.search.TextRank;
+import ifTG.travelPlan.service.travelplan.search.Word2Vec;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
@@ -59,6 +55,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Component
@@ -87,16 +84,22 @@ public class PostConstructor {
     public void initData() throws IOException {
         /*addData();
         List<Destination> destinationList = null;
-        for (int i  =1;i<10; i++) {
+        for (int i  =7;i<10; i++) {
             destinationList = saveDestinationList(i);
             getSubDestination(destinationList);
-        }
-        word2Vec.initData();
-        saveElasticDestination(destinationList);*/
+        }*/
+        //List<Destination> destinationList2 = destinationRepository.findAll();
+        /*word2Vec.initData();
+        List<String> strings = textRank.textRank(destinationRepository.findById(144L).get().getOverview());
+        log.info("text = {}", strings);*/
+        //saveElasticDestination(destinationList2);
+
+
     }
 
     private void saveElasticDestination(List<Destination> destinationList) {
         destinationList.forEach(d->{
+            log.info(" > {}", d.getId());
             List<String> keywordList = textRank.textRank(d.getOverview());
             EDestination eDestination = EDestination.builder()
                                                     .id(d.getId())
@@ -106,6 +109,7 @@ public class PostConstructor {
                                                     .info(d.getOverview())
                                                     .address(d.getAddress())
                                                     .category(d.getCategory())
+                                                    .contentType(d.getContentType())
                                                     .build();
             eDestinationRepository.save(eDestination);
         });
@@ -141,7 +145,7 @@ public class PostConstructor {
                                                 .scale(replaceBrTag(item.getScaleshopping())).build();
                     shoppingRepository.save(shopping);
                 }
-                case Recreation -> {
+                case LeisureSports -> {
                     LeisureSportsDetailIntroItem item = tourApiDetailIntro.selectIntroductionIntro(LeisureSportsDetailIntroDto.class, d.getTourApiContentId(), d.getContentType()).getItem().get(0);
                     LeisureSports leisureSports = LeisureSports.builder()
                                                                .destination(d)
@@ -207,7 +211,6 @@ public class PostConstructor {
     }
 
     private List<Destination> saveDestinationList(int page) {
-
         List<Destination> destinationList = new ArrayList<>();
         AreaBasedSyncListDto areaBasedSyncListDto = tourApi.selectAreaBasedSynList(page);
         areaBasedSyncListDto.getItem().stream().filter(absi->

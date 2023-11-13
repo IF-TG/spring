@@ -1,5 +1,6 @@
 package ifTG.travelPlan.domain.travel;
 
+import ifTG.travelPlan.domain.travel.destinationdetail.*;
 import ifTG.travelPlan.dto.travel.enums.Category;
 import ifTG.travelPlan.service.api.dto.ContentType;
 import jakarta.persistence.*;
@@ -43,9 +44,12 @@ public class Destination{
     /**
      * 양방향 매핑
      */
-    @OneToMany(mappedBy = "destination", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<DestinationImg> destinationImgList = new ArrayList<>();
 
+    /**
+     * one to one 은 양방향 매핑시 lazy 어려움
+     */
     @Builder
     public Destination(Long tourApiContentId, ContentType contentType, String zipcode, String address, String addressDetail, String thumbNail,
                        String title, Integer areaCode, Double mapX, Double mapY, Integer mLevel, String tel, Category category) {

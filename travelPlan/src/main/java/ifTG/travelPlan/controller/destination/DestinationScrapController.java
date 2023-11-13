@@ -10,6 +10,7 @@ import ifTG.travelPlan.dto.travel.DestinationDto;
 import ifTG.travelPlan.service.destination.DestinationScrapService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +32,11 @@ public class DestinationScrapController {
     }
 
     @GetMapping("/detail")
-    public Result<List<DestinationDto>> findAllDestinationScrapsByScrapFolderAndUserId(@RequestBody RequestScrapDetail dto){
-        return new Result<>(destinationScrapService.findAllDestinationScrapsByScrapFolderAndUserId(dto));
+    public Result<List<DestinationDto>> findAllDestinationScrapsByScrapFolderAndUserId(
+            @RequestParam String folderName,
+            @RequestParam Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage){
+        return new Result<>(destinationScrapService.findAllDestinationScrapsByScrapFolderAndUserId(folderName, userId, PageRequest.of(page,perPage)));
     }
 }

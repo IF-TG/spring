@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,6 +38,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity @Getter
 @Table(name = "posts")
 @NoArgsConstructor(access = PROTECTED)
+@ToString
 @Slf4j
 public class Post {
     @Id
@@ -135,7 +137,7 @@ public class Post {
         this.postImgList.add(postImg);
     }
 
-    public void removePostImgById(String postImgFileName) {
+    public void removePostImgByFileName(String postImgFileName) {
         for(int i = 0; i<this.postImgList.size(); i++){
             if(postImgList.get(i).getFileName().equals(postImgFileName)){
                 postImgList.remove(i);

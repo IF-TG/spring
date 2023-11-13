@@ -1,6 +1,8 @@
 package ifTG.travelPlan.service.api.dto;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public enum ContentType {
@@ -8,7 +10,7 @@ public enum ContentType {
     Cultural_Facility(14),
     Event_Performance_Festival(15),
     Travel_Course(25),
-    Recreation(28),
+    LeisureSports(28),
     Accommodation(32),
     Shopping(38),
     Restaurant(39);
@@ -41,5 +43,17 @@ public enum ContentType {
         }
 
         return Optional.empty();
+    }
+
+    private static final Map<Integer, ContentType> lookup = new HashMap<>();
+
+    static{
+        for (ContentType c: values()){
+            lookup.put(c.getValue(), c);
+        }
+    }
+
+    public static ContentType of(int value){
+        return lookup.get(value);
     }
 }

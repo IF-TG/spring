@@ -10,6 +10,7 @@ import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.service.post.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +26,11 @@ public class PostLikeController {
         return postLikeService.toggleLikePost(requestLikeDto);
     }
 
-    @GetMapping("/list")
-    public Result<List<PostWithThumbnailDto>> findAllPostLikeWithPostByUser(@RequestBody RequestPostListByUserIdDto dto){
-        return new Result<>(postLikeService.findAllPostLikeWithPostByUser(dto));
+    @GetMapping("/list/{userId}")
+    public Result<List<PostWithThumbnailDto>> findAllPostLikeWithPostByUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage,
+            @PathVariable Long userId){
+        return new Result<>(postLikeService.findAllPostLikeWithPostByUser(userId, PageRequest.of(page, perPage)));
     }
 }
