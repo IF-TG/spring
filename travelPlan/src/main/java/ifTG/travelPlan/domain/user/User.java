@@ -76,9 +76,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private final List<UserLog> userLogList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private final Set<UserBlock> userBlockList = new HashSet<>();
+    private final List<UserBlock> userBlockList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
-    private final Set<PostLike> postLikeList = new HashSet<>();
+    private final List<PostLike> postLikeList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private final Set<CommentLike> commentLikeList = new HashSet<>();
     @OneToMany(mappedBy = "user")

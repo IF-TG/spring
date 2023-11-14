@@ -7,6 +7,7 @@ import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.domain.user.UserBlock;
 import ifTG.travelPlan.repository.querydsl.QPostSearchRepository;
+import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.user.UserSearchService;
 import jakarta.transaction.Transactional;
@@ -24,22 +25,25 @@ public class PostSearchServiceImpl implements PostSearchService{
     private final UserRepository userRepository;
     private final PostConvertDto postConvertDto;
     private final UserSearchService userSearchService;
+    private final UserBlockRepository userBlockRepository;
 
     @Override
     public List<PostDto> findAllLikeKeyword(RequestSearchPostDto requestSearchPostDto) {
-        User user = userRepository.findByUserIdWithUserBlockAndPostLike(requestSearchPostDto.getUserId());
-        List<Long> userBlockIdList = user.getUserBlockList().stream().map(UserBlock::getBlockedUserId).toList();
-        List<Long> likedPostList = user.getPostLikeList().stream().map(PostLike::getPostLikedId).toList();
+        User user = userRepository.findByIdWithPostLike(requestSearchPostDto.getUserId());
+        List<Long> allBlockUserList = getAllBlockUserList(user);
+        List<Long> likedPostListByUser = user.getPostLikeList().stream().map(PostLike::getPostLikedId).toList();
         Page<Post> postList = qPostSearchRepository.findAllByKeywordNotInBlockedUserId(
                 requestSearchPostDto.getPageable(),
                 requestSearchPostDto.getKeyword(),
                 requestSearchPostDto.isContent(),
                 requestSearchPostDto.isTitle(),
-                userBlockIdList
+                allBlockUserList
                 );
         new Thread(()->userSearchService.saveKeywordHistory(user, requestSearchPostDto.getKeyword())).start();
-        return postConvertDto.getPostDtoList(postList, likedPostList);
+        return postConvertDto.getPostDtoList(postList, likedPostListByUser);
     }
 
-
+    private List<Long> getAllBlockUserList(User user) {
+        return userBlockRepository.findUserIdListByBlockedUserIdAndBlockingUserId(user.getId());
+    }
 }

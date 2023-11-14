@@ -6,6 +6,7 @@ import ifTG.travelPlan.dto.post.RequestPostListDto;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
 import ifTG.travelPlan.dto.post.enums.OrderMethod;
 import ifTG.travelPlan.service.post.PostService;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +25,11 @@ public class PostListController {
 
     @GetMapping()
     public Result<List<PostWithThumbnailDto>> getPostListWithCategory(
-            @RequestParam int page,
-            @RequestParam int perPage,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int perPage,
             @RequestParam OrderMethod orderMethod,
             @RequestParam MainCategory mainCategory,
-            @RequestParam String subCategory,
+            @RequestParam @Nullable String subCategory,
             @RequestParam Long userId) throws IllegalAccessException {
         return new Result<>(postService.findAllPostWithPostRequestDto(new RequestPostListDto(page, perPage, orderMethod, mainCategory, subCategory, userId)));
     }

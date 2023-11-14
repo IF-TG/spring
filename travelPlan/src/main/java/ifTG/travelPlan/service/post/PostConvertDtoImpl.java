@@ -72,6 +72,7 @@ public class PostConvertDtoImpl implements PostConvertDto{
         List<String> regions = getPostCategoryFilterMainCategory(post, MainCategory.REGION);
         List<String> themes = getPostCategoryFilterMainCategory(post, MainCategory.THEME);
         List<String> companions = getPostCategoryFilterMainCategory(post, MainCategory.COMPANION);
+
         return PostDto.builder()
                       .postId(post.getId())
                       .profileImgUri(userProfileImgService.getProfileImgUrl(post.getUser().getId(), post.getUser().getProfileImgUrl()))
@@ -97,6 +98,7 @@ public class PostConvertDtoImpl implements PostConvertDto{
 
 
     private static List<String> getPostCategoryFilterMainCategory(Post post, MainCategory mainCategory) {
+
         return post.getPostCategoryList().stream().filter(pc->pc.getMainCategory().equals(mainCategory)).map(pc->{
             switch (mainCategory){
                 case SEASON -> {

@@ -48,17 +48,16 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostWithThumbnailDto> findAllPostWithPostRequestDto(RequestPostListDto requestPostListDto){
-        User user = userRepository.findByUserIdWithUserBlockAndPostLike(requestPostListDto.getUserId());
+        User user = userRepository.findByIdWithPostLike(requestPostListDto.getUserId());
         List<Long> allBlockUserList = getAllBlockUserList(user);
+        System.out.println("allBlockUserList = " + allBlockUserList);
         List<Long> likedPostListByUser = user.getPostLikeList().stream().map(PostLike::getPostLikedId).toList();
         Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(requestPostListDto, allBlockUserList);
         return postConvertDto.getPostWithThumbnailDtoList(postList, likedPostListByUser);
     }
 
     private List<Long> getAllBlockUserList(User user) {
-        List<Long> blockedUserIdByUserList = user.getUserBlockList().stream().map(UserBlock::getBlockedUserId).toList();
-        List<Long> blockingUserList = userBlockRepository.findUserIdListByBlockedUserId(user.getId());
-        return Stream.concat(blockingUserList.stream(), blockedUserIdByUserList.stream()).distinct().toList();
+        return userBlockRepository.findUserIdListByBlockedUserIdAndBlockingUserId(user.getId());
     }
 
     @Override
@@ -97,7 +96,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostWithThumbnailDto> findCommentedOrLikedPostListByUserId(Long userId, Pageable pageable) {
-        User user = userRepository.findByUserIdWithUserBlockAndPostLike(userId);
+        User user = userRepository.findByIdWithPostLike(userId);
         List<Long> allBlockUserList = getAllBlockUserList(user);
         Page<Post> postList;
         postList = allBlockUserList.size()==0?

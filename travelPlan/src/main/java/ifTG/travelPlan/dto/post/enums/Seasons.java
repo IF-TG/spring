@@ -17,7 +17,6 @@ public enum Seasons {
     }
 
     public static String getInstance(String seasons){
-        System.out.println("seasons = " + seasons);
         for (Seasons s : Seasons.values()){
             if (s.toString().equals(seasons)){
                 return s.getValue();
