@@ -9,6 +9,7 @@ import ifTG.travelPlan.service.post.PostService;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,13 +25,13 @@ public class PostListController {
     private final PostService postService;
 
     @GetMapping()
-    public Result<List<PostWithThumbnailDto>> getPostListWithCategory(
+    public ResponseEntity<Result<List<PostWithThumbnailDto>>> getPostListWithCategory(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage,
             @RequestParam OrderMethod orderMethod,
             @RequestParam MainCategory mainCategory,
             @RequestParam @Nullable String subCategory,
             @RequestParam Long userId) throws IllegalAccessException {
-        return new Result<>(postService.findAllPostWithPostRequestDto(new RequestPostListDto(page, perPage, orderMethod, mainCategory, subCategory, userId)));
+        return Result.isSuccess(postService.findAllPostWithPostRequestDto(new RequestPostListDto(page, perPage, orderMethod, mainCategory, subCategory, userId)));
     }
 }

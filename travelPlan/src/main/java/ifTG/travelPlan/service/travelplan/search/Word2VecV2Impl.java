@@ -1,23 +1,27 @@
 package ifTG.travelPlan.service.travelplan.search;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-public class Word2Vec2VImpl implements Word2Vec{
-    protected final int DIMENSION = 100;
-    private final double learnRate = 0.005;
+public abstract class Word2VecV2Impl implements Word2Vec{
+
+    @Value("${nlp.dimension}")
+    protected Integer DIMENSION;
+    @Value("${nlp.word2vec.learnRate}")
+    private Double learnRate;
     protected double [][] inputHiddenWeight;
     private double [][] hiddenOutputWeight;
     protected final Morpheme morpheme;
-    private final int windowSize = 2;
-    private final int epoch = 20;
+    @Value("${nlp.window}")
+    private Integer windowSize;
+    @Value("${nlp.word2vec.epoch}")
+    private Integer epoch;
     private Integer size;
 
     @Autowired
-    public Word2Vec2VImpl(Morpheme morpheme){
+    public Word2VecV2Impl(Morpheme morpheme){
         this.morpheme = morpheme;
     }
 
@@ -27,20 +31,24 @@ public class Word2Vec2VImpl implements Word2Vec{
         size = morpheme.getWordIdxMap().size();
         List<String> nounList = morpheme.findAllNounByDestination();
         initArray();
-        double  e=1;
         for (int i = 0; i<epoch; i++){
             learningWeight(nounList);
-            System.out.println("test  = " + forwardPassWithSoftmax(0)[1]);
             System.out.println("w1 > " + hiddenOutputWeight[0][0]);
             System.out.println("w2 > " + inputHiddenWeight[0][0]);
             System.out.println("epoch > " + i);
-            if (i%10==0){
-                double e2 = Arrays.stream(forwardPass(0)).sum();
-                if (Math.abs(e2-e)<0.0001)break;
-                e = e2;
-            }
         }
     }
+
+    @Override
+    public Map<Integer, Double> getVectorByString(String s){
+        Map<Integer, Double> resultMap = new HashMap<>();
+        Integer idx = morpheme.getIdx(s);
+        for (int i = 0; i<DIMENSION; i++){
+            resultMap.put(i,inputHiddenWeight[i][idx]);
+        }
+        return resultMap;
+    }
+
 
     private void learningWeight(List<String> nounList) {
         for (int i = 0; i< nounList.size()-windowSize; i++){
@@ -59,6 +67,34 @@ public class Word2Vec2VImpl implements Word2Vec{
                 learn(result, oneHotInput, oneHotOutput);
             }
         }
+    }
+
+    private double[] forwardPass(int oneHotInput) {
+        double[] result = new double[size];
+        for (int i =0; i<DIMENSION; i++){
+            for (int j = 0; j<size; j++){
+                result[j] += inputHiddenWeight[i][oneHotInput]*hiddenOutputWeight[i][j];
+            }
+        }
+        return result;
+    }
+    public double[] forwardPassWithSoftmax(int oneHotInput){
+        double[] result = forwardPass(oneHotInput);
+        double[] softmax = new double[result.length];
+        double tmp = 0;
+        double max = 0;
+        for (double v : result){
+            if (max<v){
+                max = v;
+            }
+        }
+        for (double v : result) {
+            tmp += Math.exp(v-max);
+        }
+        for (int i =0; i<result.length; i++){
+            softmax[i] = Math.exp(result[i]-max)/tmp;
+        }
+        return softmax;
     }
 
     private void learn(double[] result, int oneHotInput, int oneHotOutput) {
@@ -80,15 +116,7 @@ public class Word2Vec2VImpl implements Word2Vec{
         }
     }
 
-    private double[] forwardPass(int oneHotInput) {
-        double[] result = new double[size];
-        for (int i =0; i<DIMENSION; i++){
-            for (int j = 0; j<size; j++){
-                result[j] += inputHiddenWeight[i][oneHotInput]*hiddenOutputWeight[i][j];
-            }
-        }
-        return result;
-    }
+
 
     private void initArray() {
         inputHiddenWeight = new double[DIMENSION][morpheme.getWordIdxMap().size()];
@@ -107,22 +135,6 @@ public class Word2Vec2VImpl implements Word2Vec{
         }
     }
 
-    public double[] forwardPassWithSoftmax(int oneHotInput){
-        double[] result = forwardPass(oneHotInput);
-        double[] softmax = new double[result.length];
-        double tmp = 0;
-        double max = 0;
-        for (double v : result){
-            if (max<v){
-                max = v;
-            }
-        }
-        for (double v : result) {
-            tmp += Math.exp(v-max);
-        }
-        for (int i =0; i<result.length; i++){
-            softmax[i] = Math.exp(result[i]-max)/tmp;
-        }
-        return softmax;
-    }
+
+    public abstract double getScore(double[] s1, double[] s2);
 }

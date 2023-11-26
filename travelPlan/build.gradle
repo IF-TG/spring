@@ -22,14 +22,20 @@ allprojects {
 		maven { url 'https://jitpack.io' }
 	}
 }
+
 dependencies {
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'com.github.shin285:KOMORAN:3.3.9'
 	implementation 'org.jsoup:jsoup:1.16.1'
-	implementation 'org.seleniumhq.selenium:selenium-java:4.5.3'
+	//implementation 'org.seleniumhq.selenium:selenium-java:4.5.3'
+
+	//json type entity
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.6.1'
+	implementation 'com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
@@ -42,6 +48,9 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+	implementation 'co.elastic.clients:elasticsearch-java:8.5.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-test:'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'

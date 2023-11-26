@@ -18,12 +18,12 @@ import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  */
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class PostServiceImpl implements PostService{
     private final QPostListRepository qPostListRepository;
@@ -50,7 +50,6 @@ public class PostServiceImpl implements PostService{
     public List<PostWithThumbnailDto> findAllPostWithPostRequestDto(RequestPostListDto requestPostListDto){
         User user = userRepository.findByIdWithPostLike(requestPostListDto.getUserId());
         List<Long> allBlockUserList = getAllBlockUserList(user);
-        System.out.println("allBlockUserList = " + allBlockUserList);
         List<Long> likedPostListByUser = user.getPostLikeList().stream().map(PostLike::getPostLikedId).toList();
         Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(requestPostListDto, allBlockUserList);
         return postConvertDto.getPostWithThumbnailDtoList(postList, likedPostListByUser);
@@ -61,6 +60,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
+    @Transactional
     public PostDto savePost(PostCreateDto postCreateDto) {
         User user = userRepository.findById(postCreateDto.getUserId()).orElseThrow(EntityNotFoundException::new);
         Post post = getPostByPostCreateDto(postCreateDto, user);
@@ -75,6 +75,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
+    @Transactional
     public PostDto updatePost(PostUpdateDto postUpdateDto) {
         Long postId = postUpdateDto.getPostId();
         deleteSubCategory(postId);
@@ -126,6 +127,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
+    @Transactional
     public Boolean deletePost(Long postId) {
         postImgFileService.deleteAllById(postId);
         postRepository.deleteById(postId);

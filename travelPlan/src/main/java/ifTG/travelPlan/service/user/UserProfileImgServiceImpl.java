@@ -4,11 +4,10 @@ import ifTG.travelPlan.controller.dto.ProfileImgDto;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.filestore.FileStore;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.openqa.selenium.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class UserProfileImgServiceImpl implements UserProfileImgService{
     private final UserRepository userRepository;
     private final FileStore fileStore;
@@ -34,7 +33,7 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
 
     @Override
     public ProfileImgDto saveProfileImg(MultipartFile file, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("not found userid"));
+        User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("not found userid"));
         return saveProfileImgByUser(file, user);
     }
 
@@ -80,7 +79,7 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
 
     @Override
     public Boolean deleteProfileImg(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("not found userid"));
+        User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("not found userid"));
         deleteProfileImgByUser(user);
         return true;
     }
@@ -95,7 +94,7 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
 
     @Override
     public ProfileImgDto updateProfileImg(MultipartFile file, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("not found userId"));
+        User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("not found userId"));
         if (user.getProfileImgUrl()==null)return saveProfileImgByUser(file,user);
         else{
             try{

@@ -9,12 +9,12 @@ import ifTG.travelPlan.dto.ScrapDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.dto.travel.DestinationDto;
 import ifTG.travelPlan.repository.springdata.travel.DestinationScrapRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,12 +22,13 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class DestinationScrapServiceImpl implements DestinationScrapService{
     private final DestinationScrapRepository destinationScrapRepository;
     private final DestinationConvertDto destinationConvertDto;
 
     @Override
+    @Transactional
     public ToggleDto toggleDestinationScrap(RequestScrapDto dto) {
         DestinationScrapId destinationScrapId = new DestinationScrapId(dto.getObjectId(), dto.getUserId());
         Optional<DestinationScrap> destinationScrap = destinationScrapRepository.findById(destinationScrapId);
@@ -42,6 +43,7 @@ public class DestinationScrapServiceImpl implements DestinationScrapService{
     }
 
     @Override
+    @Transactional
     public List<ScrapDto> updateDestinationScrap(RequestUpdateDestinationScrapDto dto) {
         List<DestinationScrapId> destinationScrapIdList = dto.getObjectIdList().stream().map(d->new DestinationScrapId(d, dto.getUserId())).toList();
         List<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllById(destinationScrapIdList);

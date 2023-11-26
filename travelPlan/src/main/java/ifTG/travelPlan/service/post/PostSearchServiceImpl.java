@@ -10,16 +10,16 @@ import ifTG.travelPlan.repository.querydsl.QPostSearchRepository;
 import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.user.UserSearchService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class PostSearchServiceImpl implements PostSearchService{
     private final QPostSearchRepository qPostSearchRepository;
     private final UserRepository userRepository;

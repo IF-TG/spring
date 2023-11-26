@@ -7,7 +7,7 @@ import ifTG.travelPlan.dto.comment.NestedCommentDto;
 import ifTG.travelPlan.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,39 +19,40 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public CommentDtoWithUserInfo saveComment(@RequestBody RequestCreateCommentDto createCommentDto){
-        return commentService.saveComment(createCommentDto);
+    public ResponseEntity<Result<CommentDtoWithUserInfo>> saveComment(@RequestBody RequestCreateCommentDto createCommentDto){
+        return Result.isSuccess(commentService.saveComment(createCommentDto));
     }
     @GetMapping
-    public Result<List<CommentDtoWithUserInfo>> getCommentList(
+    public ResponseEntity<Result<List<CommentDtoWithUserInfo>>> getCommentList(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage,
             @RequestParam Long postId,
             @RequestParam Long userId){
-        return new Result<>(commentService.getCommentListByPost(postId, userId, PageRequest.of(page,perPage)));
+        return Result.isSuccess(commentService.getCommentListByPost(postId,userId,PageRequest.of(page,perPage)));
+
     }
 
     @DeleteMapping
-    public Boolean deleteComment(@RequestParam Long commentId){
-        return commentService.deleteComment(commentId);
+    public ResponseEntity<Result<Boolean>> deleteComment(@RequestParam Long commentId){
+        return Result.isSuccess(commentService.deleteComment(commentId));
     }
 
     @PutMapping
-    public CommentUpdateDto updateComment(@RequestBody RequestUpdateCommentDto requestUpdateCommentDto){
-        return commentService.updateComment(requestUpdateCommentDto);
+    public ResponseEntity<Result<CommentUpdateDto>> updateComment(@RequestBody RequestUpdateCommentDto requestUpdateCommentDto){
+        return Result.isSuccess(commentService.updateComment(requestUpdateCommentDto));
     }
 
     @PostMapping("/nestedComment")
-    public NestedCommentDto saveNestedComment(@RequestBody RequestCreateNestedCommentDto nestedCommentDto){
-        return commentService.saveNestedComment(nestedCommentDto);
+    public ResponseEntity<Result<NestedCommentDto>> saveNestedComment(@RequestBody RequestCreateNestedCommentDto nestedCommentDto){
+        return Result.isSuccess(commentService.saveNestedComment(nestedCommentDto));
     }
 
     @DeleteMapping("/nestedComment")
-    public Boolean deleteNestedComment(@RequestParam Long nestedCommentId){
-        return commentService.deleteNestedComment(nestedCommentId);
+    public ResponseEntity<Result<Boolean>> deleteNestedComment(@RequestParam Long nestedCommentId){
+        return Result.isSuccess(commentService.deleteNestedComment(nestedCommentId));
     }
     @PutMapping("/nestedComment")
-    public NestedUpdateCommentDto updateNestedComment(@RequestBody RequestUpdateNestedCommentDto requestUpdateNestedCommentDto){
-        return commentService.updateNestedUpdateComment(requestUpdateNestedCommentDto);
+    public ResponseEntity<Result<NestedUpdateCommentDto>> updateNestedComment(@RequestBody RequestUpdateNestedCommentDto requestUpdateNestedCommentDto){
+        return Result.isSuccess(commentService.updateNestedUpdateComment(requestUpdateNestedCommentDto));
     }   
 }

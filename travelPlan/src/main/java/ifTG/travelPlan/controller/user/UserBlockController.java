@@ -1,12 +1,12 @@
 package ifTG.travelPlan.controller.user;
 
 import ifTG.travelPlan.controller.dto.RequestBlockUserDto;
-import ifTG.travelPlan.controller.dto.RequestGetAllBlockedUserByUser;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.dto.user.NicknameAndThumbnail;
 import ifTG.travelPlan.service.user.UserBlockService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,12 +18,12 @@ public class UserBlockController {
     private final UserBlockService userBlockService;
 
     @PostMapping
-    public ToggleDto blockedUser(@RequestBody RequestBlockUserDto dto){
-        return userBlockService.toggleBlockUser(dto);
+    public ResponseEntity<Result<ToggleDto>> blockedUser(@RequestBody RequestBlockUserDto dto){
+        return Result.isSuccess(userBlockService.toggleBlockUser(dto));
     }
 
     @GetMapping("/list")
-    public Result<List<NicknameAndThumbnail>> getBlockedUserListByUser(@RequestParam Long userId){
-        return new Result<>(userBlockService.getAllBlockedUserListByUser(userId));
+    public ResponseEntity<Result<List<NicknameAndThumbnail>>> getBlockedUserListByUser(@RequestParam Long userId){
+        return Result.isSuccess(userBlockService.getAllBlockedUserListByUser(userId));
     }
 }

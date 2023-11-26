@@ -8,9 +8,10 @@ import ifTG.travelPlan.dto.travel.TravelPlanDestinationDto;
 import ifTG.travelPlan.repository.jdbc.JdbcDestinationRouteRepository;
 import ifTG.travelPlan.repository.springdata.travel.TravelPlanDestinationRepository;
 import ifTG.travelPlan.service.destination.DestinationConvertDto;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,10 +21,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class TravelPlanDestinationServiceImpl implements TravelPlanDestinationService {
     private final TravelPlanDestinationRepository travelPlanDestinationRepository;
     private final JdbcDestinationRouteRepository jdbcDestinationRouteRepository;
+    private final EntityManager entityManager;
     private final DestinationConvertDto destinationConvertDto;
     @Override
     public List<TravelPlanDestinationDto> getDestinationRouteByTravelPlanId(Long travelPlanId) {
@@ -33,15 +35,17 @@ public class TravelPlanDestinationServiceImpl implements TravelPlanDestinationSe
     }
 
     @Override
+    @Transactional
     public List<TravelPlanDestinationDto> addDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto) {
-        System.out.println("TravelPlanDestinationServiceImpl.addDestinationToTravelPlan");
         List<TravelPlanDestination> travelPlanDestinationList = dto.getTravelPlan().stream().filter(d->d.getData().containsKey(DataType.DESTINATION))
                                                                    .map(d->TravelPlanDestination.builder()
                 .travelPlanId(dto.getTravelPlanId())
                 .destinationId(d.getData().get(DataType.DESTINATION))
                 .eta(d.getEta())
                 .build()).toList();
-        jdbcDestinationRouteRepository.insertTravelPlanDestination(travelPlanDestinationList);
+        travelPlanDestinationRepository.saveAllAndFlush(travelPlanDestinationList);
+        entityManager.clear();
+        //jdbcDestinationRouteRepository.insertTravelPlanDestination(travelPlanDestinationList);
         return getDestinationRouteDtoListByTravelPlanId(dto.getTravelPlanId());
     }
 
@@ -56,6 +60,7 @@ public class TravelPlanDestinationServiceImpl implements TravelPlanDestinationSe
      */
 
     @Override
+    @Transactional
     public List<TravelPlanDestinationDto> updateDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto) {
         List<TravelPlanDestination> travelPlanDestinationList = travelPlanDestinationRepository.findAllByTravelPlanId(dto.getTravelPlanId());
         List<TravelPlanDestination> deleteTravelPlanDestinationList = new ArrayList<>();
@@ -85,11 +90,16 @@ public class TravelPlanDestinationServiceImpl implements TravelPlanDestinationSe
     }
 
     private List<TravelPlanDestinationDto> getDestinationRouteDtoListByTravelPlanId(Long travelPlanId) {
-        return getWithTravelPlanAndDestinationRouteByTravelPlanId(travelPlanId)
+        List<TravelPlanDestination> travelPlanDestinationList = getWithTravelPlanAndDestinationRouteByTravelPlanId(travelPlanId);
+        return travelPlanDestinationList
                 .stream().map(this::getDestinationRouteDtoByDestinationDto).toList();
     }
 
     private List<TravelPlanDestination> getWithTravelPlanAndDestinationRouteByTravelPlanId(Long travelPlanId) {
+        List<TravelPlanDestination> withTravelPlanAndDestinationRouteByTravelPlanId = travelPlanDestinationRepository.findWithTravelPlanAndDestinationRouteByTravelPlanId(travelPlanId);
+        System.out.println("withTravelPlanAndDestinationRouteByTravelPlanId = " + withTravelPlanAndDestinationRouteByTravelPlanId.size());
+        System.out.println("withTravelPlanAndDestinationRouteByTravelPlanId = " + withTravelPlanAndDestinationRouteByTravelPlanId);
+
         return travelPlanDestinationRepository.findWithTravelPlanAndDestinationRouteByTravelPlanId(travelPlanId);
     }
     private TravelPlanDestinationDto getDestinationRouteDtoByDestinationDto(TravelPlanDestination travelPlanDestination) {

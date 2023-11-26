@@ -83,7 +83,8 @@ public class User {
     private final Set<CommentLike> commentLikeList = new HashSet<>();
     @OneToMany(mappedBy = "user")
     private final Set<NestedCommentLike> nestedCommentLikeList = new HashSet<>();
-
+    @OneToMany(mappedBy = "user")
+    private final List<UserVector> userVectorList = new ArrayList<>();
     @Builder
     public User(String userId, String pw, String nickname, String name, Sex sex, LocalDate birthDate, String phoneNumber, String email, UserAddress userAddress) {
         this.userId = userId;

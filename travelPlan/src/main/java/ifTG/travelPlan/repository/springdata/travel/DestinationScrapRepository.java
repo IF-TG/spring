@@ -19,4 +19,7 @@ public interface DestinationScrapRepository extends JpaRepository<DestinationScr
     @Modifying(clearAutomatically = true)
     @Query("UPDATE DestinationScrap ds SET ds.folderName = :newFolderName WHERE ds.folderName = :oldFolderName")
     void updateFolderName(String oldFolderName, String newFolderName);
+
+    @Query("SELECT ds.destination.id FROM DestinationScrap ds WHERE ds.user.id = :userId")
+    List<Long> findAllDestinationIdByUserId(Long userId);
 }

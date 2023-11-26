@@ -1,23 +1,46 @@
 package ifTG.travelPlan.controller.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Result<T> {
     T result;
-    private StatusCode statusCode;
+    private String status;
+    private String statusCode;
     private String message;
-    public Result(T value) {
-        this.result = value;
-        statusCode = StatusCode.OK;
-        message = "SUCCESS";
+
+    public static <T> ResponseEntity<Result<T>> isSuccess(T value){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Result.<T>builder()
+                        .result(value)
+                        .status(StatusCode.OK.toString())
+                        .statusCode(StatusCode.OK.getCode())
+                        .message(StatusCode.OK.getMessage())
+                        .build()
+                );
+    }
+    public static ResponseEntity<Object> isError(StatusCode statusCode){
+        return ResponseEntity
+                .status(statusCode.getHttpStatus())
+                .body(Result.builder()
+                        .result(null)
+                        .status(statusCode.toString())
+                        .statusCode(statusCode.getCode())
+                        .message(statusCode.getMessage())
+                        .build()
+                );
+    }
+    @Builder
+    private Result(T result, String status, String statusCode, String message) {
+        this.result = result;
+        this.status = status;
+        this.statusCode = statusCode;
+        this.message = message;
     }
 
-    public Result<T> isError(String message){
-        this.message = message;
-        statusCode = StatusCode.ERROR;
-        return this;
-    }
+
 }

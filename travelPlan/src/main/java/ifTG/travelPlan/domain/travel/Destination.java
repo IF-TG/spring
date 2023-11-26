@@ -20,7 +20,6 @@ public class Destination{
     @Id @Column(name = "destination_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
     private Long tourApiContentId;
     @Enumerated(value = EnumType.STRING)
     private ContentType contentType;

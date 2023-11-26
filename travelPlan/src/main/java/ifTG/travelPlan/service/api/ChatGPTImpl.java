@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -28,22 +30,28 @@ public class ChatGPTImpl implements ChatGPT{
     @Value("${api.chat_gpt.secure_key}")
     private String secureKey;
 
+    @Value("${api.chat_gpt.destination.command}")
+    private String command;
+
+    @Value("${api.chat_gpt.destination.function}")
+    private String function;
+
     private final RestTemplate restTemplate;
 
     @Override
-    public List<String> findRelatedKeywords(String search){
+    @Async
+    public CompletableFuture<List<String>> findRelatedKeywords(String search){
         log.info("search keyword = {}", search);
         String uri = chatGPTBaseUrl + chatCompletionUrl;
         HttpHeaders httpHeaders = getHttpHeaders();
         ChatGPTRequestDto gpt = getHttpBody(search);
         HttpEntity<?> httpEntity = new HttpEntity<>(gpt, httpHeaders);
-        return getKeywords(uri, httpEntity);
+        return CompletableFuture.completedFuture(getKeywords(uri,httpEntity));
     }
 
 
-    private static ChatGPTRequestDto getHttpBody(String search) {
-        final String systemMessage = "You are a travel destination search engine assistant. Respond with 10 keywords related to the user's input. Also sort by importance. Please provide the keywords in Korean. It would be better if each keyword includes a location.";
-        List<GPTMessage> messages = getGptMessages(search, systemMessage);
+    private ChatGPTRequestDto getHttpBody(String search) {
+        List<GPTMessage> messages = getGptMessages(search, command);
         GPTCommendDto gptCommendDto = getGptCommendDto();
         List<GptFunction> gptFunctions = getGptFunctions(gptCommendDto);
         return ChatGPTRequestDto.builder()
@@ -71,9 +79,9 @@ public class ChatGPTImpl implements ChatGPT{
         return keywords;
     }
 
-    private static List<GptFunction> getGptFunctions(GPTCommendDto gptCommendDto) {
+    private List<GptFunction> getGptFunctions(GPTCommendDto gptCommendDto) {
         List<GptFunction> gptFunctions = new ArrayList<>();
-        gptFunctions.add(new GptFunction("desired_search_keywords", "Insert 10 keywords. It must be returned in JSON format. Only korean", new GPTParameter("object", gptCommendDto)));
+        gptFunctions.add(new GptFunction("desired_search_keywords", function, new GPTParameter("object", gptCommendDto)));
         return gptFunctions;
     }
 

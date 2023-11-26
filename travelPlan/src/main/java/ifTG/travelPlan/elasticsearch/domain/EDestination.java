@@ -9,9 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Mapping;
-import org.springframework.data.elasticsearch.annotations.Setting;
+import org.springframework.data.elasticsearch.annotations.*;
 
 import java.util.List;
 
@@ -33,4 +31,7 @@ public class EDestination {
     private String address;
     private Category category;
     private ContentType contentType;
+
+    @Field(type = FieldType.Dense_Vector, dims = 100)
+    private double[] embedding;
 }

@@ -14,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TravelPlanServiceImpl implements TravelPlanService{
     private final TravelPlanRepository travelPlanRepository;
     private final UserRepository userRepository;
     @Override
+    @Transactional
     public TravelPlanDto saveTravelPlan(RequestTravelPlanDto requestTravelPlanDto) {
         User user = userRepository.findById(requestTravelPlanDto.getUserId()).orElseThrow(EntityNotFoundException::new);
         TravelPlan travelPlan = TravelPlan.builder()
@@ -32,6 +33,7 @@ public class TravelPlanServiceImpl implements TravelPlanService{
     }
 
     @Override
+    @Transactional
     public TravelPlanDto updateTravelPlan(Long travelPlanId, RequestTravelPlanDto requestTravelPlanDto) {
         TravelPlan travelPlan = travelPlanRepository.findById(travelPlanId).orElseThrow(EntityNotFoundException::new);
         travelPlan.updateTravelPlan(requestTravelPlanDto.getTitle());
@@ -40,6 +42,7 @@ public class TravelPlanServiceImpl implements TravelPlanService{
     }
 
     @Override
+    @Transactional
     public Boolean deleteTravelPlan(Long travelPlanId) {
         travelPlanRepository.deleteById(travelPlanId);
         return true;

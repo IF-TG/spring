@@ -3,11 +3,7 @@ package ifTG.travelPlan.service.crawling;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -16,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@Slf4j
+/*@Slf4j
 @Service
 @Deprecated
 public class NaverBlogCrawlingImpl implements NaverBlogCrawling {
@@ -54,13 +50,14 @@ public class NaverBlogCrawlingImpl implements NaverBlogCrawling {
 
         log.info("end = {}", elements);
 
-        /*Document document = null;
+        *//*Document document = null;
         try{
             document = Jsoup.connect(url).get();
         }catch (IOException e){
             e.printStackTrace();
         }
-        log.info("{}", document.getAllElements());*/
+        log.info("{}", document.getAllElements());*//*
         return null;
     }
 }
+*/

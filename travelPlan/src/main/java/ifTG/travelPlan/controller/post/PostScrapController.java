@@ -7,6 +7,7 @@ import ifTG.travelPlan.service.post.PostScrapService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,20 +20,20 @@ public class PostScrapController {
     private final PostScrapService postScrapService;
 
     @PostMapping
-    public ToggleDto togglePostScrap(@RequestBody RequestScrapDto dto){
-        return postScrapService.togglePostScrap(dto);
+    public ResponseEntity<Result<ToggleDto>> togglePostScrap(@RequestBody RequestScrapDto dto){
+        return Result.isSuccess(postScrapService.togglePostScrap(dto));
     }
 
     @PutMapping
-    public List<ScrapDto> updateFolderName(@RequestBody RequestUpdatePostScrapDto dto) {
-        return postScrapService.updateFolderName(dto);
+    public ResponseEntity<Result<List<ScrapDto>>> updateFolderName(@RequestBody RequestUpdatePostScrapDto dto) {
+        return Result.isSuccess(postScrapService.updateFolderName(dto));
     }
     @GetMapping("/detail")
-    public Result<List<PostDto>> findAllPostScrapsByScrapFolderAndUserId(
+    public ResponseEntity<Result<List<PostDto>>> findAllPostScrapsByScrapFolderAndUserId(
             @RequestParam String folderName,
             @RequestParam Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage){
-        return new Result<>(postScrapService.findAllPostScrapsByScrapFolderAndUserId(folderName, userId, PageRequest.of(page,perPage)));
+        return Result.isSuccess(postScrapService.findAllPostScrapsByScrapFolderAndUserId(folderName, userId, PageRequest.of(page,perPage)));
     }
 }

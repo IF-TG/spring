@@ -39,24 +39,19 @@ import ifTG.travelPlan.service.api.dto.tourapi.detailintro.shopping.ShoppingDeta
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.shopping.ShoppingDetailIntroItem;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing.SightSeeingDetailIntroDto;
 import ifTG.travelPlan.service.api.dto.tourapi.detailintro.sightseeing.SightSeeingDetailIntroItem;
-import ifTG.travelPlan.service.travelplan.search.TextRank;
-import ifTG.travelPlan.service.travelplan.search.Word2Vec;
+import ifTG.travelPlan.service.travelplan.search.*;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -77,22 +72,34 @@ public class PostConstructor {
     private final RestaurantRepository restaurantRepository;
     private final TextRank textRank;
     private final Word2Vec word2Vec;
-    private final ResourceLoader resourceLoader;
+    private final VectorAverage vectorAverage;
+    private final Morpheme morpheme;
 
     @PostConstruct
     @Transactional
     public void initData() throws IOException {
-        /*addData();
+        /*addMockData();
         List<Destination> destinationList = null;
-        for (int i  =7;i<10; i++) {
+        for (int i  =0;i<30; i++) {
             destinationList = saveDestinationList(i);
             getSubDestination(destinationList);
         }*/
-        //List<Destination> destinationList2 = destinationRepository.findAll();
-        /*word2Vec.initData();
-        List<String> strings = textRank.textRank(destinationRepository.findById(144L).get().getOverview());
-        log.info("text = {}", strings);*/
-        //saveElasticDestination(destinationList2);
+        /*morpheme.settingWordMap();
+        word2Vec.initData();
+        List<Destination> destinationList2 = destinationRepository.findAll();
+        saveElasticDestination(destinationList2);
+        Iterator<EDestination> all = eDestinationRepository.findAll().iterator();
+        List<EDestination> input = new ArrayList<>();
+        while(all.hasNext()){
+            input.add(all.next());
+        }
+        System.out.println(input);*/
+        /*Iterator<EDestination> all = eDestinationRepository.findAll().iterator();
+        List<EDestination> input = new ArrayList<>();
+        while(all.hasNext()){
+            input.add(all.next());
+        }
+        System.out.println(input);*/
 
 
     }
@@ -101,6 +108,12 @@ public class PostConstructor {
         destinationList.forEach(d->{
             log.info(" > {}", d.getId());
             List<String> keywordList = textRank.textRank(d.getOverview());
+            double[] vectorAverageArray = null;
+            if (keywordList.size()==10){
+                vectorAverageArray = vectorAverage.getVectorAverage(keywordList.stream().map(word2Vec::getVectorByString).toList());
+            }
+
+            System.out.println("Arrays.toString(vectorAverageArray) = " + Arrays.toString(vectorAverageArray));
             EDestination eDestination = EDestination.builder()
                                                     .id(d.getId())
                                                     .title(d.getTitle())
@@ -110,6 +123,7 @@ public class PostConstructor {
                                                     .address(d.getAddress())
                                                     .category(d.getCategory())
                                                     .contentType(d.getContentType())
+                                                    .embedding(vectorAverageArray)
                                                     .build();
             eDestinationRepository.save(eDestination);
         });
@@ -247,7 +261,7 @@ public class PostConstructor {
     private String replaceBrTag(String input){
         return input.replaceAll("<\\s*/?\\s*br\\s*/?\\s*>", "\n");
     }
-    private void addData() {
+    private void addMockData() {
         UserAddress userAddressA = UserAddress.builder()
                                               .sido("서울")
                                               .sigungu("강남")

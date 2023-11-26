@@ -10,15 +10,14 @@ import ifTG.travelPlan.repository.querydsl.QDestinationRepository;
 import ifTG.travelPlan.repository.springdata.travel.DestinationLikeRepository;
 import ifTG.travelPlan.repository.springdata.travel.DestinationScrapRepository;
 import ifTG.travelPlan.service.api.dto.ContentType;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class DestinationServiceImpl implements DestinationService{
 
@@ -26,9 +25,11 @@ public class DestinationServiceImpl implements DestinationService{
     private final DestinationLikeRepository destinationLikeRepository;
     private final QDestinationRepository qDestinationRepository;
     private final DestinationConvertDto destinationConvertDto;
+    private final DestinationVectorService destinationVectorService;
 
     @Override
     public DestinationDetailDto findByDestinationId(Long destinationId, ContentType contentType, Long userId) {
+        destinationVectorService.updateUserVectorByDestination(userId, destinationId);
         Object detailWithDestination = qDestinationRepository.findDetailWithDestinationById(destinationId, contentType);
         boolean isScraped = destinationScrapRepository.existsById(new DestinationScrapId(destinationId, userId));
         boolean isLiked = destinationLikeRepository.existsById(new DestinationLikeId(destinationId, userId));
@@ -36,6 +37,7 @@ public class DestinationServiceImpl implements DestinationService{
     }
 
     private DestinationDetailDto getDetailDto(Object object, ContentType contentType, boolean isLiked, boolean isScraped) {
+        System.out.println("object = " + object);
         DestinationDetailDto dto = null;
         switch (contentType){
             case Cultural_Facility -> dto = getCulturalFacilityWithDestinationDto((CulturalFacility) object, isLiked, isScraped);

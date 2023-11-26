@@ -16,18 +16,18 @@ import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.post.PostViewService;
 import ifTG.travelPlan.service.user.UserProfileImgService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
@@ -50,6 +50,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public CommentDtoWithUserInfo saveComment(RequestCreateCommentDto createCommentDto) {
         User user = getUser(createCommentDto.getUserId());
         Post post = getPost(createCommentDto.getPostId());
@@ -63,6 +64,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public Boolean deleteComment(Long commentId) {
         Comment comment = commentRepository.findWithNestedCommentById(commentId).orElseThrow(EntityNotFoundException::new);
         if(comment.getNestedCommentList().isEmpty()){
@@ -75,6 +77,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public CommentUpdateDto updateComment(RequestUpdateCommentDto requestUpdateCommentDto) {
         Comment comment = commentRepository.findById(requestUpdateCommentDto.getCommentId()).orElseThrow(EntityNotFoundException::new);
         if(comment.isDeleted()){
@@ -86,6 +89,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public NestedCommentDto saveNestedComment(RequestCreateNestedCommentDto nestedCommentDto) {
         User user = getUser(nestedCommentDto.getUserId());
         Comment comment = getComment(nestedCommentDto.getCommentId());
@@ -100,6 +104,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public Boolean deleteNestedComment(Long nestedCommentId) {
         nestedCommentRepository.deleteById(nestedCommentId);
         commentRepository.deleteCommentWithSoftDeletedNestedComments(nestedCommentId);
@@ -108,6 +113,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    @Transactional
     public NestedUpdateCommentDto updateNestedUpdateComment(RequestUpdateNestedCommentDto requestUpdateNestedCommentDto) {
         NestedComment nestedComment = nestedCommentRepository.findById(requestUpdateNestedCommentDto.getNestedCommentId()).orElseThrow(EntityNotFoundException::new);
         nestedComment.updateComment(requestUpdateNestedCommentDto.getComment());

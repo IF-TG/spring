@@ -2,17 +2,21 @@ package ifTG.travelPlan.service.travelplan.search;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 
 @Service
 
 @Slf4j
-public class TextRankWeightImpl extends Word2Vec2VImpl implements TextRankWeight{
+public class TextVecRankWeight2Impl extends Word2VecV2Impl implements TextRankWeight{
     @Autowired
-    public TextRankWeightImpl(Morpheme morpheme) {
+    public TextVecRankWeight2Impl(Morpheme morpheme) {
         super(morpheme);
+    }
+
+    @Override
+    public double getScore(double[] s1, double[] s2) {
+        return 0;
     }
 
     @Override

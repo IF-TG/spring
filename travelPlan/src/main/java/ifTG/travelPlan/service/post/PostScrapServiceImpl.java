@@ -9,11 +9,11 @@ import ifTG.travelPlan.dto.ScrapDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.repository.springdata.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.PostScrapRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +21,13 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class PostScrapServiceImpl implements PostScrapService{
     private final PostScrapRepository postScrapRepository;
     private final PostConvertDto postConvertDto;
     private final PostLikeRepository postLikeRepository;
     @Override
+    @Transactional
     public ToggleDto togglePostScrap(RequestScrapDto dto) {
        PostScrapId postScrapId = new PostScrapId(dto.getObjectId(), dto.getUserId());
        Optional<PostScrap> postScrap = postScrapRepository.findById(postScrapId);
@@ -41,6 +42,7 @@ public class PostScrapServiceImpl implements PostScrapService{
     }
 
     @Override
+    @Transactional
     public List<ScrapDto> updateFolderName(RequestUpdatePostScrapDto dto) {
         List<PostScrapId> postScrapIdList = dto.getObjectIdList().stream().map(d->new PostScrapId(d, dto.getUserId())).toList();
         List<PostScrap> postScrapList = postScrapRepository.findAllById(postScrapIdList);

@@ -1,10 +1,11 @@
 package ifTG.travelPlan.controller.destination;
 
-import ifTG.travelPlan.controller.dto.RequestSearchDestinationDto;
 import ifTG.travelPlan.controller.dto.Result;
+import ifTG.travelPlan.controller.dto.StatusCode;
 import ifTG.travelPlan.dto.destination.DestinationDetailDto;
 import ifTG.travelPlan.elasticsearch.dto.ResponseEDestinationDto;
 
+import ifTG.travelPlan.exception.CustomErrorException;
 import ifTG.travelPlan.service.api.dto.ContentType;
 import ifTG.travelPlan.service.destination.DestinationSearchService;
 import ifTG.travelPlan.service.destination.DestinationService;
@@ -32,24 +33,17 @@ public class DestinationController {
             @RequestParam Long userId){
         ContentType inputContent = ContentType.of(contentTypeId);
         if (inputContent == null){
-            Result<DestinationDetailDto> errorResult = new Result<DestinationDetailDto>()
-                    .isError("InvalidContentTypeIdException");
-            return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+            throw new CustomErrorException(StatusCode.INVALID_CONTENT_TYPE_ID);
         }
-        return new ResponseEntity<>(
-                new Result<>(
-                        destinationService.findByDestinationId(destinationId, inputContent, userId)
-                ),
-                HttpStatus.OK
-        );
+        return Result.isSuccess(destinationService.findByDestinationId(destinationId, inputContent, userId));
     }
     @GetMapping("/search")
-    public Result<List<ResponseEDestinationDto>> findAllByKeyword(
+    public ResponseEntity<Result<List<ResponseEDestinationDto>>> findAllByKeyword(
             @RequestParam Long userId,
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage
     ){
-        return new Result<>(destinationSearchService.findAllByKeyword(userId, keyword, PageRequest.of(page,perPage)));
+        return Result.isSuccess(destinationSearchService.findAllByKeyword(userId, keyword, PageRequest.of(page,perPage)));
     }
 }

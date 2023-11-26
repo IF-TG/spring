@@ -13,15 +13,15 @@ import ifTG.travelPlan.repository.springdata.travel.DestinationScrapRepository;
 import ifTG.travelPlan.service.destination.DestinationConvertDto;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
 import ifTG.travelPlan.service.post.PostConvertDto;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
 public class UserScrapServiceImpl implements UserScrapService {
@@ -41,9 +41,6 @@ public class UserScrapServiceImpl implements UserScrapService {
     private final DestinationScrapRepository destinationScrapRepository;
     private final PostImgRepository postImgRepository;
     private final PostImgFileService postImgFileService;
-    private final PostConvertDto postConvertDto;
-    private final PostLikeRepository postLikeRepository;
-    private final DestinationConvertDto destinationConvertDto;
 
     @Override
     public List<UserScrapFolderDto> findAllScrapFolderByUser(Long userId) {
@@ -85,6 +82,7 @@ public class UserScrapServiceImpl implements UserScrapService {
     }
 
     @Override
+    @Transactional
     public List<UserScrapFolderDto> renameScrapFolder(RequestRenameScrapFolder dto) {
         destinationScrapRepository.updateFolderName(dto.getOldFolderName(), dto.getNewFolderName());
         return findAllScrapFolderByUser(dto.getUserId());

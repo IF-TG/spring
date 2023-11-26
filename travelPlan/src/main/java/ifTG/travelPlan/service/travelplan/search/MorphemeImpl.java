@@ -2,7 +2,6 @@ package ifTG.travelPlan.service.travelplan.search;
 
 import ifTG.travelPlan.domain.travel.Destination;
 import ifTG.travelPlan.repository.springdata.travel.DestinationRepository;
-import jakarta.annotation.PostConstruct;
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.constant.SYMBOL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
@@ -10,6 +9,7 @@ import kr.co.shineware.nlp.komoran.model.KomoranResult;
 import kr.co.shineware.nlp.komoran.model.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +22,7 @@ public class MorphemeImpl implements Morpheme {
     private final Map<String, Integer> wordIdxMap = new HashMap<>();
     private final Map<Integer, String> wordMap = new HashMap<>();
 
-    //@PostConstruct
+    @Override
     public void settingWordMap(){
         List<String> nounByString = findAllNounByDestination();
         int count = 0;
@@ -36,6 +36,7 @@ public class MorphemeImpl implements Morpheme {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<String> findAllNounByDestination(){
         List<Destination> destinationList = destinationRepository.findAll();
         String allDestinationOverview = destinationList.stream().map(Destination::getOverview).toList().toString();

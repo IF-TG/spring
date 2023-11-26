@@ -5,18 +5,20 @@ import ifTG.travelPlan.controller.dto.SearchHistoryDto;
 import ifTG.travelPlan.domain.user.SearchHistory;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.repository.springdata.user.SearchHistoryRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class UserSearchServiceImpl implements UserSearchService{
     private final SearchHistoryRepository searchHistoryRepository;
@@ -28,13 +30,9 @@ public class UserSearchServiceImpl implements UserSearchService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveKeywordHistory(User user, String keyword) {
-        log.info("{}, {}", user.getId(), keyword);
-        Optional<SearchHistory> searchHistory = searchHistoryRepository.findByUserIdAndHistory(user.getId(), keyword);
-        if(searchHistory.isEmpty()){
-            searchHistoryRepository.save(new SearchHistory(user, keyword));
-        }else{
-            searchHistory.get().updateTimeSearchHistory();
-        }
+        log.info("user save KeywordHistory = {}, {}", user.getId(), keyword);
+        searchHistoryRepository.save(new SearchHistory(user, keyword));
     }
 }
