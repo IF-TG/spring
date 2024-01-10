@@ -1,18 +1,14 @@
 package ifTG.travelPlan.service.user;
 
 import ifTG.travelPlan.controller.dto.RequestRenameScrapFolder;
-import ifTG.travelPlan.controller.dto.RequestScrapFolderDto;
 import ifTG.travelPlan.domain.post.PostImg;
 import ifTG.travelPlan.domain.post.PostScrap;
 import ifTG.travelPlan.domain.travel.DestinationScrap;
 import ifTG.travelPlan.dto.user.UserScrapFolderDto;
-import ifTG.travelPlan.repository.springdata.PostLikeRepository;
-import ifTG.travelPlan.repository.springdata.PostScrapRepository;
+import ifTG.travelPlan.repository.springdata.post.PostScrapRepository;
 import ifTG.travelPlan.repository.springdata.post.PostImgRepository;
 import ifTG.travelPlan.repository.springdata.travel.DestinationScrapRepository;
-import ifTG.travelPlan.service.destination.DestinationConvertDto;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
-import ifTG.travelPlan.service.post.PostConvertDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

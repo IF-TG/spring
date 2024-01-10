@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface Morpheme {
-    void settingWordMap();
+    void init();
 
     List<String> findAllNounByDestination();
 

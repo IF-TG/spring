@@ -1,5 +1,6 @@
 package ifTG.travelPlan.service.travelplan.search;
 
+import ifTG.travelPlan.exception.CustomErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -19,6 +20,7 @@ public abstract class Word2VecV2Impl implements Word2Vec{
     @Value("${nlp.word2vec.epoch}")
     private Integer epoch;
     private Integer size;
+    private boolean isReady;
 
     @Autowired
     public Word2VecV2Impl(Morpheme morpheme){
@@ -28,6 +30,7 @@ public abstract class Word2VecV2Impl implements Word2Vec{
 
     @Override
     public void initData(){
+        isReady = true;
         size = morpheme.getWordIdxMap().size();
         List<String> nounList = morpheme.findAllNounByDestination();
         initArray();
@@ -41,6 +44,7 @@ public abstract class Word2VecV2Impl implements Word2Vec{
 
     @Override
     public Map<Integer, Double> getVectorByString(String s){
+        if (!isReady)throw new RuntimeException("not ready");
         Map<Integer, Double> resultMap = new HashMap<>();
         Integer idx = morpheme.getIdx(s);
         for (int i = 0; i<DIMENSION; i++){

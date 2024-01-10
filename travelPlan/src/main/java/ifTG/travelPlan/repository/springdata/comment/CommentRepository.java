@@ -1,4 +1,4 @@
-package ifTG.travelPlan.repository.springdata.post;
+package ifTG.travelPlan.repository.springdata.comment;
 
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.comment.Comment;

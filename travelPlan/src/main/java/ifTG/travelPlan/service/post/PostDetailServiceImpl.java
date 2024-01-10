@@ -1,11 +1,9 @@
 package ifTG.travelPlan.service.post;
 
-import ifTG.travelPlan.controller.dto.RequestCommentAndImgsDto;
-import ifTG.travelPlan.controller.dto.RequestCommentByPostDto;
 import ifTG.travelPlan.domain.post.PostScrapId;
 import ifTG.travelPlan.dto.comment.CommentDtoWithUserInfo;
 import ifTG.travelPlan.dto.post.PostDetailsWithIsScraped;
-import ifTG.travelPlan.repository.springdata.PostScrapRepository;
+import ifTG.travelPlan.repository.springdata.post.PostScrapRepository;
 import ifTG.travelPlan.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

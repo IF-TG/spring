@@ -70,8 +70,11 @@ public class Post {
     private Integer commentNum;
 
     private LocalDate startDate;
+
     private LocalDate endDate;
+
     private Double mapX;
+
     private Double mapY;
 
     //양방향 매핑

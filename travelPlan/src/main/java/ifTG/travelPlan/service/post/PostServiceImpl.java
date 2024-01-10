@@ -1,17 +1,14 @@
 package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.PostDto;
-import ifTG.travelPlan.controller.dto.RequestAllUserLikeOrCommentPostDto;
-import ifTG.travelPlan.controller.dto.RequestPostListByUserIdDto;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostCategory;
 import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.user.User;
-import ifTG.travelPlan.domain.user.UserBlock;
 import ifTG.travelPlan.dto.post.*;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
 import ifTG.travelPlan.repository.querydsl.QPostListRepository;
-import ifTG.travelPlan.repository.springdata.PostLikeRepository;
+import ifTG.travelPlan.repository.springdata.post.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.post.PostCategoryRepository;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
@@ -27,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * 결합도 낮출것, 그러니까 클래스 좀 더 나누자 나중에

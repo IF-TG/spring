@@ -1,4 +1,4 @@
-package ifTG.travelPlan.repository.springdata.travel;
+package ifTG.travelPlan.repository.springdata.travel.sucategory;
 
 import ifTG.travelPlan.domain.travel.destinationdetail.Event;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -23,7 +23,7 @@ public class MorphemeImpl implements Morpheme {
     private final Map<Integer, String> wordMap = new HashMap<>();
 
     @Override
-    public void settingWordMap(){
+    public void init(){
         List<String> nounByString = findAllNounByDestination();
         int count = 0;
         for (String s : nounByString) {

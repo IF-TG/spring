@@ -1,4 +1,4 @@
-package ifTG.travelPlan.repository.springdata;
+package ifTG.travelPlan.repository.springdata.travel.sucategory;
 
 import ifTG.travelPlan.domain.travel.destinationdetail.Shopping;
 import org.springframework.data.jpa.repository.JpaRepository;

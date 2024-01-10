@@ -22,10 +22,8 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
     private final FileStore fileStore;
     @Value("${profile.path}")
     private String profilePath;
-
-    @Value("${profile.length}")
+    @Value("${profile.thumbnail.length}")
     private Integer length;
-
     @Value("${thumbnail.path}")
     private String thumbnailPath;
     @Value("${IMG_SERVER_URL}")

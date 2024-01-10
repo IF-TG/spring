@@ -1,4 +1,4 @@
-package ifTG.travelPlan.repository.springdata;
+package ifTG.travelPlan.repository.springdata.post;
 
 import ifTG.travelPlan.domain.post.PostScrap;
 import ifTG.travelPlan.domain.post.PostScrapId;
