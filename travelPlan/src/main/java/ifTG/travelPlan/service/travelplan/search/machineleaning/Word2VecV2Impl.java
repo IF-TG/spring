@@ -1,26 +1,28 @@
-package ifTG.travelPlan.service.travelplan.search;
+package ifTG.travelPlan.service.travelplan.search.machineleaning;
 
-import ifTG.travelPlan.exception.CustomErrorException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
 
+@Slf4j
 public abstract class Word2VecV2Impl implements Word2Vec{
-
+    protected double [][] inputHiddenWeight;
+    private double [][] hiddenOutputWeight;
+    private boolean isReady;
     @Value("${nlp.dimension}")
     protected Integer DIMENSION;
     @Value("${nlp.word2vec.learnRate}")
     private Double learnRate;
-    protected double [][] inputHiddenWeight;
-    private double [][] hiddenOutputWeight;
+
     protected final Morpheme morpheme;
     @Value("${nlp.window}")
     private Integer windowSize;
     @Value("${nlp.word2vec.epoch}")
     private Integer epoch;
     private Integer size;
-    private boolean isReady;
+
 
     @Autowired
     public Word2VecV2Impl(Morpheme morpheme){
@@ -32,19 +34,19 @@ public abstract class Word2VecV2Impl implements Word2Vec{
     public void initData(){
         isReady = true;
         size = morpheme.getWordIdxMap().size();
-        List<String> nounList = morpheme.findAllNounByDestination();
+        List<List<String>> nounListGroupByDestination = morpheme.findAllNounGroupByDestination();
         initArray();
         for (int i = 0; i<epoch; i++){
-            learningWeight(nounList);
-            System.out.println("w1 > " + hiddenOutputWeight[0][0]);
-            System.out.println("w2 > " + inputHiddenWeight[0][0]);
-            System.out.println("epoch > " + i);
+            nounListGroupByDestination.forEach(this::learningWeight);
+            log.info("w1 > {}", hiddenOutputWeight[0][0]);
+            log.info("w2 > {}", inputHiddenWeight[0][0]);
+            log.info("epoch > {}", i);
         }
     }
 
     @Override
     public Map<Integer, Double> getVectorByString(String s){
-        if (!isReady)throw new RuntimeException("not ready");
+        if (!isReady)throw new RuntimeException("word2vec is not ready");
         Map<Integer, Double> resultMap = new HashMap<>();
         Integer idx = morpheme.getIdx(s);
         for (int i = 0; i<DIMENSION; i++){

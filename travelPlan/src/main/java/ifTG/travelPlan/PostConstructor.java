@@ -13,6 +13,7 @@ import ifTG.travelPlan.service.destination.DestinationSaveByTourApi;
 import ifTG.travelPlan.service.destination.EDestinationSaveService;
 import ifTG.travelPlan.service.destination.SubDestinationSaveByTourApi;
 import ifTG.travelPlan.service.travelplan.search.*;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,13 +36,13 @@ public class PostConstructor {
     @Value("${api.tour.download_page}")
     private int downloadPage;
 
-    //@PostConstruct
+    @PostConstruct
     @Transactional
     public void initData() throws IOException {
-        for (int i =0; i<downloadPage; i++){
+        /*for (int i =0; i<downloadPage; i++){
             List<Destination> savedDestination = destinationSaveByTourApi.save(i);
             subDestinationSaveByTourApi.save(savedDestination);
-        }
+        }*/
         machineLeaning.init();
         saveEDestination();
     }

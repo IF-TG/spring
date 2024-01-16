@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search;
+package ifTG.travelPlan.service.travelplan.search.machineleaning;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service

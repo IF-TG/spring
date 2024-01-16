@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search;
+package ifTG.travelPlan.service.travelplan.search.machineleaning;
 
 import ifTG.travelPlan.domain.travel.Destination;
 import ifTG.travelPlan.repository.springdata.travel.DestinationRepository;
@@ -37,14 +37,21 @@ public class MorphemeImpl implements Morpheme {
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> findAllNounByDestination(){
+    public List<List<String>> findAllNounGroupByDestination(){
         List<Destination> destinationList = destinationRepository.findAll();
-        String allDestinationOverview = destinationList.stream().map(Destination::getOverview).toList().toString();
-        return  getNounByString(allDestinationOverview);
+        List<String> allDestinationOverviewByOverView = destinationList.stream().map(Destination::getOverview).toList();
+        return allDestinationOverviewByOverView.stream().map(this::getNounByString).toList();
+    }
+
+    private List<String> findAllNounByDestination(){
+        List<Destination> destinationList = destinationRepository.findAll();
+        String allDestinationOverViewByOverView = destinationList.stream().map(Destination::getOverview).toList().toString();
+        return getNounByString(allDestinationOverViewByOverView);
     }
 
     @Override
     public List<String> getNounByString(String s) {
+        System.out.println("MorphemeImpl.getNounByString");
         Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
         KomoranResult komoranResult = komoran.analyze(s);
         List<Token> tokenList = komoranResult.getTokenList();

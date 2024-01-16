@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search;
+package ifTG.travelPlan.service.travelplan.search.machineleaning;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

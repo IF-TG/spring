@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search;
+package ifTG.travelPlan.service.travelplan.search.machineleaning;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

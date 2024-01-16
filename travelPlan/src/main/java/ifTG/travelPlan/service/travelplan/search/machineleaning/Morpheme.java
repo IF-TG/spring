@@ -1,4 +1,6 @@
-package ifTG.travelPlan.service.travelplan.search;
+package ifTG.travelPlan.service.travelplan.search.machineleaning;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +8,9 @@ import java.util.Map;
 public interface Morpheme {
     void init();
 
-    List<String> findAllNounByDestination();
+    @Transactional(readOnly = true)
+    List<List<String>> findAllNounGroupByDestination();
+
 
     List<String> getNounByString(String s);
 
