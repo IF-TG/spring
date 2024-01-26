@@ -56,6 +56,9 @@ public abstract class Word2VecV2Impl implements Word2Vec{
     }
 
 
+    /**
+     * 공사중
+     */
     private void learningWeight(List<String> nounList) {
         for (int i = 0; i< nounList.size()-windowSize; i++){
             int startWindow = Math.max(0, i-windowSize);
@@ -75,6 +78,9 @@ public abstract class Word2VecV2Impl implements Word2Vec{
         }
     }
 
+    /**
+     * 공사중
+     */
     private double[] forwardPass(int oneHotInput) {
         double[] result = new double[size];
         for (int i =0; i<DIMENSION; i++){
@@ -84,6 +90,10 @@ public abstract class Word2VecV2Impl implements Word2Vec{
         }
         return result;
     }
+
+    /**
+     * 공사중
+     */
     public double[] forwardPassWithSoftmax(int oneHotInput){
         double[] result = forwardPass(oneHotInput);
         double[] softmax = new double[result.length];
@@ -103,6 +113,9 @@ public abstract class Word2VecV2Impl implements Word2Vec{
         return softmax;
     }
 
+    /**
+     * 공사중
+     */
     private void learn(double[] result, int oneHotInput, int oneHotOutput) {
         double[] delta = new double[size];
         for (int i =0; i<size; i++){
@@ -121,8 +134,6 @@ public abstract class Word2VecV2Impl implements Word2Vec{
             inputHiddenWeight[i][oneHotInput] -= learnRate*hiddenDelta;
         }
     }
-
-
 
     private void initArray() {
         inputHiddenWeight = new double[DIMENSION][morpheme.getWordIdxMap().size()];

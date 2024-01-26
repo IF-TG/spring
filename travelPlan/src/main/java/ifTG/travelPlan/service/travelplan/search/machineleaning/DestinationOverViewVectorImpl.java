@@ -6,11 +6,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/*@Service
+@Service
 @Slf4j
-@Deprecated*/
-/*
+@Deprecated
 public class Word2VecImpl implements Word2Vec{
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public Map<Integer, Double> getVectorByString(String s) {
+        return null;
+    }
+
+    /*@Override
+    public Map<Integer, Double> getVectorByString(String s) {
+        return null;
+    }
     private final int DIMENSION = 100;
     private final double learnRate = 0.005;
     private double [][] inputHiddenWeight;
@@ -24,31 +37,6 @@ public class Word2VecImpl implements Word2Vec{
         this.morpheme = morpheme;
     }
 
-
-    @Override
-    public void initData(){
-        List<String> nounList = morpheme.findAllNounByDestination();
-        int count = 0;
-        for (String s : nounList) {
-            if (!wordIdxMap.containsKey(s)) {
-                wordIdxMap.put(s, count);
-                count++;
-            }
-        }
-        initArray();
-        double  e=1;
-        for (int i = 0; i<epoch; i++){
-            learningWeight(nounList);
-            System.out.println("w1 > " + hiddenOutputWeight[0][0]);
-            System.out.println("w2 > " + inputHiddenWeight[0][0]);
-            System.out.println("epoch > " + i);
-            if (i%10==0){
-                double e2 = Arrays.stream(forwardPass(0)).sum();
-                if (Math.abs(e2-e)<0.0001)break;
-                e = e2;
-            }
-        }
-    }
 
     private void learningWeight(List<String> nounList) {
         for (int i = 0; i< nounList.size()-windowSize; i++){
@@ -132,6 +120,5 @@ public class Word2VecImpl implements Word2Vec{
             softmax[i] = Math.exp(result[i]-max)/tmp;
         }
         return softmax;
-    }
+    }*/
 }
-*/
