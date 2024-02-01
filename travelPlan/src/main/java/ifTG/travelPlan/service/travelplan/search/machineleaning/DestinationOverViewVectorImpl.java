@@ -1,7 +1,6 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -9,7 +8,7 @@ import java.util.*;
 @Service
 @Slf4j
 @Deprecated
-public class Word2VecImpl implements Word2Vec{
+public class DestinationOverViewVectorImpl implements DestinationOverViewVector{
     @Override
     public void initData() {
 

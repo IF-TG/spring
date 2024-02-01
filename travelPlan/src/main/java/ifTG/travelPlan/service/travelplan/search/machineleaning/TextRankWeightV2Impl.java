@@ -1,5 +1,7 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning;
 
+import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtractor;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -8,11 +10,10 @@ import org.springframework.stereotype.Service;
 @Service("TextRankWeightV2Impl")
 @Primary
 @Slf4j
-public class TextRankWeightV22ImplVec extends Word2VecV2Impl implements TextRankWeight{
-
+public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements TextRankWeight{
     @Autowired
-    public TextRankWeightV22ImplVec(Morpheme morpheme) {
-        super(morpheme);
+    public TextRankWeightV2Impl(DestinationOverviewNounExtractor de, EmbeddingModel em, Morpheme morpheme) {
+        super(de, em, morpheme);
     }
 
     /**
@@ -25,7 +26,7 @@ public class TextRankWeightV22ImplVec extends Word2VecV2Impl implements TextRank
         double dotProduct = 0.0;
         double normA = 0.0;
         double normB = 0.0;
-        for (int i = 0; i<DIMENSION; i++){
+        for (int i = 0; i< dimension; i++){
             dotProduct += inputHiddenWeight[i][idxA]*inputHiddenWeight[i][idxB];
             normA += inputHiddenWeight[i][idxA]*inputHiddenWeight[i][idxA];
             normB += inputHiddenWeight[i][idxB]*inputHiddenWeight[i][idxB];

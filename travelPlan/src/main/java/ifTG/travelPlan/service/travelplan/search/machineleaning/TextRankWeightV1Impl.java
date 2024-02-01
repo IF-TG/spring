@@ -1,17 +1,22 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning;
 
+import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtractor;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * 더 이상 쓰지 않음
+ */
 @Service
-
+@Deprecated
 @Slf4j
-public class TextVecRankWeight2Impl extends DestinationOverViewVectorV2 implements TextRankWeight{
+public class TextRankWeightV1Impl extends DestinationOverViewVectorV2 implements TextRankWeight{
+
     @Autowired
-    public TextVecRankWeight2Impl(Morpheme morpheme) {
-        super(morpheme);
+    public TextRankWeightV1Impl(DestinationOverviewNounExtractor de, EmbeddingModel em, Morpheme morpheme) {
+        super(de, em, morpheme);
     }
 
     @Override

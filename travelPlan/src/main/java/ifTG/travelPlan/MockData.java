@@ -12,12 +12,14 @@ import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 
 
 @Transactional
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class MockData {

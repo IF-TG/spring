@@ -3,9 +3,9 @@ package ifTG.travelPlan.service.destination;
 import ifTG.travelPlan.domain.travel.Destination;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.elasticsearch.repository.EDestinationRepository;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.DestinationOverViewVectorV2;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.TextRank;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.VectorAverage;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.Word2Vec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class EDestinationSaveServiceImpl implements EDestinationSaveService{
     private final EDestinationRepository eDestinationRepository;
     private final TextRank textRank;
     private final VectorAverage vectorAverage;
-    private final Word2Vec word2Vec;
+    private final DestinationOverViewVectorV2 word2Vec;
 
     @Override
     public void saveEDestination(List<Destination> destinationList) {

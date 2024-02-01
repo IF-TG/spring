@@ -223,7 +223,6 @@ public class TourApiImpl implements TourApi{
         String url = basedURL + areaBasedSynList;
         UriComponents builder = getUriComponentToTourApi(UriComponentsBuilder.fromUriString(url), page)
                 .queryParam("showflag", 1)
-                //.queryParam("contentTypeId", ContentType.Cultural_Facility.getValue())
                 .build(true);
         log.info("tour api url = {}", builder.toUriString());
 
