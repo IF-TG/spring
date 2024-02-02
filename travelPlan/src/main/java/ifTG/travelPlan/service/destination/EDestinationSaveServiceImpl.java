@@ -5,7 +5,7 @@ import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.elasticsearch.repository.EDestinationRepository;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.TextRank;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.VectorAverage;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.Word2Vec;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.DestinationOverViewVector;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class EDestinationSaveServiceImpl implements EDestinationSaveService{
     private final EDestinationRepository eDestinationRepository;
     private final TextRank textRank;
     private final VectorAverage vectorAverage;
-    private final Word2Vec word2Vec;
+    private final DestinationOverViewVector destinationOverViewVector;
 
     @Override
     public void saveEDestination(List<Destination> destinationList) {
@@ -27,7 +27,7 @@ public class EDestinationSaveServiceImpl implements EDestinationSaveService{
             List<String> keywordList = textRank.textRank(d.getOverview());
             double[] vectorAverageArray = null;
             if (keywordList.size()==10){
-                vectorAverageArray = vectorAverage.getVectorAverage(keywordList.stream().map(word2Vec::getVectorByString).toList());
+                vectorAverageArray = vectorAverage.getVectorAverage(keywordList.stream().map(destinationOverViewVector::getVectorByString).toList());
             }
 
             EDestination eDestination = getEDestination(d, keywordList, vectorAverageArray);

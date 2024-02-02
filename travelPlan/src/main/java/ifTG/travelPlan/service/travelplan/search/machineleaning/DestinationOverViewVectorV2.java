@@ -3,11 +3,13 @@ package ifTG.travelPlan.service.travelplan.search.machineleaning;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Slf4j
-public abstract class Word2VecV2Impl implements Word2Vec{
+@Service
+public abstract class DestinationOverViewVectorV2 implements DestinationOverViewVector {
     protected double [][] inputHiddenWeight;
     private double [][] hiddenOutputWeight;
     private boolean isReady;
@@ -15,7 +17,6 @@ public abstract class Word2VecV2Impl implements Word2Vec{
     protected Integer DIMENSION;
     @Value("${nlp.word2vec.learnRate}")
     private Double learnRate;
-
     protected final Morpheme morpheme;
     @Value("${nlp.window}")
     private Integer windowSize;
@@ -25,7 +26,7 @@ public abstract class Word2VecV2Impl implements Word2Vec{
 
 
     @Autowired
-    public Word2VecV2Impl(Morpheme morpheme){
+    public DestinationOverViewVectorV2(Morpheme morpheme){
         this.morpheme = morpheme;
     }
 

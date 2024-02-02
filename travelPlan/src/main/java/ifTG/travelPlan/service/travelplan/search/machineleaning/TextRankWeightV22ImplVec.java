@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service("TextRankWeightV2Impl")
 @Primary
 @Slf4j
-public class TextRankWeightV22ImplVec extends Word2VecV2Impl implements TextRankWeight{
+public class TextRankWeightV22ImplVec extends DestinationOverViewVectorV2 implements TextRankWeight{
 
     @Autowired
     public TextRankWeightV22ImplVec(Morpheme morpheme) {

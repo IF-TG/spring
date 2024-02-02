@@ -43,20 +43,19 @@ public class EDestinationCustomRepository {
     private static Query getUserKeywordQuery(String userKeyword) {
         return NativeQuery.builder()
                           .withQuery(
-                                  q-> q.multiMatch(MultiMatchQuery.of(builder->
-                                                  builder
-                                                          .query(userKeyword)
-                                                          .fields("title^2", "info", "blind_info", "address", "keywordList")
-                                                          .boost(1.5f)
-                                                          .operator(Operator.Or)
-                                                          .type(TextQueryType.MostFields)
-                                                   ))
+                                  q-> q.multiMatch(
+                                          builder-> builder
+                                                  .query(userKeyword)
+                                                  .fields("title^2", "info", "blind_info", "address", "keywordList")
+                                                  .boost(1.5f)
+                                                  .operator(Operator.Or)
+                                                  .type(TextQueryType.MostFields)
+                                  )
                                            ).getQuery();
     }
     private static List<Query> getGptKeywordQuery(List<String> gptKeywordList) {
         return gptKeywordList.stream().map(
-                keyword->
-                        NativeQuery.builder().withQuery(
+                keyword-> NativeQuery.builder().withQuery(
                                 p->p.match(builder ->
                                         builder
                                                 .field("keywordList")
