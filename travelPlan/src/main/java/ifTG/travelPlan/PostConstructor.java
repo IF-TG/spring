@@ -1,21 +1,11 @@
 package ifTG.travelPlan;
 
 import ifTG.travelPlan.domain.travel.Destination;
-import ifTG.travelPlan.elasticsearch.domain.EDestination;
-import ifTG.travelPlan.elasticsearch.repository.EDestinationRepository;
-import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.travel.DestinationRepository;
-import ifTG.travelPlan.repository.springdata.travel.sucategory.*;
-import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
-import ifTG.travelPlan.repository.springdata.user.UserRepository;
-import ifTG.travelPlan.service.api.TourApi;
-import ifTG.travelPlan.service.api.TourApiDetailIntro;
 import ifTG.travelPlan.service.destination.DestinationSaveByTourApi;
-import ifTG.travelPlan.service.destination.DestinationVectorService;
 import ifTG.travelPlan.service.destination.EDestinationSaveService;
 import ifTG.travelPlan.service.destination.SubDestinationSaveByTourApi;
-import ifTG.travelPlan.service.travelplan.search.*;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.DestinationOverViewVector;
+import ifTG.travelPlan.service.travelplan.search.MachineLeaning;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.TextRankWeight;
 import jakarta.annotation.PostConstruct;
@@ -52,7 +42,6 @@ public class PostConstructor {
 //        }
         /*
         saveEDestination();*/
-
         machineLeaning.init();
         morpheme.getWordMap().values().forEach(System.out::println);
         System.out.println("높 > " + textRankWeight.getScore("에스프레소", "카페라떼"));

@@ -7,6 +7,7 @@ import java.util.List;
 
 
 @Getter
+@Builder
 public class LearningBuilder{
     private int epoch;
     private List<List<String>> documentWordList;

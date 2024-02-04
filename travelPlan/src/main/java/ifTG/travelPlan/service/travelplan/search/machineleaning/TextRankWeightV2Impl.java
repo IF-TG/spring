@@ -10,12 +10,7 @@ import org.springframework.stereotype.Service;
 @Service("TextRankWeightV2Impl")
 @Primary
 @Slf4j
-<<<<<<< HEAD:travelPlan/src/main/java/ifTG/travelPlan/service/travelplan/search/machineleaning/TextRankWeightV22ImplVec.java
-public class TextRankWeightV22ImplVec extends DestinationOverViewVectorV2 implements TextRankWeight{
-
-=======
 public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements TextRankWeight{
->>>>>>> d44af60ff76f20667a6a68c636650c12d1b637a9:travelPlan/src/main/java/ifTG/travelPlan/service/travelplan/search/machineleaning/TextRankWeightV2Impl.java
     @Autowired
     public TextRankWeightV2Impl(DestinationOverviewNounExtractor de, EmbeddingModel em, Morpheme morpheme) {
         super(de, em, morpheme);

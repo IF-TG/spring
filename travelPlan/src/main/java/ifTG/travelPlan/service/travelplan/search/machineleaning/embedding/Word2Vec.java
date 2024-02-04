@@ -56,6 +56,7 @@ public class Word2Vec implements EmbeddingModel {
     }
 
     private void learnByBackpropagation(LearningBuilder builder, int oneHotInput, int oneHotOutput, double[] result) {
+
         backpropagation.learnForOneHotEncoding(
                 builder.getWeightBuilder().inputHiddenWeight,
                 builder.getWeightBuilder().hiddenOutputWeight,
@@ -64,6 +65,7 @@ public class Word2Vec implements EmbeddingModel {
                 oneHotInput,
                 oneHotOutput
         );
+
     }
 
     private void validWeightBuilder(LearningBuilder builder) {
@@ -102,8 +104,4 @@ public class Word2Vec implements EmbeddingModel {
         return array;
     }
 
-    @Override
-    public void embedding(LearningBuilder builder) {
-        
-    }
 }

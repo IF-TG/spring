@@ -1,10 +1,12 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.bp;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Component
+@Slf4j
 public class BackpropagationImpl implements Backpropagation{
     @Override
     public double[] forwardPassWithSoftmaxForOneHotEncoding(double[][] inputHiddenWeight, double[][] hiddenOutputWeight, int oneHotInput) {

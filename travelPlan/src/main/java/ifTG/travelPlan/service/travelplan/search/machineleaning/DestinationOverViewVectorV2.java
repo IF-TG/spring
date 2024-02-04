@@ -12,15 +12,11 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Slf4j
-<<<<<<< HEAD
-@Service
+
 public abstract class DestinationOverViewVectorV2 implements DestinationOverViewVector {
-=======
-public abstract class DestinationOverViewVectorV2 implements DestinationOverViewVector{
     private final EmbeddingModel em;
     protected final Morpheme morpheme;
     private final DestinationOverviewNounExtractor de;
->>>>>>> d44af60ff76f20667a6a68c636650c12d1b637a9
     protected double [][] inputHiddenWeight;
     private double [][] hiddenOutputWeight;
     private boolean isReady;
@@ -29,10 +25,6 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
     protected Integer dimension;
     @Value("${nlp.word2vec.learnRate}")
     private Double learnRate;
-<<<<<<< HEAD
-    protected final Morpheme morpheme;
-=======
->>>>>>> d44af60ff76f20667a6a68c636650c12d1b637a9
     @Value("${nlp.window}")
     private Integer windowSize;
     @Value("${nlp.word2vec.epoch}")
@@ -40,13 +32,9 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
 
 
     @Autowired
-<<<<<<< HEAD
-    public DestinationOverViewVectorV2(Morpheme morpheme){
-=======
     public DestinationOverViewVectorV2(DestinationOverviewNounExtractor de, EmbeddingModel em, Morpheme morpheme){
         this.de = de;
         this.em = em;
->>>>>>> d44af60ff76f20667a6a68c636650c12d1b637a9
         this.morpheme = morpheme;
     }
 
