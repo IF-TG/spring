@@ -3,9 +3,13 @@ package ifTG.travelPlan.service.destination;
 import ifTG.travelPlan.domain.travel.Destination;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.elasticsearch.repository.EDestinationRepository;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.DestinationOverViewVectorV2;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.TextRank;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.VectorAverage;
+<<<<<<< HEAD
 import ifTG.travelPlan.service.travelplan.search.machineleaning.DestinationOverViewVector;
+=======
+>>>>>>> d44af60ff76f20667a6a68c636650c12d1b637a9
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +23,11 @@ public class EDestinationSaveServiceImpl implements EDestinationSaveService{
     private final EDestinationRepository eDestinationRepository;
     private final TextRank textRank;
     private final VectorAverage vectorAverage;
+<<<<<<< HEAD
     private final DestinationOverViewVector destinationOverViewVector;
+=======
+    private final DestinationOverViewVectorV2 word2Vec;
+>>>>>>> d44af60ff76f20667a6a68c636650c12d1b637a9
 
     @Override
     public void saveEDestination(List<Destination> destinationList) {

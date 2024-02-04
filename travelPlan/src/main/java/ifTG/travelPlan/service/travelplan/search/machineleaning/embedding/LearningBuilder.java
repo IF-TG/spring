@@ -1,14 +1,21 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding;
 
 import lombok.Builder;
+import lombok.Getter;
 
-@Builder
-public class LearningBuilder {
+import java.util.List;
+
+
+@Getter
+public class LearningBuilder{
     private int epoch;
-    private double[][] inputHiddenWeight;
-    private double[][][] hiddenWeight;
-    private double[][] hiddenOutputWeight;
+    private List<List<String>> documentWordList;
+    private WeightBuilder weightBuilder;
+    private int dimension;
     private Double learnRate;
     private Integer window;
 
+    public void setWeightBuilder(WeightBuilder weightBuilder){
+        this.weightBuilder = weightBuilder;
+    }
 }

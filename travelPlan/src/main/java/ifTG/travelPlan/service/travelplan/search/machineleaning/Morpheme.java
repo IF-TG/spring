@@ -8,9 +8,6 @@ import java.util.Map;
 public interface Morpheme {
     void init();
 
-    @Transactional(readOnly = true)
-    List<List<String>> findAllNounGroupByDestination();
-
 
     List<String> getNounByString(String s);
 

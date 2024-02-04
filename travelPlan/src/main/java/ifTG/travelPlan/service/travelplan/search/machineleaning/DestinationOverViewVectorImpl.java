@@ -8,7 +8,11 @@ import java.util.*;
 @Service
 @Slf4j
 @Deprecated
+<<<<<<< HEAD
 public class DestinationOverViewVectorImpl implements DestinationOverViewVector {
+=======
+public class DestinationOverViewVectorImpl implements DestinationOverViewVector{
+>>>>>>> d44af60ff76f20667a6a68c636650c12d1b637a9
     @Override
     public void initData() {
 
