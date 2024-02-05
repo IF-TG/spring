@@ -1,6 +1,6 @@
 package ifTG.travelPlan.service.travelplan.search;
 
-import ifTG.travelPlan.service.travelplan.search.machineleaning.VectorAverage;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.vector.VectorAverage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

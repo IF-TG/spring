@@ -1,7 +1,7 @@
 package ifTG.travelPlan.service.travelplan.search;
 
-import ifTG.travelPlan.service.travelplan.search.machineleaning.DestinationOverViewVector;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.Morpheme;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.DestinationOverViewVector;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

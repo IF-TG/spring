@@ -1,5 +1,6 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector;
 
+import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

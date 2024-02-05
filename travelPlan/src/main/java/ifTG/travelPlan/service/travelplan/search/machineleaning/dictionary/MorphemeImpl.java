@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary;
 
 import ifTG.travelPlan.domain.travel.Destination;
 import ifTG.travelPlan.repository.springdata.travel.DestinationRepository;
@@ -9,7 +9,6 @@ import kr.co.shineware.nlp.komoran.model.KomoranResult;
 import kr.co.shineware.nlp.komoran.model.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;

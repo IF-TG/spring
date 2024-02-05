@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector;
 
 import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtractor;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service("TextRankWeightV2Impl")
 @Primary
 @Slf4j
-public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements TextRankWeight{
+public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements TextRankWeight {
     @Autowired
-    public TextRankWeightV2Impl(DestinationOverviewNounExtractor de, EmbeddingModel em, Morpheme morpheme) {
-        super(de, em, morpheme);
+    public TextRankWeightV2Impl(DestinationOverviewNounExtractor de, EmbeddingModel em) {
+        super(de, em);
     }
 
     /**
@@ -21,8 +21,8 @@ public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements
      */
     @Override
     public double getScore(String s1, String s2){
-        int idxA = morpheme.getIdx(s1);
-        int idxB = morpheme.getIdx(s2);
+        int idxA = de.getIdx(s1);
+        int idxB = de.getIdx(s2);
         double dotProduct = 0.0;
         double normA = 0.0;
         double normB = 0.0;

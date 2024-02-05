@@ -1,7 +1,9 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.word2vec;
 
-import ifTG.travelPlan.service.travelplan.search.machineleaning.Morpheme;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.Backpropagation;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,10 +11,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Random;
 
-@Component
+@Component("skipGram")
 @Slf4j
 @RequiredArgsConstructor
-public class Word2Vec implements EmbeddingModel {
+public class SkipGram implements Word2Vec {
     private final Morpheme morpheme;
     private final Backpropagation backpropagation;
 
@@ -28,8 +30,8 @@ public class Word2Vec implements EmbeddingModel {
     @Override
     public double[] forwardPassWithSoftmax(WeightBuilder weightBuilder, int oneHotInput) {
         return backpropagation.forwardPassWithSoftmaxForOneHotEncoding(
-                weightBuilder.inputHiddenWeight,
-                weightBuilder.hiddenOutputWeight,
+                weightBuilder.getInputHiddenWeight(),
+                weightBuilder.getHiddenOutputWeight(),
                 oneHotInput
         );
     }
@@ -43,22 +45,26 @@ public class Word2Vec implements EmbeddingModel {
 
     private void initIdxAndBackpropagation(LearningBuilder builder, List<String> wordByDocument) {
         for (int windowIdx = 0; windowIdx< wordByDocument.size(); windowIdx++){
+            int oneHotInput = getOneHotIdx(wordByDocument.get(windowIdx));
             int startWindow = Math.max(0, windowIdx- builder.getWindow());
             int endWindow = Math.min(wordByDocument.size(), windowIdx+ builder.getWindow()+1);
-            int oneHotInput = morpheme.getIdx(wordByDocument.get(windowIdx));
             for (int k = startWindow; k< endWindow; k++){
                 if (k == windowIdx) continue;
-                int oneHotOutput = morpheme.getIdx(wordByDocument.get(k));
+                int oneHotOutput = getOneHotIdx(wordByDocument.get(k));
                 double[] result = forwardPassWithSoftmax(builder.getWeightBuilder(), oneHotInput);
                 learnByBackpropagation(builder, oneHotInput, oneHotOutput, result);
             }
         }
     }
 
+    private int getOneHotIdx(String s) {
+        return morpheme.getIdx(s);
+    }
+
     private void learnByBackpropagation(LearningBuilder builder, int oneHotInput, int oneHotOutput, double[] result) {
         backpropagation.learnForOneHotEncoding(
-                builder.getWeightBuilder().inputHiddenWeight,
-                builder.getWeightBuilder().hiddenOutputWeight,
+                builder.getWeightBuilder().getInputHiddenWeight(),
+                builder.getWeightBuilder().getHiddenOutputWeight(),
                 builder.getLearnRate(),
                 result,
                 oneHotInput,
@@ -66,7 +72,7 @@ public class Word2Vec implements EmbeddingModel {
         );
     }
 
-    private void validWeightBuilder(LearningBuilder builder) {
+    public void validWeightBuilder(LearningBuilder builder) {
         if (builder.getWeightBuilder()==null){
             initWeightBuilder(builder);
         }else{

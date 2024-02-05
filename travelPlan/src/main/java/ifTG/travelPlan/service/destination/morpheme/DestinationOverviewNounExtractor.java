@@ -9,4 +9,5 @@ public interface DestinationOverviewNounExtractor {
     @Transactional(readOnly = true)
     List<List<String>> findAllNounGroupByDestination();
 
+    Integer getIdx(String s);
 }

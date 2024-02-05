@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary;
 
 import org.springframework.transaction.annotation.Transactional;
 
