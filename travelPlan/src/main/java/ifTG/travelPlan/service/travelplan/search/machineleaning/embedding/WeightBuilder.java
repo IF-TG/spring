@@ -8,5 +8,5 @@ import lombok.Data;
 public class WeightBuilder {
     double[][] inputHiddenWeight;
     double[][] hiddenOutputWeight;
-    double[][] hiddenWeight;
+    double[][][] hiddenWeight;
 }

@@ -5,9 +5,10 @@ import ifTG.travelPlan.repository.springdata.travel.DestinationRepository;
 import ifTG.travelPlan.service.destination.DestinationSaveByTourApi;
 import ifTG.travelPlan.service.destination.EDestinationSaveService;
 import ifTG.travelPlan.service.destination.SubDestinationSaveByTourApi;
-import ifTG.travelPlan.service.travelplan.search.*;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
+import ifTG.travelPlan.service.travelplan.search.MachineLeaning;
+
 import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.TextRankWeight;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,6 @@ public class PostConstructor {
 //        }
         /*
         saveEDestination();*/
-
         machineLeaning.init();
     }
 

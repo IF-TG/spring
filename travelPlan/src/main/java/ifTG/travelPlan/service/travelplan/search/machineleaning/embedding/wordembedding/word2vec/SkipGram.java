@@ -62,6 +62,7 @@ public class SkipGram implements Word2Vec {
     }
 
     private void learnByBackpropagation(LearningBuilder builder, int oneHotInput, int oneHotOutput, double[] result) {
+
         backpropagation.learnForOneHotEncoding(
                 builder.getWeightBuilder().getInputHiddenWeight(),
                 builder.getWeightBuilder().getHiddenOutputWeight(),
@@ -70,6 +71,7 @@ public class SkipGram implements Word2Vec {
                 oneHotInput,
                 oneHotOutput
         );
+
     }
 
     public void validWeightBuilder(LearningBuilder builder) {

@@ -21,7 +21,7 @@ public class DestinationVectorImpl implements DestinationVector{
         mapping = new HashMap<>();
     }
 
-    public init
+
 
 
 }
