@@ -1,15 +1,15 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.word2vec;
 
-import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.Backpropagation;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.util.InitArray;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Random;
 
 @Component("skipGram")
 @Slf4j
@@ -17,6 +17,7 @@ import java.util.Random;
 public class SkipGram implements Word2Vec {
     private final Morpheme morpheme;
     private final Backpropagation backpropagation;
+    private final InitArray initArray;
 
     @Override
     public WeightBuilder learningWeight(LearningBuilder builder) {
@@ -89,8 +90,8 @@ public class SkipGram implements Word2Vec {
         builder.setWeightBuilder(weightBuilder);
     }
     private WeightBuilder initParameter(LearningBuilder builder) {
-        double[][] inputHiddenWeight = initArrayToRandom(builder.getDimension(), morpheme.getWordIdxMap().size());
-        double[][] hiddenOutputWeight = initArrayToRandom(builder.getDimension(), morpheme.getWordIdxMap().size());
+        double[][] inputHiddenWeight = initArray.initArrayToRandom(morpheme.getWordIdxMap().size(), builder.getDimension());
+        double[][] hiddenOutputWeight = initArray.initArrayToRandom(builder.getDimension(), morpheme.getWordIdxMap().size());
         return WeightBuilder
                 .builder()
                 .inputHiddenWeight(inputHiddenWeight)
@@ -98,16 +99,5 @@ public class SkipGram implements Word2Vec {
                 .build();
     }
 
-
-    private double[][] initArrayToRandom(int row, int col) {
-        double[][] array = new double[row][col];
-        Random random  = new Random();
-        for (int i = 0; i<array.length; i++){
-            for (int j = 0; j<array[i].length; j++){
-                array[i][j] = -0.5 + random.nextDouble();
-            }
-        }
-        return array;
-    }
 
 }

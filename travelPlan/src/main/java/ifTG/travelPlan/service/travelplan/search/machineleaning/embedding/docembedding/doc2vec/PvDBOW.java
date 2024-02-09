@@ -5,6 +5,7 @@ import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morph
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.word2vec.Word2Vec;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.util.InitArray;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -21,6 +22,7 @@ public class PvDBOW implements Doc2Vec {
     private final Backpropagation bp;
     private final Word2Vec word2Vec;
     private final Morpheme morpheme;
+    private final InitArray initArray;
 
     @Override
     public WeightBuilder learningWeight(LearningBuilder builder) {
@@ -70,8 +72,8 @@ public class PvDBOW implements Doc2Vec {
         builder.setWeightBuilder(weightBuilder);
     }
     private WeightBuilder initParameter(LearningBuilder builder) {
-        double[][] inputHiddenWeight = initArrayToRandom(builder.getDimension(), builder.getDocumentWordList().size());
-        double[][] hiddenOutputWeight = initArrayToRandom(builder.getDimension(), morpheme.getWordIdxMap().size());
+        double[][] inputHiddenWeight = initArray.initArrayToRandom(builder.getDimension(), builder.getDocumentWordList().size());
+        double[][] hiddenOutputWeight = initArray.initArrayToRandom(builder.getDimension(), morpheme.getWordIdxMap().size());
         return WeightBuilder
                 .builder()
                 .inputHiddenWeight(inputHiddenWeight)
@@ -80,14 +82,5 @@ public class PvDBOW implements Doc2Vec {
     }
 
 
-    private double[][] initArrayToRandom(int row, int col) {
-        double[][] array = new double[row][col];
-        Random random  = new Random();
-        for (int i = 0; i<array.length; i++){
-            for (int j = 0; j<array[i].length; j++){
-                array[i][j] = -0.5 + random.nextDouble();
-            }
-        }
-        return array;
-    }
+
 }

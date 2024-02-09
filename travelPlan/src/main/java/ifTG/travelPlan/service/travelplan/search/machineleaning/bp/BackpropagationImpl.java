@@ -10,16 +10,17 @@ import org.springframework.stereotype.Service;
 public class BackpropagationImpl implements Backpropagation{
     @Override
     public double[] forwardPassWithSoftmaxForOneHotEncoding(double[][] inputHiddenWeight, double[][] hiddenOutputWeight, int oneHotInput) {
-        double[] result = forwardPass(inputHiddenWeight, hiddenOutputWeight, oneHotInput);
+        double[] result = forwardPassForOneHotEncoding(inputHiddenWeight, hiddenOutputWeight, oneHotInput);
         return softmax(result);
     }
 
-    private static double[] forwardPass(double[][] inputHiddenWeight, double[][] hiddenOutputWeight, int oneHotInput) {
+    private static double[] forwardPassForOneHotEncoding(double[][] inputHiddenWeight, double[][] hiddenOutputWeight, int oneHotInput) {
         int size = hiddenOutputWeight[0].length;
+        int dimension = inputHiddenWeight[0].length;
         double[] result = new double[size];
-        for (int i = 0; i< inputHiddenWeight.length; i++){
+        for (int i = 0; i<dimension; i++){
             for (int j = 0; j<size; j++){
-                result[j] += inputHiddenWeight[i][oneHotInput]* hiddenOutputWeight[i][j];
+                result[j] += inputHiddenWeight[oneHotInput][i]* hiddenOutputWeight[i][j];
             }
         }
         return result;
@@ -69,13 +70,13 @@ public class BackpropagationImpl implements Backpropagation{
                 delta[i] = result[i];
             }
         }
-        for (int i =0; i<inputHiddenWeight.length; i++){
+        for (int i =0; i<inputHiddenWeight[0].length; i++){
             double hiddenDelta = 0;
             for (int j =0; j<result.length; j++){
-                hiddenOutputWeight[i][j]-=learnRate*inputHiddenWeight[i][oneHotInput]*delta[j];
+                hiddenOutputWeight[i][j]-=learnRate*inputHiddenWeight[oneHotInput][i]*delta[j];
                 hiddenDelta += hiddenOutputWeight[i][j]*delta[j];
             }
-            inputHiddenWeight[i][oneHotInput] -= learnRate*hiddenDelta;
+            inputHiddenWeight[oneHotInput][i] -= learnRate*hiddenDelta;
         }
     }
 }

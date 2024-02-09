@@ -15,8 +15,13 @@ public class DestinationOverViewVectorImpl implements DestinationOverViewVector{
     }
 
     @Override
-    public Map<Integer, Double> getVectorByString(String s) {
+    public Map<Integer, Double> getVectorMapByString(String s) {
         return null;
+    }
+
+    @Override
+    public double[] getVectorByString(String s) {
+        return new double[0];
     }
 
     /*@Override

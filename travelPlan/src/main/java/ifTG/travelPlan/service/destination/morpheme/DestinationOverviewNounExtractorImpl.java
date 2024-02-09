@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,18 @@ public class DestinationOverviewNounExtractorImpl implements DestinationOverview
         List<Destination> destinationList = destinationRepository.findAll();
         List<String> allDestinationOverviewByOverView = destinationList.stream().map(Destination::getOverview).toList();
         return allDestinationOverviewByOverView.stream().map(morpheme::getNounByString).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Long, List<String>> findAllNounMappingByDestination(){
+        List<Destination> destinationList = destinationRepository.findAll();
+        Map<Long, List<String>> resultMapping = new HashMap<>();
+        destinationList.forEach(d->{
+            List<String> nounList = morpheme.getNounByString(d.getOverview());
+            if (nounList.size()>=10) resultMapping.put(d.getId(), nounList);
+        });
+        return resultMapping;
     }
 
     @Override
