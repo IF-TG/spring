@@ -17,7 +17,6 @@ import java.util.List;
 public class SkipGram implements Word2Vec {
     private final Morpheme morpheme;
     private final Backpropagation backpropagation;
-    private final InitArray initArray;
 
     @Override
     public WeightBuilder learningWeight(LearningBuilder builder) {
@@ -64,7 +63,7 @@ public class SkipGram implements Word2Vec {
 
     private void learnByBackpropagation(LearningBuilder builder, int oneHotInput, int oneHotOutput, double[] result) {
 
-        backpropagation.learnForOneHotEncoding(
+        backpropagation.learnForOneHotEncodingForSoftmax(
                 builder.getWeightBuilder().getInputHiddenWeight(),
                 builder.getWeightBuilder().getHiddenOutputWeight(),
                 builder.getLearnRate(),
@@ -90,8 +89,8 @@ public class SkipGram implements Word2Vec {
         builder.setWeightBuilder(weightBuilder);
     }
     private WeightBuilder initParameter(LearningBuilder builder) {
-        double[][] inputHiddenWeight = initArray.initArrayToRandom(morpheme.getWordIdxMap().size(), builder.getDimension());
-        double[][] hiddenOutputWeight = initArray.initArrayToRandom(builder.getDimension(), morpheme.getWordIdxMap().size());
+        double[][] inputHiddenWeight = InitArray.initArrayToRandom(morpheme.getWordIdxMap().size(), builder.getDimension());
+        double[][] hiddenOutputWeight = InitArray.initArrayToRandom(builder.getDimension(), morpheme.getWordIdxMap().size());
         return WeightBuilder
                 .builder()
                 .inputHiddenWeight(inputHiddenWeight)

@@ -1,15 +1,16 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.bp;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.function.Function;
 
 @Component
 @Slf4j
-public class BackpropagationImpl implements Backpropagation{
+public class ShallowNeuralNetwork implements Backpropagation{
     @Override
-    public double[] forwardPassWithSoftmaxForOneHotEncoding(double[][] inputHiddenWeight, double[][] hiddenOutputWeight, int oneHotInput) {
+    public double[] forwardPassWithSoftmaxForOneHotEncoding(double[][] inputHiddenWeight, double[][] hiddenOutputWeight, int oneHotInput, Function<Double, Double> func) {
         double[] result = forwardPassForOneHotEncoding(inputHiddenWeight, hiddenOutputWeight, oneHotInput);
         return softmax(result);
     }
@@ -36,26 +37,12 @@ public class BackpropagationImpl implements Backpropagation{
         return softmax;
     }
 
-    private static double getExp(double[] result, double max) {
-        double tmp = 0;
-        for (double v : result) {
-            tmp += Math.exp(v- max);
-        }
-        return tmp;
-    }
 
-    private static double getMax(double[] result) {
-        double max = 0;
-        for (double v : result){
-            if (max<v){
-                max = v;
-            }
-        }
-        return max;
-    }
+
+
 
     @Override
-    public void learnForOneHotEncoding(
+    public void learnForOneHotEncodingForSoftmax(
             double[][] inputHiddenWeight,
             double[][] hiddenOutputWeight,
             Double learnRate,

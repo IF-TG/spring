@@ -24,10 +24,11 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
     protected Integer dimension;
     @Value("${nlp.word2vec.learnRate}")
     private Double learnRate;
-    @Value("${nlp.window}")
+    @Value("${nlp.word2vec.window}")
     private Integer windowSize;
     @Value("${nlp.word2vec.epoch}")
     private Integer epoch;
+    private Integer idx;
 
 
     @Autowired
@@ -68,8 +69,8 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
     @Override
     public double[] getVectorByString(String s){
         if (!isReady)throw new RuntimeException("word2vec is not ready");
-        de.getIdx(s);
-        return null;
+        Integer idx = de.getIdx(s);
+        return inputHiddenWeight[idx];
     }
 
     protected double[] forwardPassWithSoftmax(int idx){

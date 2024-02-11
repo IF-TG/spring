@@ -29,10 +29,10 @@ public class DestinationVectorImpl implements DestinationVector{
     @Value("${nlp.dimension}")
     private Integer dimension;
 
-    @Value("${nlp.window}")
+    @Value("${nlp.doc2vec.pv_dm.window}")
     private Integer window;
 
-    public DestinationVectorImpl(@Qualifier("pvDBOW") EmbeddingModel em, DestinationOverviewNounExtractor de) {
+    public DestinationVectorImpl(@Qualifier("PvDMUsingDestinationOverviewVector") EmbeddingModel em, DestinationOverviewNounExtractor de) {
         this.em = em;
         this.de = de;
     }
