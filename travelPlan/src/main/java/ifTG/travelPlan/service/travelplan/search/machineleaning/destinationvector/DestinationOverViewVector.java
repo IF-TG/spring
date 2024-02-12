@@ -4,6 +4,7 @@ import java.util.Map;
 
 public interface DestinationOverViewVector {
     void initData();
+    Map<Integer, Double> getVectorMapByString(String s);
 
-    Map<Integer, Double> getVectorByString(String s);
+    double[] getVectorByString(String s);
 }

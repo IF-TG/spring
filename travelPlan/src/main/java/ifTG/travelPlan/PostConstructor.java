@@ -7,6 +7,8 @@ import ifTG.travelPlan.service.destination.EDestinationSaveService;
 import ifTG.travelPlan.service.destination.SubDestinationSaveByTourApi;
 import ifTG.travelPlan.service.travelplan.search.MachineLeaning;
 
+import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.DestinationOverViewVector;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.DestinationOverViewVectorV2;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.TextRankWeight;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import jakarta.annotation.PostConstruct;
@@ -33,6 +35,7 @@ public class PostConstructor {
 
     private final TextRankWeight textRankWeight;
     private final Morpheme morpheme;
+    private final DestinationOverViewVector destination;
 
     @PostConstruct
     @Transactional
@@ -44,6 +47,7 @@ public class PostConstructor {
         /*
         saveEDestination();*/
         machineLeaning.init();
+        destination.getVectorMapByString("대표");
     }
 
     private void saveEDestination() {

@@ -28,7 +28,7 @@ public class EDestinationSaveServiceImpl implements EDestinationSaveService{
             List<String> keywordList = textRank.textRank(d.getOverview());
             double[] vectorAverageArray = null;
             if (keywordList.size()==10){
-                vectorAverageArray = vectorAverage.getVectorAverage(keywordList.stream().map(destinationOverViewVectorV2::getVectorByString).toList());
+                vectorAverageArray = vectorAverage.getVectorAverage(keywordList.stream().map(destinationOverViewVectorV2::getVectorMapByString).toList());
             }
 
             EDestination eDestination = getEDestination(d, keywordList, vectorAverageArray);

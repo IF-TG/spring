@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -25,10 +24,11 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
     protected Integer dimension;
     @Value("${nlp.word2vec.learnRate}")
     private Double learnRate;
-    @Value("${nlp.window}")
+    @Value("${nlp.word2vec.window}")
     private Integer windowSize;
     @Value("${nlp.word2vec.epoch}")
     private Integer epoch;
+    private Integer idx;
 
 
     @Autowired
@@ -56,14 +56,21 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
     }
 
     @Override
-    public Map<Integer, Double> getVectorByString(String s){
+    public Map<Integer, Double> getVectorMapByString(String s){
         if (!isReady)throw new RuntimeException("word2vec is not ready");
         Map<Integer, Double> resultMap = new HashMap<>();
         Integer idx = de.getIdx(s);
         for (int i = 0; i< dimension; i++){
-            resultMap.put(i,inputHiddenWeight[i][idx]);
+            resultMap.put(i,inputHiddenWeight[idx][i]);
         }
         return resultMap;
+    }
+
+    @Override
+    public double[] getVectorByString(String s){
+        if (!isReady)throw new RuntimeException("word2vec is not ready");
+        Integer idx = de.getIdx(s);
+        return inputHiddenWeight[idx];
     }
 
     protected double[] forwardPassWithSoftmax(int idx){

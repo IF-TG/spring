@@ -5,7 +5,10 @@ import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.Embedd
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+<<<<<<< HEAD
 import org.springframework.stereotype.Component;
+=======
+>>>>>>> 8bcb5df2ff3540b25939591164167be063070098
 import org.springframework.stereotype.Service;
 
 /**
