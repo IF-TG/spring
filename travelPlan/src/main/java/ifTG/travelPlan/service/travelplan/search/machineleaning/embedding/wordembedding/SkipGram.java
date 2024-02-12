@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.word2vec;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding;
 
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.Backpropagation;

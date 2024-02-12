@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.docembedding.doc2vec;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.docembedding;
 
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
 

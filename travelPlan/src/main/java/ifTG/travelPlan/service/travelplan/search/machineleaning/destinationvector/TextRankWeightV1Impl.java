@@ -4,18 +4,20 @@ import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtra
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
  * 더 이상 쓰지 않음
  */
-@Service
+@Component
 @Deprecated
 @Slf4j
 public class TextRankWeightV1Impl extends DestinationOverViewVectorV2 implements TextRankWeight {
 
     @Autowired
-    public TextRankWeightV1Impl(DestinationOverviewNounExtractor de, EmbeddingModel em) {
+    public TextRankWeightV1Impl(DestinationOverviewNounExtractor de, @Qualifier("skipGram") EmbeddingModel em) {
         super(de, em);
     }
 

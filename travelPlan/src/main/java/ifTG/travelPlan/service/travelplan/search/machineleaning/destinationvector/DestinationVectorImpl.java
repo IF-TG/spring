@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 public class DestinationVectorImpl implements DestinationVector{
     private final EmbeddingModel em;
     private double[][] destinationVector;
-    private Map<Long, Long> mapping;
+    private Map<Integer, Long> mapping;
     private final DestinationRepository destinationRepository;
 
     public DestinationVectorImpl(@Qualifier("pvDBOW") EmbeddingModel em, DestinationRepository destinationRepository) {
@@ -30,7 +30,7 @@ public class DestinationVectorImpl implements DestinationVector{
         mapping = IntStream.range(0, allDestinationList.size()).boxed()
                 .collect(Collectors.toMap(i->i, i->allDestinationList.get(i).getId()));
 
-
+        
 
     }
 

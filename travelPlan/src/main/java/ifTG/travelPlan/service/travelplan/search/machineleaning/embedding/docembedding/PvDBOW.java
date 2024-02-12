@@ -1,15 +1,13 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.docembedding.doc2vec;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.docembedding;
 
 import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.Backpropagation;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.word2vec.Word2Vec;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.Word2Vec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.MethodOrderer;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
