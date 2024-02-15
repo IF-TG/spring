@@ -46,13 +46,7 @@ public class WordVectorInitializerImpl implements WordVectorInitializer {
     @Override
     public void initDestinationWordVector(){
         WordVector wordVector = wordVectorFileReader.readWordWeight();
-        if (wordVector==null) System.out.println("null이네");
-        if (morpheme.isValid(wordVector.getMapping())) System.out.println("닭장이잖아..");
-        if (wordVector.getDimension()!=dimension) System.out.println("잘익은거라고!");
-        System.out.println("valid(wordVector) = " + valid(wordVector));
-
         if (valid(wordVector)){
-            System.out.println("섹스");
             morpheme.init(wordVector.getMapping());
             destinationWordVector.initData(
                     wordVector.getInputHiddenWeight(),
