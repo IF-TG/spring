@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service("TextRankWeightV2Impl")
 @Primary
 @Slf4j
-public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements TextRankWeight {
+public class TextRankWeightV2Impl extends DestinationWordVectorV2 implements TextRankWeight {
     @Autowired
     public TextRankWeightV2Impl(DestinationOverviewNounExtractor de, @Qualifier("skipGram") EmbeddingModel em) {
         super(de, em);
@@ -32,7 +32,6 @@ public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements
             normA += inputHiddenWeight[i][idxA]*inputHiddenWeight[i][idxA];
             normB += inputHiddenWeight[i][idxB]*inputHiddenWeight[i][idxB];
         }
-
         return dotProduct/(Math.sqrt(normA)*Math.sqrt(normB));
     }
 

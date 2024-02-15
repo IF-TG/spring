@@ -4,21 +4,25 @@ import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtra
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.file.WordVector;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.file.filereader.WordVectorFileReader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Slf4j
-
-public abstract class DestinationOverViewVectorV2 implements DestinationOverViewVector {
+@Component
+public class DestinationWordVectorV2 implements DestinationWordVector {
     private final EmbeddingModel em;
     protected final DestinationOverviewNounExtractor de;
     protected double [][] inputHiddenWeight;
     private double [][] hiddenOutputWeight;
     private boolean isReady;
+    private final WordVectorFileReader wordVectorFileReader;
 
     @Value("${nlp.dimension}")
     protected Integer dimension;
@@ -32,15 +36,16 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
 
 
     @Autowired
-    public DestinationOverViewVectorV2(DestinationOverviewNounExtractor de, @Qualifier("skipGram") EmbeddingModel em){
+    public DestinationWordVectorV2(DestinationOverviewNounExtractor de, @Qualifier("skipGram") EmbeddingModel em, WordVectorFileReader wordVectorFileReader){
         this.de = de;
         this.em = em;
+        this.wordVectorFileReader = wordVectorFileReader;
     }
 
 
     @Override
     public void initData(){
-        isReady = true;
+        
         List<List<String>> nounListGroupByDestination = de.findAllNounGroupByDestination();
         WeightBuilder weightBuilder = em.learningWeight(
                 LearningBuilder.builder()
@@ -53,6 +58,7 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
         );
         inputHiddenWeight = weightBuilder.getInputHiddenWeight();
         hiddenOutputWeight = weightBuilder.getHiddenOutputWeight();
+        isReady = true;
     }
 
     @Override
@@ -73,6 +79,24 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
         return inputHiddenWeight[idx];
     }
 
+    @Override
+    public double[] getVectorByMorphemeIdx(int morphemeIdx) {
+        if (!isReady)throw new RuntimeException("word2vec is not ready");
+        if (inputHiddenWeight.length<idx)throw new RuntimeException("morphemeIdx out of bounds");
+        return inputHiddenWeight[morphemeIdx];
+    }
+
+    @Override
+    public double[][] getInputHiddenWeight(){
+        return inputHiddenWeight;
+    }
+
+    @Override
+    public double[][] getHiddenOutputWeight(){
+        return hiddenOutputWeight;
+    }
+
+
     protected double[] forwardPassWithSoftmax(int idx){
         return em.forwardPassWithSoftmax(
                 WeightBuilder.builder()
@@ -80,6 +104,4 @@ public abstract class DestinationOverViewVectorV2 implements DestinationOverView
                 .hiddenOutputWeight(hiddenOutputWeight).build()
                 , idx);
     }
-
-    public abstract double getScore(double[] s1, double[] s2);
 }
