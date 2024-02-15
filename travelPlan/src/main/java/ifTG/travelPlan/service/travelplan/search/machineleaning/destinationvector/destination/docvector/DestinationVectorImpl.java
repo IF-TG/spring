@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.docvector;
 
 import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtractor;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
@@ -66,6 +66,12 @@ public class DestinationVectorImpl implements DestinationVector{
         }
         return destinationVector[mappingIdx];
     }
+
+    @Override
+    public double[] getVectorByIdx(Integer idx) {
+        return destinationVector[idx];
+    }
+
     @Override
     public Map<Long, Integer> getMapping(){
         return mapping;

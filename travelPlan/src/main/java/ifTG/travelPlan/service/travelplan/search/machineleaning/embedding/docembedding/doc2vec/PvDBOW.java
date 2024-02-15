@@ -1,6 +1,7 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.docembedding.doc2vec;
 
 import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.Backpropagation;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.activations.ActivationFunction;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
@@ -34,13 +35,14 @@ public class PvDBOW implements Doc2Vec {
             List<String> wordListByDocument = builder.getDocumentWordList().get(oneHotInput);
             for (int oneHotOutput = 0; oneHotOutput<wordListByDocument.size(); oneHotOutput++){
                 double[] result = forwardPassWithSoftmax(builder.getWeightBuilder() ,oneHotInput);
-                bp.learnForOneHotEncodingForSoftmax(
+                bp.learnForOneHotEncodingWithSoftmax(
                         builder.getWeightBuilder().getInputHiddenWeight(),
                         builder.getWeightBuilder().getHiddenOutputWeight(),
                         builder.getLearnRate(),
                         result,
                         oneHotInput,
-                        oneHotOutput
+                        oneHotOutput,
+                        ActivationFunction.linear()
                 );
             }
         }

@@ -4,19 +4,20 @@ import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morph
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class TextRankImpl implements TextRank{
     private final Morpheme morpheme;
     private final TextRankWeight textRankWeight;
 
-    @Value("${nlp.window}")
+    @Value("${nlp.textrank.window}")
     private Integer windowSize;
     @Value("${nlp.epsilon}")
     private Double epsilon;

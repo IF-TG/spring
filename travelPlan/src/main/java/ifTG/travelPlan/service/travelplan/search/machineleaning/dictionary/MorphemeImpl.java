@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,12 @@ public class MorphemeImpl implements Morpheme {
                 count++;
             }
         }
+    }
+
+    @Override
+    public void init(Map<String, Integer> morpheme) {
+        wordIdxMap.putAll(morpheme);
+        wordMap.putAll(morpheme.keySet().stream().collect(Collectors.toMap(word->morpheme.get(word), word->word)));
     }
 
     private List<String> findAllNounByDestination(){
@@ -67,6 +75,13 @@ public class MorphemeImpl implements Morpheme {
     @Override
     public Map<Integer, String> getWordMap() {
         return wordMap;
+    }
+
+    @Override
+    public boolean isValid(Map<String, Integer> mapping) {
+        List<String> allNounByDestination = findAllNounByDestination();
+        Set<String> m = mapping.keySet();
+        return m.containsAll(allNounByDestination);
     }
 }
 

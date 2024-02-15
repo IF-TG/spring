@@ -7,15 +7,13 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -42,11 +40,26 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
+    public String findFile(String path){
+        Path filePath = Paths.get(absoluteFilePath + path);
+        try{
+            return Files.readString(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".")+1);
     }
 
-
+    @Override
+    public boolean isExisted(String uri){
+        String filePath = absoluteFilePath + uri;
+        File file = new File(filePath);
+        return file.exists();
+    }
 
     @Override
     public String saveFile(byte[] file, String uri, String type) {
@@ -60,6 +73,21 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
+    public void saveTextFile(String file, String fileUriWithFileName){
+        String path = absoluteFilePath + fileUriWithFileName + ".txt";
+        try{
+            createFolder(new File(path).getParentFile().getPath());
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(path))){
+            writer.write(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void createThumbnailAndSaveFile(String savedFileUri, String fileName, String thumbnailUri, int length) {
         log.info("thumbnail = {}", savedFileUri+fileName);
         File savedImgFile = new File(absoluteFilePath + savedFileUri + fileName);
@@ -70,6 +98,7 @@ public class FileStoreImpl implements FileStore {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @Override
@@ -117,7 +146,7 @@ public class FileStoreImpl implements FileStore {
 
 
     private String writeImageFile(byte[] file, String path, String type) {
-        String fileName = getFileName(type);
+        String fileName = getUUIDFileName(type);
         try(FileOutputStream fileOutputStream = new FileOutputStream(path + fileName)){
             fileOutputStream.write(file);
         } catch (IOException e) {
@@ -150,7 +179,7 @@ public class FileStoreImpl implements FileStore {
     }
 
 
-    private String getFileName(String type){
+    private String getUUIDFileName(String type){
         return UUID.randomUUID() + "." + type;
     }
 }

@@ -1,4 +1,5 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.wordvector;
 
-public interface DestinationWordVectorInitializer {
+public interface WordVectorInitializer {
+    void initDestinationWordVector();
 }

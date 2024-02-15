@@ -1,10 +1,14 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.fileWriter;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.file.filewriter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ifTG.travelPlan.service.filestore.FileStore;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.DestinationWordVector;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.wordvector.DestinationWordVector;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.file.WordVector;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.vector.VectorCalculating;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class WordVectorFileWriterImpl implements WordVectorFileWriter {
@@ -19,14 +24,11 @@ public class WordVectorFileWriterImpl implements WordVectorFileWriter {
     private final Morpheme morpheme;
     private final DestinationWordVector destinationWordVector;
 
-    @Value("${nlp.word2vec.similarity.write.path}")
+    @Value("${nlp.word2vec.file.similarity.write.path}")
     private String wordSimilarityPath;
 
-    @Value("${nlp.word2vec.weight.write.path}")
+    @Value("${nlp.word2vec.file.weight.write.path}")
     private String wordWeightPath;
-
-    @Value("${nlp.word2vec.morpheme_mapping.write.path}")
-    private String wordMappingPath;
 
     @Override
     public void saveFile(){
@@ -53,32 +55,16 @@ public class WordVectorFileWriterImpl implements WordVectorFileWriter {
     }
 
     public void saveWordWeightAndMapping(String fileName){
-        if (!fileStore.isExisted(wordMappingPath)&&!fileStore.isExisted(wordWeightPath)){
-            saveMapping();
-            saveWeight();
+        WordVector wordVector = new WordVector(
+                destinationWordVector.getInputHiddenWeight(),
+                destinationWordVector.getHiddenOutputWeight(),
+                destinationWordVector.getHiddenOutputWeight().length,
+                morpheme.getWordIdxMap()
+        );
+        try{
+            fileStore.saveTextFile(new ObjectMapper().writeValueAsString(wordVector), wordWeightPath+fileName);
+        } catch (JsonProcessingException e) {
+            log.debug("잘못된 형식의 json", e);
         }
-    }
-
-    private void saveWeight() {
-        StringBuilder sb = getStringBuilderByArray(destinationWordVector.getInputHiddenWeight()).append(getStringBuilderByArray(destinationWordVector.getHiddenOutputWeight()));
-        fileStore.saveTextFile(sb.toString(), wordWeightPath);
-    }
-
-    private StringBuilder getStringBuilderByArray(double[][] array){
-        StringBuilder sb = new StringBuilder();
-        for (double[] wordIdx: array){
-            for (double weight: wordIdx){
-                sb.append(weight).append("\t");
-            }
-            sb.append("\n");
-        }
-        return sb;
-    }
-
-    private void saveMapping() {
-        Map<String, Integer> wordIdxMap = morpheme.getWordIdxMap();
-        StringBuilder mappingText = new StringBuilder();
-        wordIdxMap.keySet().forEach(word->mappingText.append(word).append("\t").append(wordIdxMap.get(word)).append("\n"));
-        fileStore.saveTextFile(mappingText.toString(), wordMappingPath);
     }
 }

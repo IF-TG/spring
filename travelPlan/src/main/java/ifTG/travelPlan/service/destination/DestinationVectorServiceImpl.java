@@ -20,7 +20,7 @@ public class DestinationVectorServiceImpl implements DestinationVectorService{
     @Async
     @Override
     public void updateUserVectorByDestination(Long userId, Long destinationId){
-        EDestination eDestination = eDestinationRepository.findById(destinationId).orElseThrow(() -> new IllegalArgumentException("알 수 없는 사용자"));
+        EDestination eDestination = eDestinationRepository.findById(destinationId).orElseThrow(() -> new IllegalArgumentException("알 수 없는 관광지id"));
         UserVector userVector = userVectorRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("알 수 없는 사용자"));
         userVectorService.updateUserVector(userVector, eDestination.getEmbedding());
     }

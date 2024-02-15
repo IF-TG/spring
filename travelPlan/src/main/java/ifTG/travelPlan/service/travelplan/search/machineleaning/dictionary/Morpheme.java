@@ -1,13 +1,12 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Map;
 
 public interface Morpheme {
     void init();
 
+    void init(Map<String,Integer> morpheme);
 
     List<String> getNounByString(String s);
 
@@ -18,4 +17,6 @@ public interface Morpheme {
     Map<String, Integer> getWordIdxMap();
 
     Map<Integer, String> getWordMap();
+
+    boolean isValid(Map<String, Integer> mapping);
 }

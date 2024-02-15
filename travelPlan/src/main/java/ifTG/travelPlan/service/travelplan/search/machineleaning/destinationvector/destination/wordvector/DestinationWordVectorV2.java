@@ -1,15 +1,9 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.wordvector;
 
 import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtractor;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.file.WordVector;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.file.filereader.WordVectorFileReader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,47 +11,24 @@ import java.util.*;
 @Slf4j
 @Component
 public class DestinationWordVectorV2 implements DestinationWordVector {
-    private final EmbeddingModel em;
-    protected final DestinationOverviewNounExtractor de;
+
     protected double [][] inputHiddenWeight;
-    private double [][] hiddenOutputWeight;
+    protected double [][] hiddenOutputWeight;
     private boolean isReady;
-    private final WordVectorFileReader wordVectorFileReader;
-
-    @Value("${nlp.dimension}")
-    protected Integer dimension;
-    @Value("${nlp.word2vec.learnRate}")
-    private Double learnRate;
-    @Value("${nlp.word2vec.window}")
-    private Integer windowSize;
-    @Value("${nlp.word2vec.epoch}")
-    private Integer epoch;
-    private Integer idx;
-
+    protected final DestinationOverviewNounExtractor de;
 
     @Autowired
-    public DestinationWordVectorV2(DestinationOverviewNounExtractor de, @Qualifier("skipGram") EmbeddingModel em, WordVectorFileReader wordVectorFileReader){
+    public DestinationWordVectorV2(DestinationOverviewNounExtractor de) {
         this.de = de;
-        this.em = em;
-        this.wordVectorFileReader = wordVectorFileReader;
     }
 
-
     @Override
-    public void initData(){
-        
-        List<List<String>> nounListGroupByDestination = de.findAllNounGroupByDestination();
-        WeightBuilder weightBuilder = em.learningWeight(
-                LearningBuilder.builder()
-                        .learnRate(learnRate)
-                        .epoch(epoch)
-                        .dimension(dimension)
-                        .window(windowSize)
-                        .documentWordList(nounListGroupByDestination)
-                        .build()
-        );
-        inputHiddenWeight = weightBuilder.getInputHiddenWeight();
-        hiddenOutputWeight = weightBuilder.getHiddenOutputWeight();
+    public void initData(
+            double[][] inputHiddenWeight,
+            double[][] hiddenOutputWeight
+    ){
+        this.inputHiddenWeight = inputHiddenWeight;
+        this.hiddenOutputWeight = hiddenOutputWeight;
         isReady = true;
     }
 
@@ -66,6 +37,7 @@ public class DestinationWordVectorV2 implements DestinationWordVector {
         if (!isReady)throw new RuntimeException("word2vec is not ready");
         Map<Integer, Double> resultMap = new HashMap<>();
         Integer idx = de.getIdx(s);
+        int dimension = hiddenOutputWeight.length;
         for (int i = 0; i< dimension; i++){
             resultMap.put(i,inputHiddenWeight[idx][i]);
         }
@@ -82,7 +54,7 @@ public class DestinationWordVectorV2 implements DestinationWordVector {
     @Override
     public double[] getVectorByMorphemeIdx(int morphemeIdx) {
         if (!isReady)throw new RuntimeException("word2vec is not ready");
-        if (inputHiddenWeight.length<idx)throw new RuntimeException("morphemeIdx out of bounds");
+        if (inputHiddenWeight.length<morphemeIdx)throw new RuntimeException("morphemeIdx out of bounds");
         return inputHiddenWeight[morphemeIdx];
     }
 
@@ -96,12 +68,4 @@ public class DestinationWordVectorV2 implements DestinationWordVector {
         return hiddenOutputWeight;
     }
 
-
-    protected double[] forwardPassWithSoftmax(int idx){
-        return em.forwardPassWithSoftmax(
-                WeightBuilder.builder()
-                .inputHiddenWeight(inputHiddenWeight)
-                .hiddenOutputWeight(hiddenOutputWeight).build()
-                , idx);
-    }
 }

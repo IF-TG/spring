@@ -1,2 +1,92 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.wordvector;public class DestinationWordVectorInitializerImpl {
+package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.wordvector;
+
+import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtractor;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.file.WordVector;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.file.filereader.WordVectorFileReader;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.file.filewriter.WordVectorFileWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+
+@Component
+public class WordVectorInitializerImpl implements WordVectorInitializer {
+
+    @Value("${nlp.dimension}")
+    protected Integer dimension;
+    @Value("${nlp.word2vec.learnRate}")
+    private Double learnRate;
+    @Value("${nlp.word2vec.window}")
+    private Integer windowSize;
+    @Value("${nlp.word2vec.epoch}")
+    private Integer epoch;
+
+    private final Morpheme morpheme;
+    private final DestinationOverviewNounExtractor de;
+    private final EmbeddingModel em;
+    private final DestinationWordVector destinationWordVector;
+    private final WordVectorFileReader wordVectorFileReader;
+    private final WordVectorFileWriter wordVectorFileWriter;
+
+    public WordVectorInitializerImpl(Morpheme morpheme, DestinationOverviewNounExtractor de, @Qualifier("skipGram") EmbeddingModel em, DestinationWordVector destinationWordVector, WordVectorFileReader wordVectorFileReader, WordVectorFileWriter wordVectorFileWriter) {
+        this.morpheme = morpheme;
+        this.de = de;
+        this.em = em;
+        this.destinationWordVector = destinationWordVector;
+        this.wordVectorFileReader = wordVectorFileReader;
+        this.wordVectorFileWriter = wordVectorFileWriter;
+    }
+
+    @Override
+    public void initDestinationWordVector(){
+        WordVector wordVector = wordVectorFileReader.readWordWeight();
+        if (wordVector==null) System.out.println("null이네");
+        if (morpheme.isValid(wordVector.getMapping())) System.out.println("닭장이잖아..");
+        if (wordVector.getDimension()!=dimension) System.out.println("잘익은거라고!");
+        System.out.println("valid(wordVector) = " + valid(wordVector));
+
+        if (valid(wordVector)){
+            System.out.println("섹스");
+            morpheme.init(wordVector.getMapping());
+            destinationWordVector.initData(
+                    wordVector.getInputHiddenWeight(),
+                    wordVector.getHiddenOutputWeight()
+            );
+        }else{
+            morpheme.init();
+            createWordWeight();
+            wordVectorFileWriter.saveFile();
+        }
+    }
+
+    private boolean valid(WordVector wordVector) {
+        return wordVector != null && morpheme.isValid(wordVector.getMapping()) && wordVector.getDimension() != dimension;
+    }
+
+    private void createWordWeight() {
+        WeightBuilder weightBuilder = learningWeightByEmbeddingModel();
+        destinationWordVector.initData(
+                weightBuilder.getInputHiddenWeight(),
+                weightBuilder.getHiddenOutputWeight()
+        );
+    }
+
+    private WeightBuilder learningWeightByEmbeddingModel() {
+        List<List<String>> nounListGroupByDestination = de.findAllNounGroupByDestination();
+        return em.learningWeight(
+                LearningBuilder.builder()
+                        .learnRate(learnRate)
+                        .epoch(epoch)
+                        .dimension(dimension)
+                        .window(windowSize)
+                        .documentWordList(nounListGroupByDestination)
+                        .build()
+        );
+    }
 }
