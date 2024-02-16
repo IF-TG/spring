@@ -40,12 +40,12 @@ public class PostConstructor {
     @PostConstruct
     @Transactional
     public void initData() throws IOException {
-//        for (int i =0; i<downloadPage; i++){
-//            List<Destination> savedDestination = destinationSaveByTourApi.save(i);
-//            subDestinationSaveByTourApi.save(savedDestination);
-//        }
-        /*
-        saveEDestination();*/
+        for (int i =0; i<downloadPage; i++){
+            List<Destination> savedDestination = destinationSaveByTourApi.save(i);
+            subDestinationSaveByTourApi.save(savedDestination);
+        }
+
+        saveEDestination();
         machineLeaning.init();
         destination.getVectorMapByString("대표");
     }

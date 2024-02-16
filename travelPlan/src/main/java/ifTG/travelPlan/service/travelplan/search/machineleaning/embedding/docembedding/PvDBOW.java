@@ -4,12 +4,8 @@ import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.Backpropagati
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
-<<<<<<< HEAD:travelPlan/src/main/java/ifTG/travelPlan/service/travelplan/search/machineleaning/embedding/docembedding/PvDBOW.java
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.Word2Vec;
-=======
-import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.word2vec.Word2Vec;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.util.InitArray;
->>>>>>> 8bcb5df2ff3540b25939591164167be063070098:travelPlan/src/main/java/ifTG/travelPlan/service/travelplan/search/machineleaning/embedding/docembedding/doc2vec/PvDBOW.java
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
