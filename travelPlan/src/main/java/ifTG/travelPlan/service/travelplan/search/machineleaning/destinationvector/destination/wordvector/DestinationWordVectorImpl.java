@@ -1,4 +1,4 @@
-package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector;
+package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.wordvector;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -8,9 +8,11 @@ import java.util.*;
 @Service
 @Slf4j
 @Deprecated
-public class DestinationOverViewVectorImpl implements DestinationOverViewVector{
+public class DestinationWordVectorImpl implements DestinationWordVector {
+
+
     @Override
-    public void initData() {
+    public void initData(double[][] inputHiddenWeight, double[][] hiddenOutputWeight) {
 
     }
 
@@ -22,6 +24,21 @@ public class DestinationOverViewVectorImpl implements DestinationOverViewVector{
     @Override
     public double[] getVectorByString(String s) {
         return new double[0];
+    }
+
+    @Override
+    public double[] getVectorByMorphemeIdx(int idx) {
+        return new double[0];
+    }
+
+    @Override
+    public double[][] getInputHiddenWeight() {
+        return new double[0][];
+    }
+
+    @Override
+    public double[][] getHiddenOutputWeight() {
+        return new double[0][];
     }
 
     /*@Override

@@ -29,6 +29,7 @@ public class DestinationServiceImpl implements DestinationService{
 
     @Override
     public DestinationDetailDto findByDestinationId(Long destinationId, ContentType contentType, Long userId) {
+        log.info("input = {}, {}, {}", destinationId, contentType.getValue(), userId);
         destinationVectorService.updateUserVectorByDestination(userId, destinationId);
         Object detailWithDestination = qDestinationRepository.findDetailWithDestinationById(destinationId, contentType);
         boolean isScraped = destinationScrapRepository.existsById(new DestinationScrapId(destinationId, userId));

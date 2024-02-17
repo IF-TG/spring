@@ -3,9 +3,8 @@ package ifTG.travelPlan.service.destination;
 import ifTG.travelPlan.domain.travel.Destination;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.elasticsearch.repository.EDestinationRepository;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.DestinationOverViewVectorV2;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.docvector.DestinationVector;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.TextRank;
-import ifTG.travelPlan.service.travelplan.search.machineleaning.vector.VectorAverage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,24 +18,20 @@ import java.util.List;
 public class EDestinationSaveServiceImpl implements EDestinationSaveService{
     private final EDestinationRepository eDestinationRepository;
     private final TextRank textRank;
-    private final VectorAverage vectorAverage;
-    private final DestinationOverViewVectorV2 destinationOverViewVectorV2;
+    private final DestinationVector destinationVector;
 
     @Override
     public void saveEDestination(List<Destination> destinationList) {
+        log.info("destinationList size = {}", destinationList.size());
         destinationList.forEach(d->{
             List<String> keywordList = textRank.textRank(d.getOverview());
-            double[] vectorAverageArray = null;
-            if (keywordList.size()==10){
-                vectorAverageArray = vectorAverage.getVectorAverage(keywordList.stream().map(destinationOverViewVectorV2::getVectorMapByString).toList());
-            }
-
-            EDestination eDestination = getEDestination(d, keywordList, vectorAverageArray);
+            double[] vectorByDestinationId = destinationVector.getVectorByDestinationId(d.getId());
+            EDestination eDestination = getEDestination(d, keywordList, vectorByDestinationId);
             eDestinationRepository.save(eDestination);
         });
     }
 
-    private static EDestination getEDestination(Destination d, List<String> keywordList, double[] vectorAverageArray) {
+    private static EDestination getEDestination(Destination d, List<String> keywordList, double[] vector) {
         return EDestination.builder()
                 .id(d.getId())
                 .title(d.getTitle())
@@ -46,7 +41,7 @@ public class EDestinationSaveServiceImpl implements EDestinationSaveService{
                 .address(d.getAddress())
                 .category(d.getCategory())
                 .contentType(d.getContentType())
-                .embedding(vectorAverageArray)
+                .embedding(vector)
                 .build();
     }
 }

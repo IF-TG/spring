@@ -1,6 +1,8 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding;
 
 import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.Backpropagation;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.activations.ActivationFunction;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.activations.ActivationFunctionDifferential;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
@@ -32,7 +34,8 @@ public class SkipGram implements Word2Vec {
         return backpropagation.forwardPassWithSoftmaxForOneHotEncoding(
                 weightBuilder.getInputHiddenWeight(),
                 weightBuilder.getHiddenOutputWeight(),
-                oneHotInput
+                oneHotInput,
+                ActivationFunction.linear()
         );
     }
 
@@ -63,13 +66,14 @@ public class SkipGram implements Word2Vec {
 
     private void learnByBackpropagation(LearningBuilder builder, int oneHotInput, int oneHotOutput, double[] result) {
 
-        backpropagation.learnForOneHotEncodingForSoftmax(
+        backpropagation.learnForOneHotEncodingWithSoftmax(
                 builder.getWeightBuilder().getInputHiddenWeight(),
                 builder.getWeightBuilder().getHiddenOutputWeight(),
                 builder.getLearnRate(),
                 result,
                 oneHotInput,
-                oneHotOutput
+                oneHotOutput,
+                ActivationFunctionDifferential.linear()
         );
 
     }

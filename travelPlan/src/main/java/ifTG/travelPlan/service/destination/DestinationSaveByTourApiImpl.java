@@ -35,8 +35,8 @@ public class DestinationSaveByTourApiImpl implements DestinationSaveByTourApi{
         AreaBasedSyncListDto areaBasedSyncListDto = tourApi.selectAreaBasedSynList(page);
         areaBasedSyncListDto.getItem().stream()
                 .filter(DestinationSaveByTourApiImpl::withoutTravelCourseAndAccommodation)
+                .filter(absi->!destinationRepository.existsByTourApiContentId(Long.parseLong(absi.getContentid())))
                 .forEach(absi-> destinationList.add(getDestinationByTourApi(absi))
-
         );
         getDetailCommon(destinationList);
         destinationRepository.saveAll(destinationList);

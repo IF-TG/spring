@@ -1,7 +1,9 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector;
 
 import ifTG.travelPlan.service.destination.morpheme.DestinationOverviewNounExtractor;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.wordvector.DestinationWordVectorV2;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.EmbeddingModel;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.vector.VectorCalculating;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service("TextRankWeightV2Impl")
 @Primary
 @Slf4j
-public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements TextRankWeight {
+public class CosineSimilarity extends DestinationWordVectorV2 implements TextRankWeight {
     @Autowired
-    public TextRankWeightV2Impl(DestinationOverviewNounExtractor de, @Qualifier("skipGram") EmbeddingModel em) {
-        super(de, em);
+    public CosineSimilarity(DestinationOverviewNounExtractor de) {
+        super(de);
     }
 
     /**
@@ -24,17 +26,9 @@ public class TextRankWeightV2Impl extends DestinationOverViewVectorV2 implements
     public double getScore(String s1, String s2){
         int idxA = de.getIdx(s1);
         int idxB = de.getIdx(s2);
-        double dotProduct = 0.0;
-        double normA = 0.0;
-        double normB = 0.0;
-        for (int i = 0; i< dimension; i++){
-            dotProduct += inputHiddenWeight[i][idxA]*inputHiddenWeight[i][idxB];
-            normA += inputHiddenWeight[i][idxA]*inputHiddenWeight[i][idxA];
-            normB += inputHiddenWeight[i][idxB]*inputHiddenWeight[i][idxB];
-        }
-
-        return dotProduct/(Math.sqrt(normA)*Math.sqrt(normB));
+        return VectorCalculating.cosineSimilarity(inputHiddenWeight[idxA], inputHiddenWeight[idxB]);
     }
+
 
     @Override
     public double getScore(double[] s1, double[] s2){

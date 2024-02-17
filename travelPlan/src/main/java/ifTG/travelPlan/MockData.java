@@ -8,6 +8,7 @@ import ifTG.travelPlan.domain.user.UserAddress;
 import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserAddressRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
+import ifTG.travelPlan.service.user.UserVectorService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,11 @@ public class MockData {
     private final UserAddressRepository userAddressRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final UserVectorService userVectorService;
 
     //@PostConstruct
     public void addMockData(){
+
         UserAddress userAddressA = UserAddress.builder()
                 .sido("서울")
                 .sigungu("강남")
