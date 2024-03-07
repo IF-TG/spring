@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.user;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.ProfileImgDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.service.user.UserProfileImgService;
@@ -10,24 +11,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("profile")
+@RequestMapping("/profile")
 public class UserProfileImgController {
     private final UserProfileImgService userProfileImgService;
 
     @PostMapping("/upload")
     public ResponseEntity<Result<ProfileImgDto>> saveProfileImg(@RequestParam("profile")MultipartFile file,
-                                                                @RequestParam("userId")Long userId){
+                                                                @AuthenticationUser Long userId){
         return Result.isSuccess(userProfileImgService.saveProfileImg(file, userId));
     }
 
     @PutMapping("/upload")
     public ResponseEntity<Result<ProfileImgDto>> updateProfileImg(@RequestParam("profile")MultipartFile file,
-                                                                  @RequestParam("userId")Long userId){
+                                                                  @AuthenticationUser Long userId){
         return Result.isSuccess(userProfileImgService.updateProfileImg(file, userId));
     }
 
     @DeleteMapping
-    public ResponseEntity<Result<Boolean>> deleteProfileImg(@RequestParam Long userId){
+    public ResponseEntity<Result<Boolean>> deleteProfileImg(@AuthenticationUser Long userId){
         return Result.isSuccess(userProfileImgService.deleteProfileImg(userId));
     }
 

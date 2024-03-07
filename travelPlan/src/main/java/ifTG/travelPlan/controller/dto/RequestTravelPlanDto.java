@@ -7,5 +7,4 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RequestTravelPlanDto {
     private final String title;
-    private final Long userId;
 }

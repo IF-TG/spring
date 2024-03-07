@@ -1,11 +1,13 @@
 package ifTG.travelPlan.controller.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestLikeDto {
-    private final Long userId;
-    private final Long objectId;
+    private Long objectId;
 }

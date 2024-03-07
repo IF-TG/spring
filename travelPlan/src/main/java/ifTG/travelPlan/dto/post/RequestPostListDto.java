@@ -16,15 +16,13 @@ public class RequestPostListDto {
     private final OrderMethod orderMethod;
     private final MainCategory mainCategory;
     private Enum<?> subCategory;
-    private final Long userId;
 
     @Builder
-    public RequestPostListDto(int page, int perPage, OrderMethod orderMethod, MainCategory mainCategory, String subCategory, Long userId) throws IllegalAccessException {
+    public RequestPostListDto(int page, int perPage, OrderMethod orderMethod, MainCategory mainCategory, String subCategory) throws IllegalAccessException {
         isNullCategory(orderMethod, mainCategory);
         this.pageable = PageRequest.of(page, perPage);
         this.orderMethod = orderMethod;
         this.mainCategory = mainCategory;
-        this.userId = userId;
         getSubCategory(mainCategory, subCategory);
     }
     private static void isNullCategory(OrderMethod orderMethod, MainCategory mainCategory) throws IllegalAccessException {

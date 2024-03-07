@@ -1,6 +1,7 @@
 package ifTG.travelPlan.controller.post;
 
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.RequestLikeDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.PostWithThumbnailDto;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/postLike")
+@RequestMapping("/post/like")
 @RequiredArgsConstructor
 public class PostLikeController {
     private final PostLikeService postLikeService;
@@ -25,11 +26,11 @@ public class PostLikeController {
         return Result.isSuccess(postLikeService.toggleLikePost(requestLikeDto));
     }
 
-    @GetMapping("/list/{userId}")
+    @GetMapping("/list")
     public ResponseEntity<Result<List<PostWithThumbnailDto>>> findAllPostLikeWithPostByUser(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage,
-            @PathVariable Long userId){
+            @AuthenticationUser Long userId){
         return Result.isSuccess(postLikeService.findAllPostLikeWithPostByUser(userId, PageRequest.of(page, perPage)));
     }
 }

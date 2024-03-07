@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.comment;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.RequestLikeDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.ToggleDto;
@@ -13,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("commentLike")
+@RequestMapping("comment/like")
 public class CommentLikeController {
 
     private final CommentLikeService commentLikeService;
 
     @PostMapping
-    public ResponseEntity<Result<ToggleDto>> toggleLikeComment(@RequestBody RequestLikeDto requestLikeDto){
-        return Result.isSuccess(commentLikeService.toggleLikeComment(requestLikeDto));
+    public ResponseEntity<Result<ToggleDto>> toggleLikeComment(@AuthenticationUser Long userId, @RequestBody RequestLikeDto requestLikeDto){
+        return Result.isSuccess(commentLikeService.toggleLikeComment(userId, requestLikeDto));
     }
 
 

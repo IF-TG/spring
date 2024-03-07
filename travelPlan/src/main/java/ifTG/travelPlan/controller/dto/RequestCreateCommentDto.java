@@ -7,6 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RequestCreateCommentDto {
     private final Long postId;
-    private final Long userId;
     private final String comment;
 }

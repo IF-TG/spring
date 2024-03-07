@@ -1,10 +1,13 @@
 package ifTG.travelPlan.service.user;
 
 import ifTG.travelPlan.controller.dto.ProfileImgDto;
+import ifTG.travelPlan.controller.dto.StatusCode;
 import ifTG.travelPlan.domain.user.User;
+import ifTG.travelPlan.exception.CustomErrorException;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.filestore.FileStore;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 public class UserProfileImgServiceImpl implements UserProfileImgService{
     private final UserRepository userRepository;
@@ -31,7 +35,10 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
 
     @Override
     public ProfileImgDto saveProfileImg(MultipartFile file, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("not found userid"));
+        User user = userRepository.findById(userId).orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_USER));
+        if (user.getProfileImgUrl()!=null){
+            return updateProfileByUser(file, user);
+        }
         return saveProfileImgByUser(file, user);
     }
 
@@ -44,13 +51,13 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
             user.updateProfileImgUrl(savedFileName);
             return new ProfileImgDto(getProfileImgUrl(user.getId(), savedFileName), user.getId());
         }catch(IOException e){
-            e.printStackTrace();
-            return new ProfileImgDto(null, user.getId());
+            log.debug("", e);
+            throw new CustomErrorException(StatusCode.Internal_Server_Error);
         }
     }
 
     private String getProfileUri(Long userId) {
-        return profilePath + userId + "/";
+        return profilePath + userId + "\\";
     }
 
     @Override
@@ -77,7 +84,7 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
 
     @Override
     public Boolean deleteProfileImg(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("not found userid"));
+        User user = userRepository.findById(userId).orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_USER));
         deleteProfileImgByUser(user);
         return true;
     }
@@ -92,20 +99,26 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
 
     @Override
     public ProfileImgDto updateProfileImg(MultipartFile file, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("not found userId"));
-        if (user.getProfileImgUrl()==null)return saveProfileImgByUser(file,user);
+        User user = userRepository.findById(userId).orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_USER));
+        return updateProfileByUser(file, user);
+    }
+
+    private ProfileImgDto updateProfileByUser(MultipartFile file, User user) {
+        Long userId = user.getId();
+        if (user.getProfileImgUrl()==null) return saveProfileImgByUser(file, user);
         else{
             try{
                 byte[] inputFilePath = fileStore.getHash(file.getBytes());
                 byte[] fileHash = fileStore.getHash(getProfileUri(userId) + thumbnailPath + user.getProfileImgUrl());
-                if (Arrays.equals(inputFilePath, fileHash))return new ProfileImgDto(getProfileImgUrl(userId, user.getProfileImgUrl()), userId);
+                if (Arrays.equals(inputFilePath, fileHash))
+                    return new ProfileImgDto(getProfileImgUrl(userId, user.getProfileImgUrl()), userId);
                 else{
                     deleteProfileImgByUser(user);
                     return saveProfileImgByUser(file, user);
                 }
             }catch(IOException e){
-                e.printStackTrace();
-                return null;
+                log.debug("", e);
+                throw new CustomErrorException(StatusCode.Internal_Server_Error);
             }
         }
     }

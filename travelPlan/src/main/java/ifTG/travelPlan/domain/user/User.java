@@ -31,34 +31,14 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate
 public class User {
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
     @Column(name = "id")
     private Long id;
-    @Column(length = 20, nullable = false, unique = true)
-    private String userId;
-    @Column(length = 64, nullable = false)
-    private String pw;
-    @Column(length = 20, nullable = false)
-    private String name;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Sex sex;
-    @Column(nullable = false)
-    private LocalDate birthDate;
-    @Column(length = 20, nullable = false)
-    private String phoneNumber;
     private String profileImgUrl;
-    @Column(nullable = false)
-    private String email;
     @Column(length = 30, nullable = true)
     private String nickname;
-
     @CreationTimestamp
     private LocalDateTime createAt;
-
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "user_address_id", nullable = false)
-    private UserAddress userAddress;
 
     //양방향 매핑
     @OneToMany(mappedBy = "user")
@@ -85,18 +65,8 @@ public class User {
     private final Set<NestedCommentLike> nestedCommentLikeList = new HashSet<>();
     @OneToMany(mappedBy = "user")
     private final List<UserVector> userVectorList = new ArrayList<>();
-    @Builder
-    public User(String userId, String pw, String nickname, String name, Sex sex, LocalDate birthDate, String phoneNumber, String email, UserAddress userAddress) {
-        this.userId = userId;
-        this.pw = pw;
-        this.nickname = nickname;
-        this.name = name;
-        this.sex = sex;
-        this.birthDate = birthDate;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.userAddress = userAddress;
-        this.userAddress.addUser(this); //1차 캐시 문제 해결
+    public User(Long userId) {
+        this.id = userId;
     }
 
     /**
@@ -105,5 +75,9 @@ public class User {
 
     public void updateProfileImgUrl(String url){
         this.profileImgUrl = url;
+    }
+
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
     }
 }

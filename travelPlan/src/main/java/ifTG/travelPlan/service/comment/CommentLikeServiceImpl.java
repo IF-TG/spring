@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentLikeServiceImpl implements CommentLikeService{
     @Override
     @ToggleLike
-    public ToggleDto toggleLikeComment(RequestLikeDto requestLikeDto) {
+    public ToggleDto toggleLikeComment(Long userId, RequestLikeDto requestLikeDto) {
         return null;
     }
 }

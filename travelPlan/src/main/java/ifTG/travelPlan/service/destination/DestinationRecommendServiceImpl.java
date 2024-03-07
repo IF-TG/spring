@@ -10,13 +10,16 @@ import ifTG.travelPlan.repository.springdata.user.UserVectorRepository;
 import ifTG.travelPlan.service.user.UserVectorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,16 +36,23 @@ public class DestinationRecommendServiceImpl implements DestinationRecommendServ
     @Override
     @Transactional
     public List<ResponseERecommendDestinationDto> getAllDestinationRecommend(Long userId, Pageable pageable) {
-        List<Long> allDestinationIdByUserId = destinationScrapRepository.findAllDestinationIdByUserId(userId);
+        List<Long> allScrapedDestinationIdByUserId = destinationScrapRepository.findAllDestinationIdByUserId(userId);
         UserVector userVector = userVectorRepository.findByUserId(userId).orElseGet(()->userVectorService.initUserVector(userId));
         double[] vector = new double[dimension];
         for (int i = 0; i<dimension; i++){
             double value;
-            if (!userVector.getVector().containsKey(i))value = 1;
+            if (!userVector.getVector().containsKey(i))value = 1; // 후에 변경 가능
             else value = userVector.getVector().get(i);
             vector[i] = value;
         }
-        return allResponseERecommendDestinationDto(pageable, allDestinationIdByUserId,  vector);
+        return allResponseERecommendDestinationDto(pageable, allScrapedDestinationIdByUserId,  vector);
+    }
+
+    @Override
+    public List<ResponseERecommendDestinationDto> getAllDestinationRecommend(PageRequest pageable) {
+        double[] vector = new double[dimension];
+        Arrays.fill(vector, 1); // 기본값 1, 추후 업뎃
+        return allResponseERecommendDestinationDto(pageable, new ArrayList<>(),  vector);
     }
 
     private List<ResponseERecommendDestinationDto> allResponseERecommendDestinationDto(Pageable pageable, List<Long> allDestinationIdByUserId, double[] userVector) {

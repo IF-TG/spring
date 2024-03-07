@@ -7,6 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RequestScrapDto {
     private final Long objectId;
-    private final Long userId;
     private final String folderName;
 }

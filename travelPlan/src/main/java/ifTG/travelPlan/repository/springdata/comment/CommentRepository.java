@@ -29,9 +29,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         countQuery = "SELECT COUNT(c) FROM Comment c WHERE c.post.id = :id")
     Page<Comment> findAllByPostId(Long id, Pageable pageable);
 
-    @Query(value = "SELECT c FROM Comment c LEFT JOIN FETCH c.user u WHERE c.post.id = :postId ORDER BY c.createdAt ASC",
+    @Query(value = "SELECT c FROM Comment c JOIN FETCH c.user u WHERE c.post.id = :postId ORDER BY c.createdAt ASC",
         countQuery = "SELECT COUNT(c) FROM Comment c WHERE c.post.id = :postId")
-    Page<Comment> findAllWithNestedCommentWithUserByPostId(Pageable pageable, @Param("postId") Long postId);
+    Page<Comment> findAllWithUserByPostId(Pageable pageable, @Param("postId") Long postId);
 
     Optional<Comment> findWithNestedCommentById(Long commentId);
 
@@ -41,4 +41,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("DELETE FROM Comment c WHERE c.nestedCommentList IS EMPTY AND c.isDeleted = true")
     @Modifying
     void deleteCommentWithSoftDeletedNestedComments(Long nestedCommentId);
+
+    @Query("SELECT c.isDeleted FROM Comment c WHERE c.id = :commentId")
+    boolean isDeleted(Long commentId);
 }

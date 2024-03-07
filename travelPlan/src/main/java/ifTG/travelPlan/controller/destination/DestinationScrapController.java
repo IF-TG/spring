@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.destination;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.RequestScrapDto;
 import ifTG.travelPlan.controller.dto.RequestUpdateDestinationScrapDto;
 import ifTG.travelPlan.controller.dto.Result;
@@ -18,26 +19,25 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/destinationScrap")
+@RequestMapping("/destination/scrap")
 public class DestinationScrapController {
     private final DestinationScrapService destinationScrapService;
 
     @PostMapping
-    public ResponseEntity<Result<ToggleDto>> toggleDestinationScrap(@RequestBody RequestScrapDto dto){
-        return Result.isSuccess(destinationScrapService.toggleDestinationScrap(dto));
+    public ResponseEntity<Result<ToggleDto>> toggleDestinationScrap(@AuthenticationUser Long userId, @RequestBody RequestScrapDto dto){
+        return Result.isSuccess(destinationScrapService.toggleDestinationScrap(userId, dto));
     }
     @PutMapping
-    public ResponseEntity<Result<List<ScrapDto>>> updateDestinationScrap(@RequestBody RequestUpdateDestinationScrapDto dto) {
-        return Result.isSuccess(destinationScrapService.updateDestinationScrap(dto));
+    public ResponseEntity<Result<List<ScrapDto>>> updateDestinationScrap(@RequestBody Long userId, RequestUpdateDestinationScrapDto dto) {
+        return Result.isSuccess(destinationScrapService.updateDestinationScrap(userId, dto));
     }
 
     @GetMapping("/detail")
     public ResponseEntity<Result<List<DestinationDto>>> findAllDestinationScrapsByScrapFolderAndUserId(
             @RequestParam String folderName,
-            @RequestParam Long userId,
+            @AuthenticationUser Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage){
         return Result.isSuccess(destinationScrapService.findAllDestinationScrapsByScrapFolderAndUserId(folderName, userId, PageRequest.of(page,perPage)));
-
     }
 }

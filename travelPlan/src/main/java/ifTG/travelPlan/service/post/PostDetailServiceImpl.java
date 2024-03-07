@@ -29,4 +29,10 @@ public class PostDetailServiceImpl implements PostDetailService{
         List<CommentDtoWithUserInfo> commentDtoWithUserInfoList = commentService.getCommentListByPost(postId, userId, pageable);
         return new PostDetailsWithIsScraped(commentDtoWithUserInfoList, isScraped);
     }
+
+    @Override
+    public PostDetailsWithIsScraped getPostDetail(Long postId, Pageable pageable) {
+        List<CommentDtoWithUserInfo> commentDtoWithUserInfoList = commentService.getCommentListByPost(postId, pageable);
+        return new PostDetailsWithIsScraped(commentDtoWithUserInfoList, false);
+    }
 }

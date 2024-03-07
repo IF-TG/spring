@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface UserBlockService {
 
-    ToggleDto toggleBlockUser(RequestBlockUserDto dto);
+    ToggleDto toggleBlockUser(Long userId, RequestBlockUserDto dto);
 
     List<NicknameAndThumbnail> getAllBlockedUserListByUser(Long userId);
 }

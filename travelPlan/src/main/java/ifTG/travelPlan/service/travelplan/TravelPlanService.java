@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface TravelPlanService {
 
-    TravelPlanDto saveTravelPlan(RequestTravelPlanDto requestTravelPlanDto);
+    TravelPlanDto saveTravelPlan(Long userId, RequestTravelPlanDto requestTravelPlanDto);
 
-    TravelPlanDto updateTravelPlan(Long travelPlanId, RequestTravelPlanDto requestTravelPlanDto);
+    TravelPlanDto updateTravelPlan(Long userId, Long travelPlanId, RequestTravelPlanDto requestTravelPlanDto);
 
-    Boolean deleteTravelPlan(Long travelPlanId);
+    Boolean deleteTravelPlan(Long userID, Long travelPlanId);
 
     List<TravelPlanDto> getTravelPlanByUserId(Long userId);
 }

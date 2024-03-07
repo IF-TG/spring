@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.post;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.dto.ScrapDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
@@ -14,24 +15,24 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/postScrap")
+@RequestMapping("/post/scrap")
 @RequiredArgsConstructor
 public class PostScrapController {
     private final PostScrapService postScrapService;
 
     @PostMapping
-    public ResponseEntity<Result<ToggleDto>> togglePostScrap(@RequestBody RequestScrapDto dto){
-        return Result.isSuccess(postScrapService.togglePostScrap(dto));
+    public ResponseEntity<Result<ToggleDto>> togglePostScrap(@AuthenticationUser Long userId, @RequestBody RequestScrapDto dto){
+        return Result.isSuccess(postScrapService.togglePostScrap(userId, dto));
     }
 
     @PutMapping
-    public ResponseEntity<Result<List<ScrapDto>>> updateFolderName(@RequestBody RequestUpdatePostScrapDto dto) {
-        return Result.isSuccess(postScrapService.updateFolderName(dto));
+    public ResponseEntity<Result<List<ScrapDto>>> updateFolderName(@AuthenticationUser Long userId, @RequestBody RequestUpdatePostScrapDto dto) {
+        return Result.isSuccess(postScrapService.updateFolderName(userId, dto));
     }
     @GetMapping("/detail")
     public ResponseEntity<Result<List<PostDto>>> findAllPostScrapsByScrapFolderAndUserId(
             @RequestParam String folderName,
-            @RequestParam Long userId,
+            @AuthenticationUser Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage){
         return Result.isSuccess(postScrapService.findAllPostScrapsByScrapFolderAndUserId(folderName, userId, PageRequest.of(page,perPage)));

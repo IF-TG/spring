@@ -10,9 +10,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PostScrapService {
-    ToggleDto togglePostScrap(RequestScrapDto dto);
+    ToggleDto togglePostScrap(Long userId, RequestScrapDto dto);
 
-    List<ScrapDto> updateFolderName(RequestUpdatePostScrapDto dto);
+    List<ScrapDto> updateFolderName(Long userId, RequestUpdatePostScrapDto dto);
 
     List<PostDto> findAllPostScrapsByScrapFolderAndUserId(String folderName, Long userId, Pageable pageable);
+
+    boolean deleteAllByFolderName(Long userId, String folderName);
 }

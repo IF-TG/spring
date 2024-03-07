@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class RequestBlockUserDto {
-    @NotNull
-    private final Long userId;
 
     @NotNull
     private final Long blockedUserId;

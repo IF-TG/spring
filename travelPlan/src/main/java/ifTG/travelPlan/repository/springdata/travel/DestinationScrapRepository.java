@@ -17,9 +17,13 @@ public interface DestinationScrapRepository extends JpaRepository<DestinationScr
     Slice<DestinationScrap> findAllWithDestinationByFolderNameAndUserId(String folderName, Long userId, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE DestinationScrap ds SET ds.folderName = :newFolderName WHERE ds.folderName = :oldFolderName")
-    void updateFolderName(String oldFolderName, String newFolderName);
+    @Query("UPDATE DestinationScrap ds SET ds.folderName = :newFolderName WHERE ds.folderName = :oldFolderName AND ds.user.id = :userId")
+    void updateFolderName(Long userId, String oldFolderName, String newFolderName);
 
     @Query("SELECT ds.destination.id FROM DestinationScrap ds WHERE ds.user.id = :userId")
     List<Long> findAllDestinationIdByUserId(Long userId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM DestinationScrap ds WHERE ds.user.id = :userId AND ds.folderName = :folderName")
+    void deleteAllByFolderNameAndUserId(Long userId, String folderName);
 }

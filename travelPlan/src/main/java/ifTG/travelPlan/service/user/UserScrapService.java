@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface UserScrapService {
     List<UserScrapFolderDto> findAllScrapFolderByUser(Long userId);
-    List<UserScrapFolderDto> renameScrapFolder(RequestRenameScrapFolder dto);
+    List<UserScrapFolderDto> renameScrapFolder(Long userId, RequestRenameScrapFolder dto);
 
 }

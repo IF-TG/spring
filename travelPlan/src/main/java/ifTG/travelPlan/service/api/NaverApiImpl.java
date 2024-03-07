@@ -32,8 +32,8 @@ public class NaverApiImpl implements NaverApi{
         UriComponents uriComponents = UriComponentsBuilder.fromUriString(blogApiUri)
                                                           .queryParam("query", URLEncoder.encode(query, StandardCharsets.UTF_8)).build();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-Naver-Client-Id", "ASoK6DV_bhYnNFTVxhw9");
-        httpHeaders.add("X-Naver-Client-Secret", "hT687kggdY");
+        httpHeaders.add("X-Naver-Client-Id", "");
+        httpHeaders.add("X-Naver-Client-Secret", "");
         HttpEntity<?> entity = new HttpEntity<>(httpHeaders);
         ResponseEntity<NaverBlogApiDto> response = restTemplate.exchange(uriComponents.toUri(), HttpMethod.GET, entity, NaverBlogApiDto.class);
         log.info("value = {}",response.getBody());

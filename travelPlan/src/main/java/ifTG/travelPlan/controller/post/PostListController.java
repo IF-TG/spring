@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.post;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.PostWithThumbnailDto;
 import ifTG.travelPlan.dto.post.RequestPostListDto;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -31,7 +33,12 @@ public class PostListController {
             @RequestParam OrderMethod orderMethod,
             @RequestParam MainCategory mainCategory,
             @RequestParam @Nullable String subCategory,
-            @RequestParam Long userId) throws IllegalAccessException {
-        return Result.isSuccess(postService.findAllPostWithPostRequestDto(new RequestPostListDto(page, perPage, orderMethod, mainCategory, subCategory, userId)));
+            @AuthenticationUser Optional<Long> userId) throws IllegalAccessException {
+        if (userId.isPresent()){
+            return Result.isSuccess(postService.findAllPostWithPostRequestDto(userId.get(), new RequestPostListDto(page, perPage, orderMethod, mainCategory, subCategory)));
+        }else{
+            return Result.isSuccess(postService.findAllPostWithPostRequestDto(new RequestPostListDto(page, perPage, orderMethod, mainCategory, subCategory)));
+        }
+
     }
 }

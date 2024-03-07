@@ -5,7 +5,7 @@ import ifTG.travelPlan.dto.post.ToggleDto;
 
 public interface CommentLikeService {
 
-    ToggleDto toggleLikeComment(RequestLikeDto requestLikeDto);
+    ToggleDto toggleLikeComment(Long userId, RequestLikeDto requestLikeDto);
 
 
 }

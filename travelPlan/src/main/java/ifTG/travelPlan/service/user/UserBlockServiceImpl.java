@@ -26,9 +26,9 @@ public class UserBlockServiceImpl implements UserBlockService{
     private final UserProfileImgService userProfileImgService;
     @Override
     @Transactional
-    public ToggleDto toggleBlockUser(RequestBlockUserDto dto) {
-        log.info("{}, {}", dto.getUserId(), dto.getBlockedUserId());
-        UserBlockId userBlockId = new UserBlockId(dto.getUserId(), dto.getBlockedUserId());
+    public ToggleDto toggleBlockUser(Long userId, RequestBlockUserDto dto) {
+        log.info("{}, {}", userId, dto.getBlockedUserId());
+        UserBlockId userBlockId = new UserBlockId(userId, dto.getBlockedUserId());
         Optional<UserBlock> userBlock = userBlockRepository.findById(userBlockId);
         if (userBlock.isEmpty()){
             userBlockRepository.save(new UserBlock(userBlockId));

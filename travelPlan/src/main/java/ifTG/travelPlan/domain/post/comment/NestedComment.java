@@ -10,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -42,6 +44,8 @@ public class NestedComment {
     @JoinColumn(name = "parent_comment_id", referencedColumnName = "comment_id")
     private Comment parentComment;
 
+    @OneToMany(mappedBy = "nestedComment", orphanRemoval = true)
+    private final List<NestedCommentLike> nestedCommentLikeList = new ArrayList<>();
     @Builder
     public NestedComment(String comment, User user, Comment parentComment) {
         this.comment = comment;

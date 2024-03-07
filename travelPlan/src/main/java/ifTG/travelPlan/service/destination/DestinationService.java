@@ -12,4 +12,6 @@ import java.util.List;
 public interface DestinationService {
 
     DestinationDetailDto findByDestinationId(Long destinationId, ContentType contentType, Long userId);
+
+    DestinationDetailDto findByDestinationId(Long destinationId, ContentType contentType);
 }

@@ -9,6 +9,5 @@ import java.util.List;
 @AllArgsConstructor
 public class RequestUpdateDestinationScrapDto {
     private List<Long> objectIdList;
-    private Long userId;
     private String folderName;
 }

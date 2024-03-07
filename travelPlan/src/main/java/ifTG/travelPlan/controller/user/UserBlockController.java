@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.user;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.RequestBlockUserDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.ToggleDto;
@@ -18,12 +19,12 @@ public class UserBlockController {
     private final UserBlockService userBlockService;
 
     @PostMapping
-    public ResponseEntity<Result<ToggleDto>> blockedUser(@RequestBody RequestBlockUserDto dto){
-        return Result.isSuccess(userBlockService.toggleBlockUser(dto));
+    public ResponseEntity<Result<ToggleDto>> blockedUser(@AuthenticationUser Long userId, @RequestBody RequestBlockUserDto dto){
+        return Result.isSuccess(userBlockService.toggleBlockUser(userId, dto));
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Result<List<NicknameAndThumbnail>>> getBlockedUserListByUser(@RequestParam Long userId){
+    public ResponseEntity<Result<List<NicknameAndThumbnail>>> getBlockedUserListByUser(@AuthenticationUser Long userId){
         return Result.isSuccess(userBlockService.getAllBlockedUserListByUser(userId));
     }
 }

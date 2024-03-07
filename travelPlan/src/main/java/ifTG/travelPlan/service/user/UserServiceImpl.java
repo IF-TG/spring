@@ -1,7 +1,11 @@
 package ifTG.travelPlan.service.user;
 
+import ifTG.travelPlan.controller.dto.StatusCode;
 import ifTG.travelPlan.controller.dto.UserCreateDto;
 import ifTG.travelPlan.controller.dto.UserInfoDto;
+import ifTG.travelPlan.domain.user.User;
+import ifTG.travelPlan.dto.SignUpDto;
+import ifTG.travelPlan.exception.CustomErrorException;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
-    @Override
-    @Transactional
-    public UserInfoDto saveUser(UserCreateDto userCreateDto) {
-        return null;
-    }
 
     @Override
     @Transactional
@@ -26,8 +25,10 @@ public class UserServiceImpl implements UserService{
         if (!userRepository.existsByNickname(nickname)){
             userRepository.updateNickname(userId, nickname);
             return true;
+        }else{
+            throw new CustomErrorException(StatusCode.DUPLICATE_NICKNAME);
         }
-        return false;
+
     }
 
     @Override

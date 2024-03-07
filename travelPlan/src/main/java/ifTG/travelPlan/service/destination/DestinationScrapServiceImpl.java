@@ -29,8 +29,8 @@ public class DestinationScrapServiceImpl implements DestinationScrapService{
 
     @Override
     @Transactional
-    public ToggleDto toggleDestinationScrap(RequestScrapDto dto) {
-        DestinationScrapId destinationScrapId = new DestinationScrapId(dto.getObjectId(), dto.getUserId());
+    public ToggleDto toggleDestinationScrap(Long userId, RequestScrapDto dto) {
+        DestinationScrapId destinationScrapId = new DestinationScrapId(dto.getObjectId(), userId);
         Optional<DestinationScrap> destinationScrap = destinationScrapRepository.findById(destinationScrapId);
         DestinationScrap newDestinationScrap = destinationScrap.orElseGet(()->new DestinationScrap(destinationScrapId, dto.getFolderName()));
         if (destinationScrap.isEmpty()){
@@ -44,10 +44,9 @@ public class DestinationScrapServiceImpl implements DestinationScrapService{
 
     @Override
     @Transactional
-    public List<ScrapDto> updateDestinationScrap(RequestUpdateDestinationScrapDto dto) {
-        List<DestinationScrapId> destinationScrapIdList = dto.getObjectIdList().stream().map(d->new DestinationScrapId(d, dto.getUserId())).toList();
+    public List<ScrapDto> updateDestinationScrap(Long userId, RequestUpdateDestinationScrapDto dto) {
+        List<DestinationScrapId> destinationScrapIdList = dto.getObjectIdList().stream().map(d->new DestinationScrapId(d, userId)).toList();
         List<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllById(destinationScrapIdList);
-        System.out.println("destinationScrapIdList.size() = " + destinationScrapIdList.size());
         destinationScrapList.forEach(d->d.updateFolderName(dto.getFolderName()));
         destinationScrapList = destinationScrapRepository.saveAll(destinationScrapList);
         return destinationScrapList.stream().map(d-> new ScrapDto(
@@ -60,6 +59,12 @@ public class DestinationScrapServiceImpl implements DestinationScrapService{
     public List<DestinationDto> findAllDestinationScrapsByScrapFolderAndUserId(String folderName, Long userId, Pageable pageable) {
         Slice<DestinationScrap> destinationScrapList = destinationScrapRepository.findAllWithDestinationByFolderNameAndUserId(folderName, userId, pageable);
         return destinationConvertDto.getDestinationDtoListByScrap(destinationScrapList.stream().map(DestinationScrap::getDestination).toList());
+    }
+
+    @Override
+    public Boolean deleteAllByFolderName(Long userId, String folderName) {
+        destinationScrapRepository.deleteAllByFolderNameAndUserId(userId, folderName);
+        return true;
     }
 
 }

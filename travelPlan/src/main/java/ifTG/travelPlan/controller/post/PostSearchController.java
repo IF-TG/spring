@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.post;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.controller.dto.RequestSearchPostDto;
 import ifTG.travelPlan.controller.dto.Result;
@@ -12,14 +13,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/postSearch")
+@RequestMapping("/post/search")
 public class PostSearchController {
     private final PostSearchService postSearchService;
 
     @GetMapping
     public ResponseEntity<Result<List<PostDto>>> findAllLikeKeyword(
             @RequestParam String keyword,
-            @RequestParam Long userId,
+            @AuthenticationUser Long userId,
             @RequestParam(defaultValue = "true") boolean isTitle,
             @RequestParam(defaultValue = "true") boolean isContent,
             @RequestParam(defaultValue = "0") int page,

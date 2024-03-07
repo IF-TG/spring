@@ -10,10 +10,12 @@ import java.util.List;
 
 public interface PostService {
 
+    List<PostWithThumbnailDto> findAllPostWithPostRequestDto(Long userId, RequestPostListDto requestPostListDto);
     List<PostWithThumbnailDto> findAllPostWithPostRequestDto(RequestPostListDto requestPostListDto);
-    PostDto savePost(PostCreateDto postCreateDto);
-    Boolean deletePost(Long postId);
-    PostDto updatePost(PostUpdateDto postUpdateDto);
+
+    PostDto savePost(Long userId, PostCreateDto postCreateDto);
+    Boolean deletePost(Long userId, Long postId);
+    PostDto updatePost(Long userId, PostUpdateDto postUpdateDto);
     List<PostDto> findByUserId(Long userId, Pageable pageable);
 
     List<PostWithThumbnailDto> findCommentedOrLikedPostListByUserId(Long userId, Pageable pageable);

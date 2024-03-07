@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.destination;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.controller.dto.StatusCode;
 import ifTG.travelPlan.dto.destination.DestinationDetailDto;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/destination")
@@ -30,16 +32,20 @@ public class DestinationController {
     public ResponseEntity<Result<DestinationDetailDto>> findDestination(
             @RequestParam Long destinationId,
             @RequestParam Integer contentTypeId,
-            @RequestParam Long userId){
+            @AuthenticationUser Optional<Long> userId){
         ContentType inputContent = ContentType.of(contentTypeId);
         if (inputContent == null){
             throw new CustomErrorException(StatusCode.INVALID_CONTENT_TYPE_ID);
         }
-        return Result.isSuccess(destinationService.findByDestinationId(destinationId, inputContent, userId));
+        if (userId.isPresent()){
+            return Result.isSuccess(destinationService.findByDestinationId(destinationId, inputContent, userId.get()));
+        }else {
+            return Result.isSuccess(destinationService.findByDestinationId(destinationId, inputContent));
+        }
     }
     @GetMapping("/search")
     public ResponseEntity<Result<List<ResponseEDestinationDto>>> findAllByKeyword(
-            @RequestParam Long userId,
+            @AuthenticationUser Long userId,
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage

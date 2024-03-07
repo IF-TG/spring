@@ -37,7 +37,7 @@ public class PostConstructor {
     private final DestinationWordVector destination;
 
 
-    @PostConstruct
+    //@PostConstruct
     @Transactional
     public void initData() throws IOException {
         /*for (int i =2; i<downloadPage; i++){

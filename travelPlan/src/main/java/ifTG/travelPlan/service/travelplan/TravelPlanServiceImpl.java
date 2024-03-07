@@ -1,17 +1,21 @@
 package ifTG.travelPlan.service.travelplan;
 
 import ifTG.travelPlan.controller.dto.RequestTravelPlanDto;
+import ifTG.travelPlan.controller.dto.StatusCode;
 import ifTG.travelPlan.controller.dto.TravelPlanDto;
 import ifTG.travelPlan.domain.travel.TravelPlan;
 import ifTG.travelPlan.domain.user.User;
+import ifTG.travelPlan.exception.CustomErrorException;
 import ifTG.travelPlan.repository.springdata.travel.TravelPlanRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.util.Check;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,30 +25,31 @@ public class TravelPlanServiceImpl implements TravelPlanService{
     private final UserRepository userRepository;
     @Override
     @Transactional
-    public TravelPlanDto saveTravelPlan(RequestTravelPlanDto requestTravelPlanDto) {
-        User user = userRepository.findById(requestTravelPlanDto.getUserId()).orElseThrow(EntityNotFoundException::new);
+    public TravelPlanDto saveTravelPlan(Long userId, RequestTravelPlanDto requestTravelPlanDto) {
+        User user = userRepository.findById(userId).orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_USER));
         TravelPlan travelPlan = TravelPlan.builder()
                         .title(requestTravelPlanDto.getTitle())
                         .user(user).build();
 
         travelPlan = travelPlanRepository.save(travelPlan);
-
         return new TravelPlanDto(travelPlan.getId(), travelPlan.getTitle());
     }
 
     @Override
     @Transactional
-    public TravelPlanDto updateTravelPlan(Long travelPlanId, RequestTravelPlanDto requestTravelPlanDto) {
-        TravelPlan travelPlan = travelPlanRepository.findById(travelPlanId).orElseThrow(EntityNotFoundException::new);
+    public TravelPlanDto updateTravelPlan(Long userId, Long travelPlanId, RequestTravelPlanDto requestTravelPlanDto) {
+        TravelPlan travelPlan = travelPlanRepository.findById(travelPlanId).orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_CONTENT));
+        Check.is(!travelPlan.getUser().getId().equals(userId), StatusCode.AUTHORITY_FAILED);
         travelPlan.updateTravelPlan(requestTravelPlanDto.getTitle());
-
         return new TravelPlanDto(travelPlan.getId(), travelPlan.getTitle());
     }
 
     @Override
     @Transactional
-    public Boolean deleteTravelPlan(Long travelPlanId) {
-        travelPlanRepository.deleteById(travelPlanId);
+    public Boolean deleteTravelPlan(Long userId, Long travelPlanId) {
+        TravelPlan travelPlan = travelPlanRepository.findById(travelPlanId).orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_CONTENT));
+        Check.is(!travelPlan.getUser().getId().equals(userId), StatusCode.AUTHORITY_FAILED);
+        travelPlanRepository.delete(travelPlan);
         return true;
     }
 

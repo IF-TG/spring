@@ -1,5 +1,6 @@
 package ifTG.travelPlan.service.post;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.PostDto;
 import ifTG.travelPlan.controller.dto.RequestScrapDto;
 import ifTG.travelPlan.controller.dto.RequestUpdatePostScrapDto;
@@ -9,6 +10,7 @@ import ifTG.travelPlan.dto.ScrapDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.repository.springdata.post.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.post.PostScrapRepository;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.util.Check;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -28,8 +30,8 @@ public class PostScrapServiceImpl implements PostScrapService{
     private final PostLikeRepository postLikeRepository;
     @Override
     @Transactional
-    public ToggleDto togglePostScrap(RequestScrapDto dto) {
-       PostScrapId postScrapId = new PostScrapId(dto.getObjectId(), dto.getUserId());
+    public ToggleDto togglePostScrap(Long userId, RequestScrapDto dto) {
+       PostScrapId postScrapId = new PostScrapId(dto.getObjectId(), userId);
        Optional<PostScrap> postScrap = postScrapRepository.findById(postScrapId);
        if (postScrap.isEmpty()){
            PostScrap newPostScrap = new PostScrap(postScrapId, dto.getFolderName());
@@ -43,8 +45,8 @@ public class PostScrapServiceImpl implements PostScrapService{
 
     @Override
     @Transactional
-    public List<ScrapDto> updateFolderName(RequestUpdatePostScrapDto dto) {
-        List<PostScrapId> postScrapIdList = dto.getObjectIdList().stream().map(d->new PostScrapId(d, dto.getUserId())).toList();
+    public List<ScrapDto> updateFolderName(Long userId, RequestUpdatePostScrapDto dto) {
+        List<PostScrapId> postScrapIdList = dto.getObjectIdList().stream().map(d->new PostScrapId(d, userId)).toList();
         List<PostScrap> postScrapList = postScrapRepository.findAllById(postScrapIdList);
         postScrapList.forEach(ps->ps.updateFolderName(dto.getFolderName()));
         postScrapRepository.saveAll(postScrapList);
@@ -59,5 +61,11 @@ public class PostScrapServiceImpl implements PostScrapService{
         Slice<PostScrap> postScrapList = postScrapRepository.findAllWithPostByFolderNameAndUserId(folderName, userId, pageable);
         List<Long> likedPostList = postLikeRepository.findPostIdByUserId(userId);
         return postConvertDto.getPostDtoList(postScrapList.stream().map(PostScrap::getPost).toList(), likedPostList);
+    }
+
+    @Override
+    public boolean deleteAllByFolderName(Long userId, String folderName) {
+        postScrapRepository.deleteAllByFolderName(userId, folderName);
+        return true;
     }
 }

@@ -1,12 +1,14 @@
 package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.PostDto;
+import ifTG.travelPlan.controller.dto.StatusCode;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostCategory;
 import ifTG.travelPlan.domain.post.PostLike;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.dto.post.*;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
+import ifTG.travelPlan.exception.CustomErrorException;
 import ifTG.travelPlan.repository.querydsl.QPostListRepository;
 import ifTG.travelPlan.repository.springdata.post.PostLikeRepository;
 import ifTG.travelPlan.repository.springdata.post.PostCategoryRepository;
@@ -14,6 +16,7 @@ import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.util.Check;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -43,12 +47,18 @@ public class PostServiceImpl implements PostService{
     private final UserBlockRepository userBlockRepository;
 
     @Override
-    public List<PostWithThumbnailDto> findAllPostWithPostRequestDto(RequestPostListDto requestPostListDto){
-        User user = userRepository.findByIdWithPostLike(requestPostListDto.getUserId());
+    public List<PostWithThumbnailDto> findAllPostWithPostRequestDto(Long userId, RequestPostListDto requestPostListDto){
+        User user = userRepository.findByIdWithPostLike(userId);
         List<Long> allBlockUserList = getAllBlockUserList(user);
         List<Long> likedPostListByUser = user.getPostLikeList().stream().map(PostLike::getPostLikedId).toList();
         Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(requestPostListDto, allBlockUserList);
         return postConvertDto.getPostWithThumbnailDtoList(postList, likedPostListByUser);
+    }
+
+    @Override
+    public List<PostWithThumbnailDto> findAllPostWithPostRequestDto(RequestPostListDto requestPostListDto) {
+        Page<Post> postList = findAllPostsBySubCategoryOrderByOrderMethod(requestPostListDto, new ArrayList<>());
+        return postConvertDto.getPostWithThumbnailDtoList(postList, new ArrayList<>());
     }
 
     private List<Long> getAllBlockUserList(User user) {
@@ -57,8 +67,8 @@ public class PostServiceImpl implements PostService{
 
     @Override
     @Transactional
-    public PostDto savePost(PostCreateDto postCreateDto) {
-        User user = userRepository.findById(postCreateDto.getUserId()).orElseThrow(EntityNotFoundException::new);
+    public PostDto savePost(Long userId, PostCreateDto postCreateDto) {
+        User user = userRepository.findById(userId).orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_USER));
         Post post = getPostByPostCreateDto(postCreateDto, user);
         Post savedPost = postRepository.save(post);
         saveAllPostSubCategoryByPostCreateDto(postCreateDto, savedPost);
@@ -72,10 +82,11 @@ public class PostServiceImpl implements PostService{
 
     @Override
     @Transactional
-    public PostDto updatePost(PostUpdateDto postUpdateDto) {
+    public PostDto updatePost(Long userId, PostUpdateDto postUpdateDto) {
         Long postId = postUpdateDto.getPostId();
         deleteSubCategory(postId);
-        Post post = postRepository.findByIdWithUserAndPostImgAndPostCategory(postUpdateDto.getPostId()).orElseThrow(EntityNotFoundException::new);
+        Post post = postRepository.findByIdWithUserAndPostImgAndPostCategory(postUpdateDto.getPostId()).orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_CONTENT));
+        Check.is(!post.getUser().getId().equals(userId), StatusCode.AUTHORITY_FAILED);
         updatePost(postUpdateDto, post);
         postImgFileService.updateImgFile(postUpdateDto.getPost().getImgFileList(), post);
         saveAllPostSubCategoryByPostCreateDto(postUpdateDto.getPost(), post);
@@ -96,7 +107,7 @@ public class PostServiceImpl implements PostService{
         User user = userRepository.findByIdWithPostLike(userId);
         List<Long> allBlockUserList = getAllBlockUserList(user);
         Page<Post> postList;
-        postList = allBlockUserList.size()==0?
+        postList = allBlockUserList.isEmpty() ?
                 postRepository.findCommentedOrLikedPostListByUserId(userId, pageable):
                 postRepository.findCommentedOrLikedPostListNotInBlockUserByUserId(userId, allBlockUserList, pageable);
         List<Long> likedPostIdList = user.getPostLikeList().stream().map(p->p.getPostLikeId().getPostId()).toList();
@@ -124,9 +135,11 @@ public class PostServiceImpl implements PostService{
 
     @Override
     @Transactional
-    public Boolean deletePost(Long postId) {
+    public Boolean deletePost(Long userId, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomErrorException(StatusCode.NOT_FOUND_CONTENT));
+        Check.is(!post.getUser().getId().equals(userId), StatusCode.AUTHORITY_FAILED);
         postImgFileService.deleteAllById(postId);
-        postRepository.deleteById(postId);
+        postRepository.delete(post);
         return true;
     }
 

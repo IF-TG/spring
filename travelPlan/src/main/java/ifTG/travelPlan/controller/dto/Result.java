@@ -28,7 +28,7 @@ public class Result<T> {
                 .status(statusCode.getHttpStatus())
                 .body(Result.builder()
                         .result(null)
-                        .status(statusCode.toString())
+                        .status(statusCode.getHttpStatus().toString())
                         .statusCode(statusCode.getCode())
                         .message(statusCode.getMessage())
                         .build()
@@ -41,6 +41,4 @@ public class Result<T> {
         this.statusCode = statusCode;
         this.message = message;
     }
-
-
 }

@@ -14,10 +14,11 @@ import java.util.List;
 
 public interface DestinationScrapService {
 
-    ToggleDto toggleDestinationScrap(RequestScrapDto dto);
+    ToggleDto toggleDestinationScrap(Long userId, RequestScrapDto dto);
 
-    List<ScrapDto> updateDestinationScrap(RequestUpdateDestinationScrapDto dto);
+    List<ScrapDto> updateDestinationScrap(Long userId, RequestUpdateDestinationScrapDto dto);
 
     List<DestinationDto> findAllDestinationScrapsByScrapFolderAndUserId(String folderName, Long userId, Pageable pageable);
 
+    Boolean deleteAllByFolderName(Long userId, String folderName);
 }

@@ -5,6 +5,7 @@ import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.activations.A
 import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.activations.ActivationFunctionDifferential;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.NormalizedVector;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.util.InitArray;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,15 @@ public class SkipGram implements Word2Vec {
         for (int i = 0; i < builder.getEpoch(); i++) {
             learn(builder);
         }
+        normalized(builder);
         return builder.getWeightBuilder();
+    }
+
+    private void normalized(LearningBuilder builder) {
+        double[][] vectors = builder.getWeightBuilder().getInputHiddenWeight();
+        for (double[] vec : vectors){
+            NormalizedVector.normalizedVector(vec);
+        }
     }
 
     @Override

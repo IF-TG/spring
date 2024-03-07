@@ -9,4 +9,6 @@ import org.springframework.data.domain.Pageable;
 public interface PostDetailService {
 
     PostDetailsWithIsScraped getPostDetail(Long postId, Long userId, Pageable pageable);
+
+    PostDetailsWithIsScraped getPostDetail(Long postId, Pageable pageable);
 }

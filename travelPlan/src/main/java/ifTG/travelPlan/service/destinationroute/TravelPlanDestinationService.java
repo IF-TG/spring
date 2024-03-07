@@ -8,10 +8,10 @@ import java.util.List;
 
 
 public interface TravelPlanDestinationService {
-    List<TravelPlanDestinationDto> getDestinationRouteByTravelPlanId(Long travelPlanId);
+    List<TravelPlanDestinationDto> getDestinationRouteByTravelPlanId(Long userId, Long travelPlanId);
 
-    List<TravelPlanDestinationDto> addDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto);
+    List<TravelPlanDestinationDto> addDestinationToTravelPlan(Long userId, DestinationRouteListWithTravelPlanIdDto dto);
 
-    List<TravelPlanDestinationDto> updateDestinationToTravelPlan(DestinationRouteListWithTravelPlanIdDto dto);
+    List<TravelPlanDestinationDto> updateDestinationToTravelPlan(Long userId, DestinationRouteListWithTravelPlanIdDto dto);
 
 }

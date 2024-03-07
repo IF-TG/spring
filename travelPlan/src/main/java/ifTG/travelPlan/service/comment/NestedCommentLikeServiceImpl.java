@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class NestedCommentLikeServiceImpl implements NestedCommentLikeService{
     @Override
     @ToggleLike
-    public ToggleDto toggleLikeNestedComment(RequestLikeDto requestLikeDto) {
+    public ToggleDto toggleLikeNestedComment(Long userId, RequestLikeDto requestLikeDto) {
         return null;
     }
 }

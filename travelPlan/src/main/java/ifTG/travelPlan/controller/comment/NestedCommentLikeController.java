@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.comment;
 
+import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.RequestLikeDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.ToggleDto;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/nestedCommentLike")
+@RequestMapping("/comment/nestedComment/like")
 public class NestedCommentLikeController {
     private final NestedCommentLikeService nestedCommentLikeService;
 
     @PostMapping
-    public ResponseEntity<Result<ToggleDto>> toggleLikeNestedComment(@RequestBody RequestLikeDto requestLikeDto){
-        return Result.isSuccess(nestedCommentLikeService.toggleLikeNestedComment(requestLikeDto));
+    public ResponseEntity<Result<ToggleDto>> toggleLikeNestedComment(@AuthenticationUser Long userId, @RequestBody RequestLikeDto requestLikeDto){
+        return Result.isSuccess(nestedCommentLikeService.toggleLikeNestedComment(userId, requestLikeDto));
     }
 }

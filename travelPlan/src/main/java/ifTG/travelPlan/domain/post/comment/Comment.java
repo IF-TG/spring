@@ -59,7 +59,8 @@ public class Comment {
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "parentComment")
     private final List<NestedComment> nestedCommentList = new ArrayList<>();
-    @OneToMany(mappedBy = "comment")
+
+    @OneToMany(mappedBy = "comment", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private final List<CommentLike> commentLikeList = new ArrayList<>();
 
     @Builder

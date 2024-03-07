@@ -83,6 +83,7 @@ public class Post {
     private final List<PostImg> postImgList = new ArrayList<>();
 
     @BatchSize(size = 100)
+    @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 

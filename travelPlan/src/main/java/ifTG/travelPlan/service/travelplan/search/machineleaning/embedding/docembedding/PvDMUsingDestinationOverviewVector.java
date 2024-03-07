@@ -6,6 +6,7 @@ import ifTG.travelPlan.service.travelplan.search.machineleaning.bp.activations.A
 import ifTG.travelPlan.service.travelplan.search.machineleaning.destinationvector.destination.wordvector.DestinationWordVector;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.dictionary.Morpheme;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.LearningBuilder;
+import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.NormalizedVector;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.WeightBuilder;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.wordembedding.Word2Vec;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.util.InitArray;
@@ -42,6 +43,13 @@ public class PvDMUsingDestinationOverviewVector implements Doc2Vec {
                 double[] result = forwardPass(builder, inputVector);
                 learning(builder, documentIdx, targetIdx, inputVector, result);
             }
+        }
+        normalized(builder);
+    }
+    private void normalized(LearningBuilder builder) {
+        double[][] vectors = builder.getWeightBuilder().getInputHiddenWeight();
+        for (double[] vec : vectors){
+            NormalizedVector.normalizedVector(vec);
         }
     }
 

@@ -37,6 +37,13 @@ public class DestinationServiceImpl implements DestinationService{
         return getDetailDto(detailWithDestination, contentType, isLiked, isScraped);
     }
 
+    @Override
+    public DestinationDetailDto findByDestinationId(Long destinationId, ContentType contentType) {
+        log.info("input = {}, {}, {}", destinationId, contentType.getValue());
+        Object detailWithDestination = qDestinationRepository.findDetailWithDestinationById(destinationId, contentType);
+        return getDetailDto(detailWithDestination, contentType, false, false);
+    }
+
     private DestinationDetailDto getDetailDto(Object object, ContentType contentType, boolean isLiked, boolean isScraped) {
         System.out.println("object = " + object);
         DestinationDetailDto dto = null;
