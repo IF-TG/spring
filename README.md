@@ -5,7 +5,8 @@
  - https://github.com/IF-TG
 ## API 명세서
  - [https://travelplan.s3.ap-northeast-2.amazonaws.com/index.html](https://travelplan.s3.ap-northeast-2.amazonaws.com/index.html)
-
+### ERD
+ - https://github.com/IF-TG/spring/blob/master/ERD.png
 ## 사용된 기술
 - 백엔드: Spring, Spring Boot, Spring Security, JPA, Query dsl
 - 데이터베이스: MySQL
