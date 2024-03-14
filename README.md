@@ -9,7 +9,7 @@
 <details>
   <summary>상태 코드</summary>
  
-| HttpStatus           | 에러 코드 | 메시지                                              | enum 상수                |
+| HttpStatus           | 에러 코드 | 메시지                                              | enum                 |
 |----------------------|------------|---------------------------------------------------|-----------------------|
 | OK                   | 0000       | SUCCESS                                           | SUCCESS               |
 | BAD_REQUEST          | 2001       | 알 수 없는 컨텐츠 타입                             | INVALID_CONTENT_TYPE_ID |
@@ -28,7 +28,7 @@
 | BAD_REQUEST          | 4006       | 지원하지 않는 포멧입니다.                             | INVALID_IMAGE_TYPE    |
 | INTERNAL_SERVER_ERROR| 5001       | 죄송합니다. 요청을 처리하는 과정에서 예상치 못한 서버 오류가 발생했습니다. 문제를 빠르게 해결하기 위해 노력하고 있습니다. 문제가 지속될 경우, 이메일로 문의해 주세요. | Internal_Server_Error |
 | NOT_IMPLEMENTED      | 5002       | 로그인 시도 중 문제가 발생하였습니다.                  | UNSUPPORTED_OAUTH2_REQUIREMENT |
-| INTERNAL_SERVER_ERROR| 5003       | 이미지 저장에 실패했습니다.
+| INTERNAL_SERVER_ERROR| 5003       | 이미지 저장에 실패했습니다.                           | CANNOT_CREATE_FOLDER |            
 
 </details>
 
