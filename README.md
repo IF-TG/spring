@@ -2,7 +2,7 @@
 # TravelPlan
 
 사용자에게 여행지 정보와 커뮤니케이션 환경을 제공하며 최종적으로 여행을 계획할 수 있도록 하는 IOS기반의 애플리케이션입니다. 따라서 Spring 프레임워크를 사용하여 기본적인 CRUD를 제공하며, 사용자가 쾌적하게 사용할 수 있도록 관광지 검색 기능과 관광지 추천 기능을 구현했습니다. 보안에서는 Spring security의 OAuth2Login을 기반으로 사용자가 편리하게 로그인할 수 있도록 제공하였습니다.
-
+ - https://github.com/IF-TG
 ## API 명세서
  - [https://travelplan.s3.ap-northeast-2.amazonaws.com/index.html](https://travelplan.s3.ap-northeast-2.amazonaws.com/index.html)
 
