@@ -1,7 +1,7 @@
 package ifTG.travelPlan.service.travelplan;
 
 import ifTG.travelPlan.controller.dto.RequestTravelPlanDto;
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.controller.dto.TravelPlanDto;
 import ifTG.travelPlan.domain.travel.TravelPlan;
 import ifTG.travelPlan.domain.user.User;
@@ -9,13 +9,11 @@ import ifTG.travelPlan.exception.CustomErrorException;
 import ifTG.travelPlan.repository.springdata.travel.TravelPlanRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.util.Check;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)

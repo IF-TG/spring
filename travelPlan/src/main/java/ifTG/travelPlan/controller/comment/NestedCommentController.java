@@ -7,6 +7,7 @@ import ifTG.travelPlan.controller.dto.RequestUpdateNestedCommentDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.comment.NestedCommentDto;
 import ifTG.travelPlan.service.comment.NestedCommentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/comment/nestedComment")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class NestedCommentController {
     private final NestedCommentService nestedCommentService;
     @PostMapping()

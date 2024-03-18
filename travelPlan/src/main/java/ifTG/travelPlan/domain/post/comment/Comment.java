@@ -14,6 +14,7 @@ import org.hibernate.annotations.Formula;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -77,5 +78,18 @@ public class Comment {
 
     public void updateComment(String comment){
         this.comment = comment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment1 = (Comment) o;
+        return likeNum == comment1.likeNum && isDeleted == comment1.isDeleted && Objects.equals(id, comment1.id) && Objects.equals(comment, comment1.comment) && Objects.equals(createdAt, comment1.createdAt) && Objects.equals(user, comment1.user) && Objects.equals(post, comment1.post);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, comment, createdAt, user, post, likeNum, isDeleted);
     }
 }

@@ -18,7 +18,6 @@ import java.util.List;
 @Mapping(mappingPath = "elastic/destination-mapping.json")
 @Setting(settingPath = "elastic/destination-setting.json")
 @AllArgsConstructor
-@ToString
 @Builder
 public class EDestination {
     @Id

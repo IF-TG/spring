@@ -4,6 +4,7 @@ import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.destination.ResponseERecommendDestinationDto;
 import ifTG.travelPlan.service.destination.DestinationRecommendService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/destination/recommend")
+@SecurityRequirement(name = "Authorization")
 public class DestinationRecommendController {
     private final DestinationRecommendService destinationRecommendService;
 

@@ -1,7 +1,7 @@
 package ifTG.travelPlan.service.destinationroute;
 
 import ifTG.travelPlan.controller.dto.DestinationRouteListWithTravelPlanIdDto;
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.controller.dto.TravelPlanDestinationIdDto;
 import ifTG.travelPlan.domain.travel.TravelPlan;
 import ifTG.travelPlan.domain.travel.TravelPlanDestination;

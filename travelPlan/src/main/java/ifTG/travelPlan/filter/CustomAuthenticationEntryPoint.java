@@ -1,16 +1,12 @@
-package com.example.demo.oauth2.custom;
+package ifTG.travelPlan.filter;
 
-import com.example.demo.exception.StatusCode;
-import com.nimbusds.jose.shaded.gson.JsonObject;
+import com.google.gson.JsonObject;
+import ifTG.travelPlan.exception.StatusCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthorizationCodeAuthenticationProvider;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationCodeGrantFilter;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 

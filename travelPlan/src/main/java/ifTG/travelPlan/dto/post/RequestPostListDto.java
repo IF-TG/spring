@@ -1,6 +1,8 @@
 package ifTG.travelPlan.dto.post;
 
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.dto.post.enums.*;
+import ifTG.travelPlan.exception.CustomErrorException;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +29,9 @@ public class RequestPostListDto {
     }
     private static void isNullCategory(OrderMethod orderMethod, MainCategory mainCategory) throws IllegalAccessException {
         Optional.ofNullable(orderMethod)
-                .orElseThrow(()->new IllegalAccessException("orderMethod cannot be null"));
+                .orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_CONTENT));
         Optional.ofNullable(mainCategory)
-                .orElseThrow(()->new IllegalAccessException("mainCategory cannot be null"));
+                .orElseThrow(()->new CustomErrorException(StatusCode.NOT_FOUND_CONTENT));
     }
     private void getSubCategory(MainCategory mainCategory, String subCategory) {
         switch(mainCategory){

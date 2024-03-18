@@ -1,6 +1,6 @@
 package ifTG.travelPlan.filter;
 
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.dto.StatusCodeMessageDto;
 import ifTG.travelPlan.dto.UserIdAndAuthorities;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final static String AUTHENTICATION_PROPERTY = "Authentication";
+    private final static String AUTHENTICATION_PROPERTY = "Authorization";
     private final RestTemplate restTemplate;
     private final UserRepository userRepository;
 
@@ -40,8 +40,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader(AUTHENTICATION_PROPERTY);
-        if (jwt ==null){
-            filterChain.doFilter(request,response);
+        if (jwt != null && jwt.startsWith("bearer ")) {
+            jwt =  jwt.substring(7);
+        }else{
+            filterChain.doFilter(request, response);
             return;
         }
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -74,3 +76,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 }
+
+

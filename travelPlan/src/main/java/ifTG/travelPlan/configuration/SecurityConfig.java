@@ -2,6 +2,7 @@ package ifTG.travelPlan.configuration;
 
 import co.elastic.clients.elasticsearch.nodes.Http;
 import ifTG.travelPlan.dto.Roles;
+import ifTG.travelPlan.filter.CustomAuthenticationEntryPoint;
 import ifTG.travelPlan.filter.CustomExceptionHandlerFilter;
 import ifTG.travelPlan.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomExceptionHandlerFilter customExceptionHandlerFilter;
+    private final CustomAuthenticationEntryPoint entryPoint;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .rememberMe(AbstractHttpConfigurer::disable)
+                .exceptionHandling(ex->ex.authenticationEntryPoint(entryPoint))
                 .authorizeHttpRequests(auth-> {
                     auth
                             .requestMatchers(HttpMethod.GET, "/comment").hasAnyRole(Roles.ANONYMOUS.role(), Roles.OAUTH2_USER.role())
@@ -59,6 +62,8 @@ public class SecurityConfig {
                             .requestMatchers("/profile/original").hasAnyRole(Roles.OAUTH2_USER.role(), Roles.ANONYMOUS.role())
                             .requestMatchers("/scrap").hasRole(Roles.OAUTH2_USER.role())
                             .requestMatchers("/searchHistory").hasRole(Roles.OAUTH2_USER.role())
+                            .requestMatchers("/swagger-ui/**").permitAll()
+                            .requestMatchers("/v3/api-docs/**").permitAll()
                             .anyRequest().hasAnyRole("OAUTH2_USER", "ANONYMOUS");
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

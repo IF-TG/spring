@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Service
 @Slf4j
 public class MachineLearningImpl implements MachineLeaning {
-    private final Morpheme morpheme;
     private final WordVectorInitializer initializer;
     private final DestinationVector destinationVector;
     private final DocVectorFileWriter docVectorFileWriter;

@@ -49,7 +49,6 @@ public class PostImgFileServiceImpl implements PostImgFileService {
 
     private String saveImgFileToFileStore(String postIdUri, ImgFile imgFile) {
         String savedFileName = fileStore.saveFileToBase64Decode(imgFile.getImg(), postIdUri, imgFile.getImageType().toString());
-        log.info("isthumbnail = {}", imgFile.isThumbnail());
         if(imgFile.isThumbnail()){
             new Thread(()->fileStore.createThumbnailAndSaveFile(postIdUri, savedFileName, thumbnailPath, length)).start();
         }

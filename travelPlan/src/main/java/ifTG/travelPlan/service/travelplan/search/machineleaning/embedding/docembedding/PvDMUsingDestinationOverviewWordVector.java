@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component("PvDMUsingDestinationOverviewVector")
 @RequiredArgsConstructor
 @Slf4j
-public class PvDMUsingDestinationOverviewVector implements Doc2Vec {
+public class PvDMUsingDestinationOverviewWordVector implements Doc2Vec {
     private final Morpheme morpheme;
     private final Word2Vec word2Vec;
     private final DestinationWordVector dv;
@@ -26,11 +26,9 @@ public class PvDMUsingDestinationOverviewVector implements Doc2Vec {
     @Override
     public WeightBuilder learningWeight(LearningBuilder builder) {
         validWeightBuilder(builder);
-
         for (int i = 0; i<builder.getEpoch(); i++){
             learn(builder);
         }
-
         return builder.getWeightBuilder();
     }
 
@@ -44,13 +42,7 @@ public class PvDMUsingDestinationOverviewVector implements Doc2Vec {
                 learning(builder, documentIdx, targetIdx, inputVector, result);
             }
         }
-        normalized(builder);
-    }
-    private void normalized(LearningBuilder builder) {
-        double[][] vectors = builder.getWeightBuilder().getInputHiddenWeight();
-        for (double[] vec : vectors){
-            NormalizedVector.normalizedVector(vec);
-        }
+        NormalizedVector.normalizedVector(builder.getWeightBuilder().getInputHiddenWeight());
     }
 
     private static void validWordListSize(LearningBuilder builder, int documentIdx) {

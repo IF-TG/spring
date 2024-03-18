@@ -4,6 +4,7 @@ import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.ProfileImgDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.service.user.UserProfileImgService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/profile")
+@SecurityRequirement(name = "Authorization")
 public class UserProfileImgController {
     private final UserProfileImgService userProfileImgService;
 

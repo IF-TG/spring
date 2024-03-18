@@ -1,6 +1,6 @@
 package ifTG.travelPlan.service.destination;
 
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.domain.user.UserVector;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
 import ifTG.travelPlan.elasticsearch.repository.EDestinationRepository;

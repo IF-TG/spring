@@ -9,6 +9,7 @@ import ifTG.travelPlan.service.travelplan.search.machineleaning.embedding.Weight
 import ifTG.travelPlan.service.travelplan.search.machineleaning.file.WordVector;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.file.filereader.WordVectorFileReader;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.file.filewriter.WordVectorFileWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.List;
 
 
 @Component
+@Slf4j
 public class WordVectorInitializerImpl implements WordVectorInitializer {
 
     @Value("${nlp.dimension}")
@@ -49,6 +51,7 @@ public class WordVectorInitializerImpl implements WordVectorInitializer {
     public void initDestinationWordVector(){
         WordVector wordVector = wordVectorFileReader.readWordWeight();
         if (valid(wordVector)){
+            log.info("파일로부터 연결강도 설정");
             morpheme.init(wordVector.getMapping());
             destinationWordVector.initData(
                     wordVector.getInputHiddenWeight(),
@@ -62,7 +65,7 @@ public class WordVectorInitializerImpl implements WordVectorInitializer {
     }
 
     private boolean valid(WordVector wordVector) {
-        return wordVector != null && morpheme.isValid(wordVector.getMapping()) && wordVector.getDimension() != dimension;
+        return wordVector != null && morpheme.isValid(wordVector.getMapping()) && wordVector.getDimension() == dimension;
     }
 
     private void createWordWeight() {

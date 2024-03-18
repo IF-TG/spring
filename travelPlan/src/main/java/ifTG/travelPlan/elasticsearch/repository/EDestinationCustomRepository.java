@@ -68,7 +68,6 @@ public class EDestinationCustomRepository {
                         .withQuery(query)
                         .withPageable(pageable)
                 .build();
-        System.out.println("nativeQuery = " + nativeQuery.getQuery().toString());
         return elasticsearchOperations.search(nativeQuery, EDestination.class);
     }
 }

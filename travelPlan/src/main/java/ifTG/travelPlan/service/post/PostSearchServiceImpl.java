@@ -12,9 +12,11 @@ import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,6 +43,18 @@ public class PostSearchServiceImpl implements PostSearchService{
                 );
         new Thread(()->userSearchService.saveKeywordHistory(user, requestSearchPostDto.getKeyword())).start();
         return postConvertDto.getPostDtoList(postList, likedPostListByUser);
+    }
+
+    @Override
+    public List<PostDto> findAllLikeKeyword(String keyword, boolean isTitle, boolean isContent, int page, int perPage) {
+        Page<Post> postList = qPostSearchRepository.findAllByKeywordNotInBlockedUserId(
+                PageRequest.of(page,perPage),
+                keyword,
+                isContent,
+                isTitle,
+                new ArrayList<>()
+        );
+        return postConvertDto.getPostDtoList(postList, new ArrayList<>());
     }
 
     private List<Long> getAllBlockUserList(User user) {

@@ -4,6 +4,7 @@ import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.PostDetailsWithIsScraped;
 import ifTG.travelPlan.service.post.PostDetailService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("/post/detail")
+@SecurityRequirement(name = "Authorization")
 @RequiredArgsConstructor
 public class PostDetailController {
     private final PostDetailService postDetailService;

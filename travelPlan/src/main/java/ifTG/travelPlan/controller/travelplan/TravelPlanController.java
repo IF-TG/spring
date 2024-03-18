@@ -3,6 +3,7 @@ package ifTG.travelPlan.controller.travelplan;
 import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.service.travelplan.TravelPlanService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/travelPlan")
+@SecurityRequirement(name = "Authorization")
 public class TravelPlanController {
     private final TravelPlanService travelPlanService;
 

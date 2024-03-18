@@ -11,4 +11,9 @@ public class NormalizedVector {
             vector[i] = vector[i]/norm;
         }
     }
+    public static void normalizedVector(double[][] vectors){
+        for (double[] vec : vectors){
+            NormalizedVector.normalizedVector(vec);
+        }
+    }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PostSearchService {
     List<PostDto> findAllLikeKeyword(RequestSearchPostDto requestSearchPostDto);
+
+    List<PostDto> findAllLikeKeyword(String keyword, boolean isTitle, boolean isContent, int page, int perPage);
 }

@@ -7,6 +7,7 @@ import ifTG.travelPlan.dto.post.RequestPostListDto;
 import ifTG.travelPlan.dto.post.enums.MainCategory;
 import ifTG.travelPlan.dto.post.enums.OrderMethod;
 import ifTG.travelPlan.service.post.PostService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("/posts")
+@SecurityRequirement(name = "Authorization")
 @RequiredArgsConstructor
 public class PostListController {
     private final PostService postService;

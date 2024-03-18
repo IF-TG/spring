@@ -1,10 +1,6 @@
 package ifTG.travelPlan.service.user;
 
-import ifTG.travelPlan.controller.dto.StatusCode;
-import ifTG.travelPlan.controller.dto.UserCreateDto;
-import ifTG.travelPlan.controller.dto.UserInfoDto;
-import ifTG.travelPlan.domain.user.User;
-import ifTG.travelPlan.dto.SignUpDto;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.exception.CustomErrorException;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import lombok.RequiredArgsConstructor;

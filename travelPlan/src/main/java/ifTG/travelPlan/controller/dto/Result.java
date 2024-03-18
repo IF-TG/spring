@@ -1,5 +1,6 @@
 package ifTG.travelPlan.controller.dto;
 
+import ifTG.travelPlan.exception.StatusCode;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class Result<T> {
                 .status(HttpStatus.OK)
                 .body(Result.<T>builder()
                         .result(value)
-                        .status(StatusCode.OK.toString())
+                        .status(StatusCode.OK.getHttpStatus().name())
                         .statusCode(StatusCode.OK.getCode())
                         .message(StatusCode.OK.getMessage())
                         .build()
@@ -28,7 +29,7 @@ public class Result<T> {
                 .status(statusCode.getHttpStatus())
                 .body(Result.builder()
                         .result(null)
-                        .status(statusCode.getHttpStatus().toString())
+                        .status(statusCode.getHttpStatus().name())
                         .statusCode(statusCode.getCode())
                         .message(statusCode.getMessage())
                         .build()

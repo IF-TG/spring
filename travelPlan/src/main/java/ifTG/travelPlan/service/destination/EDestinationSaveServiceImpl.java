@@ -22,7 +22,6 @@ public class EDestinationSaveServiceImpl implements EDestinationSaveService{
 
     @Override
     public void saveEDestination(List<Destination> destinationList) {
-        log.info("destinationList size = {}", destinationList.size());
         destinationList.forEach(d->{
             List<String> keywordList = textRank.textRank(d.getOverview());
             double[] vectorByDestinationId = destinationVector.getVectorByDestinationId(d.getId());

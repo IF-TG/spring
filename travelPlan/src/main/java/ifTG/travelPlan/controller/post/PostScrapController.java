@@ -5,6 +5,7 @@ import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.dto.ScrapDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.service.post.PostScrapService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/post/scrap")
+@SecurityRequirement(name = "Authorization")
 @RequiredArgsConstructor
 public class PostScrapController {
     private final PostScrapService postScrapService;
@@ -30,7 +32,7 @@ public class PostScrapController {
         return Result.isSuccess(postScrapService.updateFolderName(userId, dto));
     }
     @GetMapping("/detail")
-    public ResponseEntity<Result<List<PostDto>>> findAllPostScrapsByScrapFolderAndUserId(
+    public ResponseEntity<Result<List<PostDto>>> getAllPostScrapsByScrapFolderAndUserId(
             @RequestParam String folderName,
             @AuthenticationUser Long userId,
             @RequestParam(defaultValue = "0") int page,

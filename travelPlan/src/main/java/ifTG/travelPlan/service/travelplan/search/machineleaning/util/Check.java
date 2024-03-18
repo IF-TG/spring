@@ -1,6 +1,6 @@
 package ifTG.travelPlan.service.travelplan.search.machineleaning.util;
 
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.exception.CustomErrorException;
 
 public class Check {

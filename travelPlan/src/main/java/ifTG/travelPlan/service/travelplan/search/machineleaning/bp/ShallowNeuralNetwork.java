@@ -113,6 +113,4 @@ public class ShallowNeuralNetwork implements Backpropagation{
             inputHiddenWeight[oneHotInput][i] -= learnRate*hiddenDelta;
         }
     }
-
-
 }

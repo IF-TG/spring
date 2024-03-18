@@ -5,6 +5,7 @@ import ifTG.travelPlan.controller.dto.DestinationRouteListWithTravelPlanIdDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.travel.TravelPlanDestinationDto;
 import ifTG.travelPlan.service.destinationroute.TravelPlanDestinationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/destination/route")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class TravelPlanDestinationController {
     private final TravelPlanDestinationService travelPlanDestinationService;
 
@@ -23,7 +25,7 @@ public class TravelPlanDestinationController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<List<TravelPlanDestinationDto>>> addDestinationToTravelPlan(@AuthenticationUser Long userId, @RequestBody DestinationRouteListWithTravelPlanIdDto dto){
+    public ResponseEntity<Result<List<TravelPlanDestinationDto>>> saveDestinationToTravelPlan(@AuthenticationUser Long userId, @RequestBody DestinationRouteListWithTravelPlanIdDto dto){
         return Result.isSuccess(travelPlanDestinationService.addDestinationToTravelPlan(userId, dto));
 
     }

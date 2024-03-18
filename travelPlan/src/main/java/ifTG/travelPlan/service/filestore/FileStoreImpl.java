@@ -1,6 +1,8 @@
 package ifTG.travelPlan.service.filestore;
 
 
+import ifTG.travelPlan.exception.StatusCode;
+import ifTG.travelPlan.exception.CustomErrorException;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -13,7 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -89,7 +90,6 @@ public class FileStoreImpl implements FileStore {
 
     @Override
     public void createThumbnailAndSaveFile(String savedFileUri, String fileName, String thumbnailUri, int length) {
-        log.info("thumbnail = {}", savedFileUri+fileName);
         File savedImgFile = new File(absoluteFilePath + savedFileUri + fileName);
         File thumbNailImgFile = new File(absoluteFilePath+savedFileUri+thumbnailUri + fileName);
         try {
@@ -167,13 +167,13 @@ public class FileStoreImpl implements FileStore {
         }
     }
 
-    private static void createParentFolder(File file) throws IOException {
+    private static void createParentFolder(File file) {
         if(!file.getParentFile().exists()){
             if(file.getParentFile().mkdirs()){
                 log.info("path = {} , create folder", file.getParentFile().getPath());
             }
             else{
-                throw new IOException("create folder fail");
+                throw new CustomErrorException(StatusCode.CANNOT_CREATE_FOLDER);
             }
         }
     }

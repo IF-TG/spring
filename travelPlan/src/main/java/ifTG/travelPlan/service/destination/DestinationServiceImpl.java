@@ -29,7 +29,6 @@ public class DestinationServiceImpl implements DestinationService{
 
     @Override
     public DestinationDetailDto findByDestinationId(Long destinationId, ContentType contentType, Long userId) {
-        log.info("input = {}, {}, {}", destinationId, contentType.getValue(), userId);
         destinationVectorService.updateUserVectorByDestination(userId, destinationId);
         Object detailWithDestination = qDestinationRepository.findDetailWithDestinationById(destinationId, contentType);
         boolean isScraped = destinationScrapRepository.existsById(new DestinationScrapId(destinationId, userId));
@@ -39,13 +38,11 @@ public class DestinationServiceImpl implements DestinationService{
 
     @Override
     public DestinationDetailDto findByDestinationId(Long destinationId, ContentType contentType) {
-        log.info("input = {}, {}, {}", destinationId, contentType.getValue());
         Object detailWithDestination = qDestinationRepository.findDetailWithDestinationById(destinationId, contentType);
         return getDetailDto(detailWithDestination, contentType, false, false);
     }
 
     private DestinationDetailDto getDetailDto(Object object, ContentType contentType, boolean isLiked, boolean isScraped) {
-        System.out.println("object = " + object);
         DestinationDetailDto dto = null;
         switch (contentType){
             case Cultural_Facility -> dto = getCulturalFacilityWithDestinationDto((CulturalFacility) object, isLiked, isScraped);

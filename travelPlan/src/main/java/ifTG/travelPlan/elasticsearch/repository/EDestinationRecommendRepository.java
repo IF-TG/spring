@@ -35,7 +35,6 @@ public class EDestinationRecommendRepository {
     }
     public List<EDestination> findEventByUserVector(double[] userVector, Pageable pageable) {
         List<EDestination> byUserVectorAndContentType = findByUserVectorAndContentType(ContentType.Event_Performance_Festival.toString(), userVector, pageable);
-        System.out.println("byUserVectorAndContentType = " + byUserVectorAndContentType);
         return findByUserVectorAndContentType(ContentType.Event_Performance_Festival.toString(), userVector, pageable);
     }
     public List<EDestination> findCulturalByUserVector(double[] userVector, Pageable pageable) {
@@ -63,7 +62,6 @@ public class EDestinationRecommendRepository {
                                        )
                                        .withPageable(pageable)
                                        .build();
-
         return elasticsearchOperations.search(query, EDestination.class).stream()
                                       .map(SearchHit::getContent).toList();
     }

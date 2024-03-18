@@ -1,7 +1,7 @@
 package ifTG.travelPlan.service.user;
 
 import ifTG.travelPlan.controller.dto.ProfileImgDto;
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.exception.CustomErrorException;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;

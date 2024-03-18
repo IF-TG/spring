@@ -4,6 +4,7 @@ import ifTG.travelPlan.aop.AuthenticationUser;
 import ifTG.travelPlan.controller.dto.*;
 import ifTG.travelPlan.dto.post.*;
 import ifTG.travelPlan.service.post.PostService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("/post")
+@SecurityRequirement(name = "Authorization")
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
@@ -29,7 +31,7 @@ public class PostController {
     }
 
     @GetMapping("/likedCommented")
-    public ResponseEntity<Result<List<PostWithThumbnailDto>>> findCommentedOrLikedPostListByUserId(
+    public ResponseEntity<Result<List<PostWithThumbnailDto>>> getCommentedOrLikedPostListByUserId(
             @AuthenticationUser Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage){

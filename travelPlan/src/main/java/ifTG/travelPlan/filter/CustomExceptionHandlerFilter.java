@@ -1,7 +1,7 @@
 package ifTG.travelPlan.filter;
 
 import com.google.gson.JsonObject;
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.exception.CustomErrorException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,8 +37,8 @@ public class CustomExceptionHandlerFilter extends OncePerRequestFilter {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("message", statusCode.getMessage());
-        jsonObject.addProperty("code", statusCode.getCode());
-
+        jsonObject.addProperty("status", statusCode.getHttpStatus().name());
+        jsonObject.addProperty("statusCode", statusCode.getCode());
         response.getWriter().write(jsonObject.toString());
         response.getWriter().flush();
     }

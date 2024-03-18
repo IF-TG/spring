@@ -37,7 +37,6 @@ public class QDestinationRepository {
             case Shopping -> result = queryFactory.selectFrom(shopping).join(shopping.destination).fetchJoin().where(shopping.destination.id.eq(destinationId)).fetchOne();
             case Sightseeing -> result = queryFactory.selectFrom(sightSeeing).join(sightSeeing.destination).fetchJoin().where(sightSeeing.destination.id.eq(destinationId)).fetchOne();
         }
-        System.out.println("result = " + result);
         return result;
     }
 }

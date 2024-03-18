@@ -1,5 +1,8 @@
 package ifTG.travelPlan.dto;
 
+import ifTG.travelPlan.exception.StatusCode;
+import ifTG.travelPlan.exception.CustomErrorException;
+
 public enum ImageType {
     jpg("jpg"),
     jpeg("jpeg"),
@@ -16,6 +19,6 @@ public enum ImageType {
                 return imageType;
             }
         }
-        throw new IllegalArgumentException("No matching FileType for value: " + value);
+        throw new CustomErrorException(StatusCode.INVALID_IMAGE_TYPE);
     }
 }

@@ -1,13 +1,13 @@
 package ifTG.travelPlan.dto.post;
 
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.dto.post.enums.Companions;
 import ifTG.travelPlan.dto.post.enums.Regions;
 import ifTG.travelPlan.dto.post.enums.Seasons;
 import ifTG.travelPlan.dto.post.enums.Themes;
-import lombok.AccessLevel;
+import ifTG.travelPlan.exception.CustomErrorException;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
@@ -55,10 +55,7 @@ public class PostCreateDto {
             this.startDate = LocalDate.parse(startDate, dateTimeFormatter);
             this.endDate = LocalDate.parse(endDate, dateTimeFormatter);
         }catch (DateTimeParseException e){
-            log.info("잘못된 날짜 형식");
-            /**
-             * 예외 클래스 custom 해서 할 것
-             */
+            throw new CustomErrorException(StatusCode.INVALID_DATE_FORMAT);
         }
     }
     private boolean[] getIsSeason() {

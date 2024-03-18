@@ -32,18 +32,15 @@ public class PostConstructor {
     @Value("${api.tour.download_page}")
     private int downloadPage;
 
-    private final TextRankWeight textRankWeight;
-    private final Morpheme morpheme;
-    private final DestinationWordVector destination;
-
 
     //@PostConstruct
     @Transactional
     public void initData() throws IOException {
-        /*for (int i =2; i<downloadPage; i++){
+        /*for (int i =1; i<downloadPage; i++){
             List<Destination> savedDestination = destinationSaveByTourApi.save(i);
             subDestinationSaveByTourApi.save(savedDestination);
-        }*/
+        }
+         */
         machineLeaning.init();
         saveEDestination();
     }

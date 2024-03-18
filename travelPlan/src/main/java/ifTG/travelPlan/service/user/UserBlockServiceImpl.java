@@ -27,7 +27,6 @@ public class UserBlockServiceImpl implements UserBlockService{
     @Override
     @Transactional
     public ToggleDto toggleBlockUser(Long userId, RequestBlockUserDto dto) {
-        log.info("{}, {}", userId, dto.getBlockedUserId());
         UserBlockId userBlockId = new UserBlockId(userId, dto.getBlockedUserId());
         Optional<UserBlock> userBlock = userBlockRepository.findById(userBlockId);
         if (userBlock.isEmpty()){

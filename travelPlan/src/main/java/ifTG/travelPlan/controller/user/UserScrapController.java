@@ -6,6 +6,7 @@ import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.user.UserScrapFolderDto;
 import ifTG.travelPlan.service.scrap.ScrapDeleteService;
 import ifTG.travelPlan.service.user.UserScrapService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/scrap")
 @Slf4j
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class UserScrapController {
     private final UserScrapService userScrapService;
     private final ScrapDeleteService scrapDeleteService;
@@ -25,7 +27,7 @@ public class UserScrapController {
         return Result.isSuccess(scrapDeleteService.deleteAllByFolderName(userId, folderName));
     }
     @GetMapping
-    public ResponseEntity<Result<List<UserScrapFolderDto>>> findAllScrapByUser(@AuthenticationUser Long userId){
+    public ResponseEntity<Result<List<UserScrapFolderDto>>> getAllScrapByUser(@AuthenticationUser Long userId){
         return Result.isSuccess(userScrapService.findAllScrapFolderByUser(userId));
     }
 

@@ -1,7 +1,5 @@
 package ifTG.travelPlan.exception;
 
-import ifTG.travelPlan.controller.dto.StatusCode;
-import jdk.jshell.spi.ExecutionControl;
 import lombok.Getter;
 
 @Getter

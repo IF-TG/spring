@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value= CustomErrorException.class)
-    public ResponseEntity<Object> notFoundUserException(CustomErrorException e){
+    public ResponseEntity<Object> exceptionStatusCode(CustomErrorException e){
         return Result.isError(e.getStatusCode());
     }
 }

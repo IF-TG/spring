@@ -45,7 +45,6 @@ public class UserVectorServiceImpl implements UserVectorService{
             }
         }
         userVector.updateVector(newVector);
-        System.out.println(userVector.getVector());
         return userVectorRepository.save(userVector);
     }
 }

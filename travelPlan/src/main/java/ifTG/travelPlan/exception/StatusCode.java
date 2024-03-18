@@ -1,4 +1,4 @@
-package ifTG.travelPlan.controller.exception;
+package ifTG.travelPlan.exception;
 
 import ifTG.travelPlan.dto.StatusCodeMessageDto;
 import lombok.Getter;

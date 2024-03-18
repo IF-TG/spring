@@ -42,7 +42,6 @@ class EDestinationCustomRepositoryTest {
                                              )
                                              .build();
 
-        System.out.println("nativeQuery.getQuery().toString() = " + nativeQuery.getQuery().toString());
         //when
 
         //then

@@ -6,7 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DiaryImgRepository extends JpaRepository<DiaryImg, Long> {
-    /**
-     * 이미지 다운로드 기능 추가 예정
-     */
+
 }

@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Component
 @RequiredArgsConstructor
 public class WordVectorFileReaderImpl implements WordVectorFileReader{
@@ -22,14 +20,10 @@ public class WordVectorFileReaderImpl implements WordVectorFileReader{
     public WordVector readWordWeight(){
         String file = null;
         if (fileStore.isExisted(wordWeightPath)){
-            System.out.println("아닌교아닌게이게이야");
             file = fileStore.findFile(wordWeightPath);
-            System.out.println("file = " + file);
             try{
-                System.out.println(LocalDateTime.now() + "현재");
                 return new ObjectMapper().readValue(file, WordVector.class);
             } catch (JsonProcessingException e) {
-                System.out.println("에러~~");
                 e.printStackTrace();
                 return null;
             }

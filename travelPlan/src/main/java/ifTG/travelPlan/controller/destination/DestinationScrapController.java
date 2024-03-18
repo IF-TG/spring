@@ -8,6 +8,7 @@ import ifTG.travelPlan.dto.ScrapDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.dto.travel.DestinationDto;
 import ifTG.travelPlan.service.destination.DestinationScrapService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/destination/scrap")
+@SecurityRequirement(name = "Authorization")
 public class DestinationScrapController {
     private final DestinationScrapService destinationScrapService;
 
@@ -33,7 +35,7 @@ public class DestinationScrapController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<Result<List<DestinationDto>>> findAllDestinationScrapsByScrapFolderAndUserId(
+    public ResponseEntity<Result<List<DestinationDto>>> getAllDestinationScrapsByScrapFolderAndUserId(
             @RequestParam String folderName,
             @AuthenticationUser Long userId,
             @RequestParam(defaultValue = "0") int page,

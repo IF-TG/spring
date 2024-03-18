@@ -2,7 +2,7 @@ package ifTG.travelPlan.service.comment;
 
 import ifTG.travelPlan.controller.dto.RequestCreateCommentDto;
 import ifTG.travelPlan.controller.dto.RequestUpdateCommentDto;
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.converter.CommentDtoConverter;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.comment.Comment;
@@ -16,7 +16,6 @@ import ifTG.travelPlan.repository.springdata.post.PostRepository;
 import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.util.Check;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

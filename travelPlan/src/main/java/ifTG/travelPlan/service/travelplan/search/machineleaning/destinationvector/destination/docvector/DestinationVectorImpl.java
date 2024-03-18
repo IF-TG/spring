@@ -25,18 +25,14 @@ public class DestinationVectorImpl implements DestinationVector{
 
     @Value("${nlp.doc2vec.learnRate}")
     private Double learnRate;
-
     @Value("${nlp.doc2vec.epoch}")
     private int epoch;
-
     @Value("${nlp.dimension}")
     private Integer dimension;
-
     @Value("${nlp.doc2vec.pv_dm.window}")
     private Integer window;
 
     private boolean isReady;
-
     public DestinationVectorImpl(@Qualifier("PvDMUsingDestinationOverviewVector") EmbeddingModel em, DestinationOverviewNounExtractor de) {
         this.em = em;
         this.de = de;
@@ -63,7 +59,7 @@ public class DestinationVectorImpl implements DestinationVector{
         if (!isReady)throw new RuntimeException("not ready destination vector");
         Integer mappingIdx = mapping.get(destinationId);
         if (mappingIdx==null){
-            log.info("{} have no mappingIdx", destinationId);
+            log.info("{} have no mappingIdx because not enough context", destinationId);
             return null;
         }
         return destinationVector[mappingIdx];
@@ -99,6 +95,4 @@ public class DestinationVectorImpl implements DestinationVector{
         destinationVector = new double[allNounMappingByDestination.size()][dimension];
         mapping = new HashMap<>();
     }
-
-
 }

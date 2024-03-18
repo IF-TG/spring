@@ -1,7 +1,7 @@
 package ifTG.travelPlan.service.post;
 
 import ifTG.travelPlan.controller.dto.PostDto;
-import ifTG.travelPlan.controller.dto.StatusCode;
+import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.domain.post.Post;
 import ifTG.travelPlan.domain.post.PostCategory;
 import ifTG.travelPlan.domain.post.PostLike;
@@ -17,7 +17,6 @@ import ifTG.travelPlan.repository.springdata.user.UserBlockRepository;
 import ifTG.travelPlan.repository.springdata.user.UserRepository;
 import ifTG.travelPlan.service.filestore.PostImgFileService;
 import ifTG.travelPlan.service.travelplan.search.machineleaning.util.Check;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

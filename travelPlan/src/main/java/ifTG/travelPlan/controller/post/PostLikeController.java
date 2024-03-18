@@ -7,6 +7,7 @@ import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.dto.post.PostWithThumbnailDto;
 import ifTG.travelPlan.dto.post.ToggleDto;
 import ifTG.travelPlan.service.post.PostLikeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/post/like")
+@SecurityRequirement(name = "Authorization")
 @RequiredArgsConstructor
 public class PostLikeController {
     private final PostLikeService postLikeService;
@@ -27,7 +29,7 @@ public class PostLikeController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Result<List<PostWithThumbnailDto>>> findAllPostLikeWithPostByUser(
+    public ResponseEntity<Result<List<PostWithThumbnailDto>>> getAllPostLikeWithPostByUser(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage,
             @AuthenticationUser Long userId){
