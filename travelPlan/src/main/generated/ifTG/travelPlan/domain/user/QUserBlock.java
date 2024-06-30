@@ -46,8 +46,8 @@ public class QUserBlock extends EntityPathBase<UserBlock> {
 
     public QUserBlock(Class<? extends UserBlock> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.blockedUser = inits.isInitialized("blockedUser") ? new QUser(forProperty("blockedUser"), inits.get("blockedUser")) : null;
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user"), inits.get("user")) : null;
+        this.blockedUser = inits.isInitialized("blockedUser") ? new QUser(forProperty("blockedUser")) : null;
+        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
         this.userBlockId = inits.isInitialized("userBlockId") ? new QUserBlockId(forProperty("userBlockId")) : null;
     }
 

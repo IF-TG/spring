@@ -19,9 +19,9 @@ public class QPostScrapId extends BeanPath<PostScrapId> {
 
     public static final QPostScrapId postScrapId = new QPostScrapId("postScrapId");
 
-    public final NumberPath<Long> folderId = createNumber("folderId", Long.class);
-
     public final NumberPath<Long> postId = createNumber("postId", Long.class);
+
+    public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
     public QPostScrapId(String variable) {
         super(PostScrapId.class, forVariable(variable));

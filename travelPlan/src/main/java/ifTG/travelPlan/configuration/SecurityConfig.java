@@ -2,6 +2,7 @@ package ifTG.travelPlan.configuration;
 
 import co.elastic.clients.elasticsearch.nodes.Http;
 import ifTG.travelPlan.dto.Roles;
+import ifTG.travelPlan.filter.CustomAccessDeniedHandler;
 import ifTG.travelPlan.filter.CustomAuthenticationEntryPoint;
 import ifTG.travelPlan.filter.CustomExceptionHandlerFilter;
 import ifTG.travelPlan.filter.JwtAuthenticationFilter;
@@ -24,13 +25,17 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomExceptionHandlerFilter customExceptionHandlerFilter;
     private final CustomAuthenticationEntryPoint entryPoint;
+    private final CustomAccessDeniedHandler deniedHandler;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .rememberMe(AbstractHttpConfigurer::disable)
-                .exceptionHandling(ex->ex.authenticationEntryPoint(entryPoint))
+                .exceptionHandling(ex-> ex
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(deniedHandler)
+                )
                 .authorizeHttpRequests(auth-> {
                     auth
                             .requestMatchers(HttpMethod.GET, "/comment").hasAnyRole(Roles.ANONYMOUS.role(), Roles.OAUTH2_USER.role())

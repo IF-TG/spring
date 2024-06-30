@@ -36,11 +36,17 @@ public class QPost extends EntityPathBase<Post> {
 
     public final NumberPath<Integer> likeNum = createNumber("likeNum", Integer.class);
 
+    public final NumberPath<Double> mapX = createNumber("mapX", Double.class);
+
+    public final NumberPath<Double> mapY = createNumber("mapY", Double.class);
+
     public final SetPath<PostCategory, QPostCategory> postCategoryList = this.<PostCategory, QPostCategory>createSet("postCategoryList", PostCategory.class, QPostCategory.class, PathInits.DIRECT2);
 
     public final ListPath<PostImg, QPostImg> postImgList = this.<PostImg, QPostImg>createList("postImgList", PostImg.class, QPostImg.class, PathInits.DIRECT2);
 
     public final ListPath<PostLike, QPostLike> postLikeList = this.<PostLike, QPostLike>createList("postLikeList", PostLike.class, QPostLike.class, PathInits.DIRECT2);
+
+    public final ListPath<PostScrap, QPostScrap> postScrapList = this.<PostScrap, QPostScrap>createList("postScrapList", PostScrap.class, QPostScrap.class, PathInits.DIRECT2);
 
     public final ListPath<PostView, QPostView> postViewList = this.<PostView, QPostView>createList("postViewList", PostView.class, QPostView.class, PathInits.DIRECT2);
 
@@ -70,7 +76,7 @@ public class QPost extends EntityPathBase<Post> {
 
     public QPost(Class<? extends Post> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

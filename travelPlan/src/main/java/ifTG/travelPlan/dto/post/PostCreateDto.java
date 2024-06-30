@@ -6,8 +6,10 @@ import ifTG.travelPlan.dto.post.enums.Regions;
 import ifTG.travelPlan.dto.post.enums.Seasons;
 import ifTG.travelPlan.dto.post.enums.Themes;
 import ifTG.travelPlan.exception.CustomErrorException;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
@@ -21,18 +23,19 @@ import java.util.List;
 
 @Getter
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCreateDto {
-    private final String title;
-    private final String content;
+    private String title;
+    private String content;
     private LocalDate startDate;
     private LocalDate endDate;
-    private final List<Themes> themes;
-    private final List<Regions> regions;
-    private final List<Seasons> seasons = new ArrayList<>();
-    private final List<Companions> companions;
-    private final List<ImgFile> imgFileList;
-    private final Double mapX;
-    private final Double mapY;
+    private List<Themes> themes;
+    private List<Regions> regions;
+    private List<Seasons> seasons = new ArrayList<>();
+    private List<Companions> companions;
+    private List<ImgFile> imgFileList;
+    private Double mapX;
+    private Double mapY;
     @Builder
     public PostCreateDto(String title, String content, String startDate, String endDate,
                          List<Themes> themes, List<Regions> regions, List<Companions> companions, List<ImgFile> imgFileList,

@@ -48,7 +48,7 @@ public class QNestedCommentLike extends EntityPathBase<NestedCommentLike> {
         super(type, metadata, inits);
         this.nestedComment = inits.isInitialized("nestedComment") ? new QNestedComment(forProperty("nestedComment"), inits.get("nestedComment")) : null;
         this.nestedCommentLikeId = inits.isInitialized("nestedCommentLikeId") ? new QNestedCommentLikeId(forProperty("nestedCommentLikeId")) : null;
-        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

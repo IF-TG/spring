@@ -22,13 +22,13 @@ public class QPostScrap extends EntityPathBase<PostScrap> {
 
     public static final QPostScrap postScrap = new QPostScrap("postScrap");
 
+    public final StringPath folderName = createString("folderName");
+
     public final QPost post;
 
-    public final QPostScrapId postLikeId;
+    public final QPostScrapId postScrapId;
 
-    public final ifTG.travelPlan.domain.user.QScrapFolder scrapFolder;
-
-    public final StringPath thumbnail = createString("thumbnail");
+    public final ifTG.travelPlan.domain.user.QUser user;
 
     public QPostScrap(String variable) {
         this(PostScrap.class, forVariable(variable), INITS);
@@ -49,8 +49,8 @@ public class QPostScrap extends EntityPathBase<PostScrap> {
     public QPostScrap(Class<? extends PostScrap> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.post = inits.isInitialized("post") ? new QPost(forProperty("post"), inits.get("post")) : null;
-        this.postLikeId = inits.isInitialized("postLikeId") ? new QPostScrapId(forProperty("postLikeId")) : null;
-        this.scrapFolder = inits.isInitialized("scrapFolder") ? new ifTG.travelPlan.domain.user.QScrapFolder(forProperty("scrapFolder"), inits.get("scrapFolder")) : null;
+        this.postScrapId = inits.isInitialized("postScrapId") ? new QPostScrapId(forProperty("postScrapId")) : null;
+        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

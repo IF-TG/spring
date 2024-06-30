@@ -1,5 +1,6 @@
 package ifTG.travelPlan.service.destination;
 
+import ifTG.travelPlan.controller.dto.ResponseSearchEDestinationDto;
 import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.domain.user.User;
 import ifTG.travelPlan.elasticsearch.domain.EDestination;
@@ -35,12 +36,12 @@ public class DestinationSearchServiceImpl implements DestinationSearchService{
     private final UserKeywordRedisCache userKeywordRedisCache;
 
     @Override
-    public List<ResponseEDestinationDto> findAllByKeyword(Long userId, String keyword, Pageable pageable){
+    public ResponseSearchEDestinationDto findAllByKeyword(Long userId, String keyword, Pageable pageable){
         saveSearchHistory(userId, keyword);
         ResponseFindEDestinationList response = findEDestinationList(keyword, pageable);
         List<EDestination> eDestinationList = response.getEDestinationList();
         List<Long> destinationScrapIdList = destinationScrapRepository.findAllDestinationIdByUserId(userId);
-        return EDestinationConvertDtoService.getResponseEDestinationDtoList(response.isGptRelated, eDestinationList, destinationScrapIdList);
+        return EDestinationConvertDtoService.getSearchResponseEDestinationDtoList(response.isGptRelated, eDestinationList, destinationScrapIdList);
     }
 
     private void saveSearchHistory(Long userId, String keyword) {
@@ -60,6 +61,7 @@ public class DestinationSearchServiceImpl implements DestinationSearchService{
         List<String> relatedKeyword = userKeywordRedisCache.getWordList(keyword);
         if (relatedKeyword != null){
             isGptRelated = true;
+            log.info("gpt answer {} = {}", keyword, relatedKeyword);
         }else{
             chatGPT.findRelatedKeywords(keyword).thenAccept(result->userKeywordRedisCache.addWordList(keyword, result));
             relatedKeyword = new ArrayList<>();

@@ -48,7 +48,7 @@ public class QTravelPlanDestination extends EntityPathBase<TravelPlanDestination
 
     public QTravelPlanDestination(Class<? extends TravelPlanDestination> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.destination = inits.isInitialized("destination") ? new QDestination(forProperty("destination")) : null;
+        this.destination = inits.isInitialized("destination") ? new QDestination(forProperty("destination"), inits.get("destination")) : null;
         this.id = inits.isInitialized("id") ? new QTravelPlanDestinationId(forProperty("id")) : null;
         this.travelPlan = inits.isInitialized("travelPlan") ? new QTravelPlan(forProperty("travelPlan"), inits.get("travelPlan")) : null;
     }

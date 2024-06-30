@@ -22,9 +22,11 @@ public class QPostView extends EntityPathBase<PostView> {
 
     public static final QPostView postView = new QPostView("postView");
 
-    public final QPost post;
+    public final DateTimePath<java.time.LocalDateTime> createAt = createDateTime("createAt", java.time.LocalDateTime.class);
 
-    public final QPostViewId postViewId;
+    public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final QPost post;
 
     public final ifTG.travelPlan.domain.user.QUser user;
 
@@ -47,8 +49,7 @@ public class QPostView extends EntityPathBase<PostView> {
     public QPostView(Class<? extends PostView> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.post = inits.isInitialized("post") ? new QPost(forProperty("post"), inits.get("post")) : null;
-        this.postViewId = inits.isInitialized("postViewId") ? new QPostViewId(forProperty("postViewId")) : null;
-        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

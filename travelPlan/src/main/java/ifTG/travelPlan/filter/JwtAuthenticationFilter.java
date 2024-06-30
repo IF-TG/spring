@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final static String AUTHENTICATION_PROPERTY = "Authorization";
     private final RestTemplate restTemplate;
@@ -39,9 +41,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("requset = {}",request);
         String jwt = request.getHeader(AUTHENTICATION_PROPERTY);
-        if (jwt != null && jwt.startsWith("bearer ")) {
+        if (jwt != null && jwt.startsWith("Bearer ")) {
             jwt =  jwt.substring(7);
+            log.info("{} request", jwt);
         }else{
             filterChain.doFilter(request, response);
             return;

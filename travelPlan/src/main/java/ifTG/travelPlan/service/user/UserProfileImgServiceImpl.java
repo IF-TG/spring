@@ -79,7 +79,7 @@ public class UserProfileImgServiceImpl implements UserProfileImgService{
 
     @Override
     public String getProfileImgUrl(Long userId, String fileName){
-        return imgServerUrl + getProfileUri(userId) + thumbnailPath + fileName;
+        return fileName==null?null:imgServerUrl + getProfileUri(userId) + thumbnailPath + fileName;
     }
 
     @Override

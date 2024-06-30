@@ -28,6 +28,10 @@ public class QNestedComment extends EntityPathBase<NestedComment> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Integer> likeNum = createNumber("likeNum", Integer.class);
+
+    public final ListPath<NestedCommentLike, QNestedCommentLike> nestedCommentLikeList = this.<NestedCommentLike, QNestedCommentLike>createList("nestedCommentLikeList", NestedCommentLike.class, QNestedCommentLike.class, PathInits.DIRECT2);
+
     public final QComment parentComment;
 
     public final ifTG.travelPlan.domain.user.QUser user;
@@ -51,7 +55,7 @@ public class QNestedComment extends EntityPathBase<NestedComment> {
     public QNestedComment(Class<? extends NestedComment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.parentComment = inits.isInitialized("parentComment") ? new QComment(forProperty("parentComment"), inits.get("parentComment")) : null;
-        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

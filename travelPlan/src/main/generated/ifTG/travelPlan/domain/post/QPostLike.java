@@ -48,7 +48,7 @@ public class QPostLike extends EntityPathBase<PostLike> {
         super(type, metadata, inits);
         this.post = inits.isInitialized("post") ? new QPost(forProperty("post"), inits.get("post")) : null;
         this.postLikeId = inits.isInitialized("postLikeId") ? new QPostLikeId(forProperty("postLikeId")) : null;
-        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

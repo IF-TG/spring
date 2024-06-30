@@ -1,6 +1,7 @@
 package ifTG.travelPlan.controller.destination;
 
 import ifTG.travelPlan.aop.AuthenticationUser;
+import ifTG.travelPlan.controller.dto.ResponseSearchEDestinationDto;
 import ifTG.travelPlan.controller.dto.Result;
 import ifTG.travelPlan.exception.StatusCode;
 import ifTG.travelPlan.dto.destination.DestinationDetailDto;
@@ -45,7 +46,7 @@ public class DestinationController {
         }
     }
     @GetMapping("/search")
-    public ResponseEntity<Result<List<ResponseEDestinationDto>>> getAllByKeyword(
+    public ResponseEntity<Result<ResponseSearchEDestinationDto>> getAllByKeyword(
             @AuthenticationUser Long userId,
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,

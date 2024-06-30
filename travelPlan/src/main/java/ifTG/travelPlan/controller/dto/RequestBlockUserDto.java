@@ -1,13 +1,13 @@
 package ifTG.travelPlan.controller.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestBlockUserDto {
 
     @NotNull
-    private final Long blockedUserId;
+    private Long blockedUserId;
 }

@@ -23,7 +23,7 @@ public class PostLikeServiceImpl implements PostLikeService{
 
     @Override
     @ToggleLike
-    public ToggleDto toggleLikePost(RequestLikeDto requestLikeDto) {
+    public ToggleDto toggleLikePost(Long userId, RequestLikeDto requestLikeDto) {
         return null;
     }
 

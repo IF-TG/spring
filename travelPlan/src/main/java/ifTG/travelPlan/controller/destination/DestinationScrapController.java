@@ -30,7 +30,7 @@ public class DestinationScrapController {
         return Result.isSuccess(destinationScrapService.toggleDestinationScrap(userId, dto));
     }
     @PutMapping
-    public ResponseEntity<Result<List<ScrapDto>>> updateDestinationScrap(@RequestBody Long userId, RequestUpdateDestinationScrapDto dto) {
+    public ResponseEntity<Result<List<ScrapDto>>> updateDestinationScrap(@AuthenticationUser Long userId, @RequestBody RequestUpdateDestinationScrapDto dto) {
         return Result.isSuccess(destinationScrapService.updateDestinationScrap(userId, dto));
     }
 

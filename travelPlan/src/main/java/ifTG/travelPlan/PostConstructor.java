@@ -31,18 +31,20 @@ public class PostConstructor {
     private final EDestinationSaveService eDestinationSaveService;
     @Value("${api.tour.download_page}")
     private int downloadPage;
+    @Value("${init}")
+    private boolean isInit;
 
-
-    //@PostConstruct
+   // @PostConstruct
     @Transactional
     public void initData() throws IOException {
-        /*for (int i =1; i<downloadPage; i++){
+        for (int i =1; i<downloadPage; i++){
             List<Destination> savedDestination = destinationSaveByTourApi.save(i);
             subDestinationSaveByTourApi.save(savedDestination);
         }
-         */
-        machineLeaning.init();
-        saveEDestination();
+        if (isInit){
+            machineLeaning.init();
+            saveEDestination();
+        }
     }
 
     private void saveEDestination() {

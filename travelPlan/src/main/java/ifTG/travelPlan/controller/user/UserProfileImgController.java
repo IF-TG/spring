@@ -35,7 +35,7 @@ public class UserProfileImgController {
     }
 
     @GetMapping("/original")
-    public ResponseEntity<Result<ProfileImgDto>> getOriginalFileImg(@RequestParam Long userId){
+    public ResponseEntity<Result<ProfileImgDto>> getOriginalFileImg(Long userId){
         return Result.isSuccess(userProfileImgService.getOriginalProfileImgUrl(userId));
     }
 }

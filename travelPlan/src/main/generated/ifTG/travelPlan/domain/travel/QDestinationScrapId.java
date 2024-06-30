@@ -21,7 +21,7 @@ public class QDestinationScrapId extends BeanPath<DestinationScrapId> {
 
     public final NumberPath<Long> destinationId = createNumber("destinationId", Long.class);
 
-    public final NumberPath<Long> folderId = createNumber("folderId", Long.class);
+    public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
     public QDestinationScrapId(String variable) {
         super(DestinationScrapId.class, forVariable(variable));

@@ -24,8 +24,8 @@ import java.util.List;
 public class PostLikeController {
     private final PostLikeService postLikeService;
     @PostMapping
-    public ResponseEntity<Result<ToggleDto>> toggleLikePost(@RequestBody RequestLikeDto requestLikeDto){
-        return Result.isSuccess(postLikeService.toggleLikePost(requestLikeDto));
+    public ResponseEntity<Result<ToggleDto>> toggleLikePost(@AuthenticationUser Long userId, @RequestBody RequestLikeDto requestLikeDto){
+        return Result.isSuccess(postLikeService.toggleLikePost(userId, requestLikeDto));
     }
 
     @GetMapping("/list")

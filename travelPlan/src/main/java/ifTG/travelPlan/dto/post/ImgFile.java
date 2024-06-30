@@ -3,14 +3,17 @@ package ifTG.travelPlan.dto.post;
 import ifTG.travelPlan.dto.ImageToString;
 import ifTG.travelPlan.dto.ImageType;
 import io.swagger.v3.oas.annotations.Hidden;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ImgFile {
     @Hidden
-    private final ImageToString image;
-    private final boolean isThumbnail;
-    private final int sort;
+    private ImageToString image;
+    private boolean isThumbnail;
+    private int sort;
 
     public ImgFile(String img, ImageType imageType, boolean isThumbnail, int sort) {
         this.image = new ImageToString(img, imageType);

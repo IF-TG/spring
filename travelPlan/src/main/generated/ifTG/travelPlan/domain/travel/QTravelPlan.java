@@ -50,7 +50,7 @@ public class QTravelPlan extends EntityPathBase<TravelPlan> {
 
     public QTravelPlan(Class<? extends TravelPlan> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

@@ -22,11 +22,15 @@ public class QPostImg extends EntityPathBase<PostImg> {
 
     public static final QPostImg postImg = new QPostImg("postImg");
 
+    public final StringPath fileName = createString("fileName");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath imgURL = createString("imgURL");
+    public final BooleanPath isThumbnail = createBoolean("isThumbnail");
 
     public final QPost post;
+
+    public final NumberPath<Integer> sort = createNumber("sort", Integer.class);
 
     public QPostImg(String variable) {
         this(PostImg.class, forVariable(variable), INITS);

@@ -20,10 +20,9 @@ public class ResponseEDestinationDto {
     private String MiddleCategory;
     private String SmallCategory;
     private boolean isScraped;
-    private boolean isGptRelated;
 
     @Builder
-    public ResponseEDestinationDto(Long id, ContentType contentType, String title, String thumbnailUrl, String address, String largeCategory, String middleCategory, String smallCategory, boolean isScraped, boolean isGptRelated) {
+    public ResponseEDestinationDto(Long id, ContentType contentType, String title, String thumbnailUrl, String address, String largeCategory, String middleCategory, String smallCategory, boolean isScraped) {
         this.id = id;
         this.contentTypeId = contentType.getValue();
         this.title = title;
@@ -33,6 +32,5 @@ public class ResponseEDestinationDto {
         MiddleCategory = middleCategory;
         SmallCategory = smallCategory;
         this.isScraped = isScraped;
-        this.isGptRelated = isGptRelated;
     }
 }

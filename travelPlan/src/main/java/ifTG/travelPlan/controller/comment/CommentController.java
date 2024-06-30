@@ -24,14 +24,14 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public List<CommentDtoWithUserInfo> getCommentList(
+    public ResponseEntity<Result<List<CommentDtoWithUserInfo>>> getCommentList(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int perPage,
             @RequestParam Long postId,
             @AuthenticationUser Optional<Long> userId){
         return userId
-                .map(aLong -> commentService.getCommentListByPost(postId, aLong, PageRequest.of(page, perPage)))
-                .orElseGet(() -> commentService.getCommentListByPost(postId, PageRequest.of(page, perPage)));
+                .map(aLong -> Result.isSuccess(commentService.getCommentListByPost(postId, aLong, PageRequest.of(page, perPage))))
+                .orElseGet(() -> Result.isSuccess(commentService.getCommentListByPost(postId, PageRequest.of(page, perPage))));
     }
 
     @PostMapping

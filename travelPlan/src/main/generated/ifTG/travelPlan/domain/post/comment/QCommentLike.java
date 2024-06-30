@@ -48,7 +48,7 @@ public class QCommentLike extends EntityPathBase<CommentLike> {
         super(type, metadata, inits);
         this.comment = inits.isInitialized("comment") ? new QComment(forProperty("comment"), inits.get("comment")) : null;
         this.commentLikeId = inits.isInitialized("commentLikeId") ? new QCommentLikeId(forProperty("commentLikeId")) : null;
-        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new ifTG.travelPlan.domain.user.QUser(forProperty("user")) : null;
     }
 
 }

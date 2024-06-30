@@ -68,28 +68,28 @@ public class DestinationRecommendServiceImpl implements DestinationRecommendServ
 
     private List<ResponseEDestinationDto> getShoppingDto(Pageable pageable, List<Long> allDestinationIdByUserId, double[] userVector) {
         List<EDestination> shopping = eDestinationRecommendRepository.findShoppingByUserVector(userVector, pageable);
-        return eDestinationConvertDtoService.getResponseEDestinationDtoList(false, shopping, allDestinationIdByUserId);
+        return eDestinationConvertDtoService.getResponseEDestinationDtoList(shopping, allDestinationIdByUserId);
     }
     private List<ResponseEDestinationDto> getLeisureDto(Pageable pageable, List<Long> allDestinationIdByUserId, double[] userVector) {
         List<EDestination> leisure = eDestinationRecommendRepository.findLeisureByUserVector(userVector, pageable);
-        return eDestinationConvertDtoService.getResponseEDestinationDtoList(false, leisure, allDestinationIdByUserId);
+        return eDestinationConvertDtoService.getResponseEDestinationDtoList( leisure, allDestinationIdByUserId);
     }
     private List<ResponseEDestinationDto> getRestaurantDto(Pageable pageable, List<Long> allDestinationIdByUserId, double[] userVector) {
         List<EDestination> restaurant = eDestinationRecommendRepository.findRestaurantByUserVector(userVector, pageable);
-        return eDestinationConvertDtoService.getResponseEDestinationDtoList(false, restaurant, allDestinationIdByUserId);
+        return eDestinationConvertDtoService.getResponseEDestinationDtoList(restaurant, allDestinationIdByUserId);
     }
     private List<ResponseEDestinationDto> getEventDto(Pageable pageable, List<Long> allDestinationIdByUserId, double[] userVector) {
         List<EDestination> event = eDestinationRecommendRepository.findEventByUserVector(userVector, pageable);
-        return eDestinationConvertDtoService.getResponseEDestinationDtoList(false, event, allDestinationIdByUserId);
+        return eDestinationConvertDtoService.getResponseEDestinationDtoList(event, allDestinationIdByUserId);
     }
 
     private List<ResponseEDestinationDto> getCulturalDto(Pageable pageable, List<Long> allDestinationIdByUserId, double[] userVector) {
         List<EDestination> cultural = eDestinationRecommendRepository.findCulturalByUserVector(userVector, pageable);
-        return eDestinationConvertDtoService.getResponseEDestinationDtoList(false, cultural, allDestinationIdByUserId);
+        return eDestinationConvertDtoService.getResponseEDestinationDtoList(cultural, allDestinationIdByUserId);
     }
 
     private List<ResponseEDestinationDto> getSightseeingDto(Pageable pageable, List<Long> allDestinationIdByUserId, double[] userVector) {
         List<EDestination> sightseeing = eDestinationRecommendRepository.findSightSeeingByUserVector(userVector, pageable);
-        return eDestinationConvertDtoService.getResponseEDestinationDtoList(false, sightseeing, allDestinationIdByUserId);
+        return eDestinationConvertDtoService.getResponseEDestinationDtoList(sightseeing, allDestinationIdByUserId);
     }
 }
