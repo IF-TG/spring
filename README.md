@@ -50,7 +50,7 @@
 
 #### 그 외 기능
  - 스프링 jpa 데이터를 활용한 댓글, 후기, 계획 기본적인 crud
- - [@RestControllerAdvice, @ExceptionHandler를 사용한 예외 처리](https://github.com/IF-TG/spring/wiki/%EA%B2%B0%EA%B3%BC-%EB%B0%98%ED%99%98-%EB%B0%8F-%EC%98%88%EC%99%B8-%EC%B2%98%EB%A6%AC-(@RestControllerAdvice)
+ - [@RestControllerAdvice, @ExceptionHandler를 사용한 예외 처리](https://github.com/IF-TG/spring/wiki/%EA%B2%B0%EA%B3%BC-%EB%B0%98%ED%99%98-%EB%B0%8F-%EC%98%88%EC%99%B8-%EC%B2%98%EB%A6%AC-(@RestControllerAdvice))
  - 후기, 프로필 이미지 저장, 삭제
  - 유저 차단 기능
  - 좋아요, 스크랩 토글 기능
